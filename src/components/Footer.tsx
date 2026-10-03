@@ -395,14 +395,7 @@ export default function Footer() {
             margin: 20px 0 16px 0;
           }
           .ftr-bottom-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 16px;
-            padding: 0 24px;
-            box-sizing: border-box;
-          }
-          .ftr-bottom-address {
-            text-align: left;
+            display: none !important;
           }
           .wordmark-wrap,
           .wordmark-wrapper {
