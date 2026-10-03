@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import {
   Instagram,
   Facebook,
@@ -20,16 +21,20 @@ import { HOTEL_INFO } from '../data/hotelData';
  * - Decorative ring behind footer: ~330x210px in --ring-fill, ~60% peeking out.
  * - Palette tokens: Jangid olive (#566B4B) default + Cobalt blue set toggle.
  * - 4 Link columns with arrow icons, 4 social icons top-right.
- * - 54px 3-line headline ("A peaceful stay / just 400 m from / Goga Ji Temple").
  * - CTA Button: 170x70px, radius 20px, hover cream.
  * - 1px divider, copyright + SVG barcode on left, uppercase 3-line address on right.
  * - Staggered scroll animations & fully responsive (desktop, tablet, mobile).
+ * - Sticky curtain reveal effect: footer is stationary beneath preceding page content.
  */
 
 export default function Footer() {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
   const [isInView, setIsInView] = useState(false);
+  const [footerHeight, setFooterHeight] = useState<number>(0);
+
+  const outerRef = useRef<HTMLElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const footerRef = useRef<HTMLDivElement>(null);
 
   // Palette color definitions
@@ -55,7 +60,29 @@ export default function Footer() {
         ringStroke: '#C7C7D8',
       };
 
-  // IntersectionObserver for lightweight entrance animation
+  // Measure dynamic footer height for sticky curtain reveal
+  useEffect(() => {
+    if (!innerRef.current) return;
+    const updateHeight = () => {
+      if (innerRef.current) {
+        setFooterHeight(innerRef.current.offsetHeight);
+      }
+    };
+    updateHeight();
+
+    const ro = new ResizeObserver(() => {
+      updateHeight();
+    });
+    ro.observe(innerRef.current);
+    window.addEventListener('resize', updateHeight);
+
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', updateHeight);
+    };
+  }, []);
+
+  // IntersectionObserver for entrance animation
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,35 +90,47 @@ export default function Footer() {
           setIsInView(true);
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
 
-    if (footerRef.current) {
-      observer.observe(footerRef.current);
+    if (outerRef.current) {
+      observer.observe(outerRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <div
+    <footer
+      id="contact"
+      ref={outerRef}
+      className="relative w-full"
       style={{
-        backgroundColor: colors.pageBg,
-        width: '100%',
-        minHeight: '100%',
-        boxSizing: 'border-box',
-        padding: '120px 16px 40px 16px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-        fontFamily: '"Plus Jakarta Sans", "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif',
-        transition: 'background-color 0.4s ease',
+        height: footerHeight ? `${footerHeight}px` : 'auto',
+        minHeight: '480px',
+        clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)',
+        pointerEvents: 'none',
       }}
     >
-      {/* SCOPED CSS FOR TRANSITIONS, HOVERS, AND MASKS */}
-      <style>{`
+      <div
+        ref={innerRef}
+        className="fixed bottom-0 left-0 w-full ftr-sticky-inner"
+        style={{
+          zIndex: 0,
+          pointerEvents: 'auto',
+          backgroundColor: colors.pageBg,
+          boxSizing: 'border-box',
+          padding: '70px 16px 24px 16px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          overflow: 'hidden',
+          fontFamily: '"Plus Jakarta Sans", "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif',
+          transition: 'background-color 0.4s ease',
+        }}
+      >
+        {/* SCOPED CSS FOR TRANSITIONS, HOVERS, AND MASKS */}
+        <style>{`
         .footer-link-item {
           display: flex;
           align-items: center;
@@ -412,6 +451,9 @@ export default function Footer() {
             margin-bottom: calc(-0.26em + var(--lift));
             overflow: visible;
           }
+          .ftr-sticky-inner {
+            padding: 32px 12px 16px 12px !important;
+          }
         }
       `}</style>
 
@@ -420,7 +462,7 @@ export default function Footer() {
         aria-hidden="true"
         style={{
           position: 'absolute',
-          top: '30px',
+          top: '15px',
           left: '46%',
           transform: isInView
             ? 'translate(-50%, 0)'
@@ -527,8 +569,7 @@ export default function Footer() {
       </div>
 
       {/* ==================== 2. MAIN FOOTER SILHOUETTE CONTAINER ==================== */}
-            <footer
-        id="contact"
+      <div
         ref={footerRef}
         className="ftr"
         style={{
@@ -908,10 +949,11 @@ export default function Footer() {
             ))}
           </div>
         </div>
-      </footer>
+      </div>
+    </div>
 
-      {/* RAZORPAY COMPLIANCE MODAL */}
-      {modalContent && (
+      {/* RAZORPAY COMPLIANCE MODAL (Rendered via Portal to escape clip-path) */}
+      {modalContent && typeof document !== 'undefined' && createPortal(
         <div
           role="dialog"
           aria-modal="true"
@@ -990,8 +1032,9 @@ export default function Footer() {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
-    </div>
+    </footer>
   );
 }
