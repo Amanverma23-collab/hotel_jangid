@@ -31,6 +31,8 @@ export default function Footer() {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
   const [isInView, setIsInView] = useState(false);
+  const [footerHeight, setFooterHeight] = useState<number>(720);
+  const [isDesktop, setIsDesktop] = useState(true);
   const revealRef = useRef<HTMLDivElement>(null);
   const ftrRef = useRef<HTMLElement>(null);
 
@@ -57,70 +59,31 @@ export default function Footer() {
         ringStroke: '#C7C7D8',
       };
 
-  // Measure and manage sticky curtain reveal effect with scroll-linked slide
+  // Measure footer height for clip-path sticky reveal
   useEffect(() => {
-    const reveal = revealRef.current || document.getElementById('ftrReveal');
-    const ftr = ftrRef.current || document.getElementById('ftr');
-    if (!reveal || !ftr) return;
+    const ftr = ftrRef.current;
+    if (!ftr) return;
 
-    const desktop = window.matchMedia('(min-width: 768px)');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
-    let H = 0, V = 0, overflow = 0, active = false, ticking = false;
-
-    function measure() {
-      if (!reveal || !ftr) return;
-      reveal.classList.remove('is-fixed');              // measure in normal flow
-      reveal.style.removeProperty('--ftr-h');
-      ftr.style.removeProperty('--ftr-slide');
-
-      H = ftr.offsetHeight;
-      V = window.innerHeight;
-      overflow = Math.max(0, H - V);
-
-      const tooTall = overflow > V * 0.35;
-      active = desktop.matches && !tooTall && !(reduced.matches && overflow > 0);
-
-      if (active) {
-        reveal.style.setProperty('--ftr-h', Math.min(H, V) + 'px');
-        reveal.classList.add('is-fixed');
+    const desktopMedia = window.matchMedia('(min-width: 768px)');
+    const updateSize = () => {
+      setIsDesktop(desktopMedia.matches);
+      if (ftr.offsetHeight > 0) {
+        setFooterHeight(ftr.offsetHeight);
       }
-      update();
-    }
+    };
 
-    function update() {
-      ticking = false;
-      if (!reveal || !ftr) return;
-      if (!active || overflow === 0) return;
-      const top = reveal.getBoundingClientRect().top;   // V -> 0 while the footer is uncovered
-      const p = Math.min(1, Math.max(0, 1 - top / V));  // 0 = just starting, 1 = fully uncovered
-      ftr.style.setProperty('--ftr-slide', (overflow * p).toFixed(1) + 'px');
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        ticking = true;
-        requestAnimationFrame(update);
-      }
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', measure);
-    window.addEventListener('load', measure);
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(measure);
-    }
-    measure();
-
-    const ro = new ResizeObserver(() => {
-      measure();
-    });
+    updateSize();
+    const ro = new ResizeObserver(updateSize);
     ro.observe(ftr);
 
+    window.addEventListener('resize', updateSize);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateSize);
+    }
+
     return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', measure);
-      window.removeEventListener('load', measure);
       ro.disconnect();
+      window.removeEventListener('resize', updateSize);
     };
   }, []);
 
@@ -143,20 +106,42 @@ export default function Footer() {
   }, []);
 
   return (
-    <div className="ftr-reveal" id="ftrReveal" ref={revealRef}>
-      <footer
-        className="ftr"
-        id="ftr"
-        ref={ftrRef}
+    <div
+      className="relative w-full ftr-reveal"
+      id="ftrReveal"
+      ref={revealRef}
+      style={{
+        height: isDesktop && footerHeight ? `${footerHeight}px` : undefined,
+        clipPath: isDesktop ? 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' : undefined,
+        zIndex: 1,
+      }}
+    >
+      <div
+        className={isDesktop ? "fixed bottom-0 left-0 right-0 w-full" : "w-full"}
         style={{
-          '--page-bg': colors.pageBg,
-          '--footer-bg': colors.footerBg,
-          '--heading-tint': colors.headingTint,
-          '--btn-bg': colors.btnBg,
-          '--btn-text': colors.btnText,
-          backgroundColor: colors.pageBg,
-        } as React.CSSProperties}
+          height: isDesktop && footerHeight ? `${footerHeight}px` : undefined,
+          zIndex: 1,
+        }}
       >
+        <div
+          className={isDesktop ? "sticky h-full w-full" : "w-full"}
+          style={{
+            top: isDesktop && footerHeight ? `calc(100vh - ${footerHeight}px)` : undefined,
+          }}
+        >
+          <footer
+            className="ftr"
+            id="ftr"
+            ref={ftrRef}
+            style={{
+              '--page-bg': colors.pageBg,
+              '--footer-bg': colors.footerBg,
+              '--heading-tint': colors.headingTint,
+              '--btn-bg': colors.btnBg,
+              '--btn-text': colors.btnText,
+              backgroundColor: colors.pageBg,
+            } as React.CSSProperties}
+          >
         {/* SCOPED CSS FOR REVEAL, HOVERS, AND GEOMETRY */}
         <style>{`
         .footer-link-item {
@@ -243,20 +228,6 @@ export default function Footer() {
           position: relative;
           z-index: 1;
           background: var(--page-bg);
-        }
-        .ftr-reveal.is-fixed {
-          height: var(--ftr-h);           /* = min(H, V). Set by JS */
-          clip-path: inset(0);            /* clips the fixed footer to this box = reveal */
-        }
-        .ftr-reveal.is-fixed .ftr {
-          position: fixed;
-          left: 0; right: 0; bottom: 0;
-          transform: translate3d(0, var(--ftr-slide, 0px), 0);
-          will-change: transform;         /* only on the footer itself */
-        }
-        .ftr-reveal:not(.is-fixed) .ftr {
-          position: relative;
-          transform: none;
         }
 
         .ftr {
@@ -1069,6 +1040,8 @@ export default function Footer() {
         </div>
       </div>
     </footer>
+  </div>
+</div>
 
       {/* RAZORPAY COMPLIANCE MODAL (Rendered via Portal to escape clip-path) */}
       {modalContent && typeof document !== 'undefined' && createPortal(
