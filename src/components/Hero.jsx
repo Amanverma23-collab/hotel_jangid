@@ -361,25 +361,28 @@ export default function Hero({ onBookClick }) {
               <span>Call Now</span>
             </a>
 
-            {/* Mobile menu toggle (Only item on mobile right) */}
+            {/* Mobile menu toggle (Clean icon without circle background) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex md:hidden"
+              className="flex md:hidden p-1.5 focus:outline-none focus:ring-0 active:outline-none"
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '50%',
-                backgroundColor: '#EDECEA',
+                background: 'transparent',
+                backgroundColor: 'transparent',
                 border: 'none',
+                outline: 'none',
+                boxShadow: 'none',
+                WebkitTapHighlightColor: 'transparent',
+                display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 color: '#111111',
                 cursor: 'pointer',
+                padding: '6px',
               }}
               aria-label="Toggle navigation menu"
             >
-              <MenuToggleIcon open={mobileMenuOpen} className="size-5" duration={400} />
+              <MenuToggleIcon open={mobileMenuOpen} className="size-6" duration={400} />
             </button>
           </div>
         </header>
