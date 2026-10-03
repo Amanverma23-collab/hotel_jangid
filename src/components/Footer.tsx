@@ -129,12 +129,13 @@ export default function Footer() {
           opacity: 0.8;
           transform: translateY(-2px);
         }
+        .wordmark-wrap,
         .wordmark-wrapper {
           width: 100%;
-          overflow: hidden;
+          overflow: visible;
           margin-top: 24px;
           margin-bottom: 0;
-          padding-bottom: 8px;
+          padding-bottom: 0.04em;
           line-height: 0.8;
           text-align: center;
           white-space: nowrap;
@@ -148,13 +149,25 @@ export default function Footer() {
           letter-spacing: -0.02em;
           font-size: clamp(96px, 23vw, 280px);
         }
+        .wordmark,
         .wordmark-letter {
+          --lift: 0.08em;                 /* raise the wordmark slightly; tune 0.04em - 0.12em */
           display: inline-block;
+          line-height: 0.8;
+          letter-spacing: -0.02em;
+          text-align: center;
+          white-space: nowrap;
+
+          padding-bottom: 0.26em;         /* NEW: room for the J and g descenders */
+          margin-bottom: calc(-0.26em + var(--lift));   /* cancels the padding, then lifts */
+          overflow: visible;
+
           background: linear-gradient(
             to bottom,
             rgba(255, 255, 255, 0.28) 0%,
-            rgba(255, 255, 255, 0.14) 45%,
-            rgba(255, 255, 255, 0.00) 95%
+            rgba(255, 255, 255, 0.14) 35%,
+            rgba(255, 255, 255, 0.06) 78%,    /* baseline of the letters */
+            rgba(255, 255, 255, 0.02) 100%    /* descender tail, very faint but visible */
           );
           -webkit-background-clip: text;
           background-clip: text;
@@ -243,12 +256,15 @@ export default function Footer() {
           margin-top: -1px;                             /* hides any hairline seam */
           position: relative;
           overflow: hidden;
-          padding: 44px 56px 16px 56px;
+          padding: 44px 56px 0 56px;
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
           justify-content: space-between;
           min-height: 335px;
+        }
+        .ftr-bottom .wordmark-wrap {
+          padding-bottom: 0.04em;
         }
 
         .ftr-top-links {
@@ -345,7 +361,7 @@ export default function Footer() {
             padding-top: 0;
           }
           .ftr-bottom {
-            padding: 0 0 14px 0;
+            padding: 0 0 0 0;
             min-height: auto;
           }
           .ftr-mobile-links {
@@ -388,11 +404,20 @@ export default function Footer() {
           .ftr-bottom-address {
             text-align: left;
           }
+          .wordmark-wrap,
           .wordmark-wrapper {
             font-size: 24vw !important;
             margin-top: 16px !important;
             margin-bottom: 0 !important;
-            padding-bottom: 4px !important;
+            padding-bottom: 0.04em !important;
+            overflow: visible !important;
+          }
+          .wordmark,
+          .wordmark-letter {
+            --lift: 0.08em;
+            padding-bottom: 0.26em;
+            margin-bottom: calc(-0.26em + var(--lift));
+            overflow: visible;
           }
         }
       `}</style>
@@ -873,12 +898,12 @@ export default function Footer() {
           {/* GIANT FADED BRAND WORDMARK "Jangid" */}
           <div
             aria-hidden="true"
-            className="wordmark-wrapper"
+            className="wordmark-wrapper wordmark-wrap"
           >
             {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
               <span
                 key={idx}
-                className="wordmark-letter"
+                className="wordmark-letter wordmark"
                 style={{
                   transform: isInView ? 'translateY(0)' : 'translateY(60%)',
                   opacity: isInView ? 1 : 0,
