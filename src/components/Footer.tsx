@@ -558,29 +558,15 @@ export default function Footer() {
               marginTop: '-1px', // Seamless junction with top-right panel
             }}
           >
-            {/* HEADLINE & CTA ROW */}
+            {/* CTA ROW */}
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
                 paddingTop: '20px',
               }}
             >
-              {/* BIG HEADLINE (54px, weight 400, line-height 0.95, letter-spacing -1.5px, 3 lines) */}
-              <div
-                style={{
-                  color: '#FFFFFF',
-                  fontWeight: 400,
-                  fontSize: '54px',
-                  lineHeight: 0.95,
-                  letterSpacing: '-1.5px',
-                }}
-              >
-                <div>A peaceful stay</div>
-                <div>just 400 m from</div>
-                <div>Goga Ji Temple</div>
-              </div>
 
               {/* CTA BUTTON (170 x 70px, radius 20px, text: Book Your Stay) */}
               <a
@@ -845,23 +831,7 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Headline on mobile (34px full width) */}
-          <div
-            style={{
-              color: '#FFFFFF',
-              fontWeight: 400,
-              fontSize: '34px',
-              lineHeight: 1.05,
-              letterSpacing: '-1px',
-              marginTop: '10px',
-            }}
-          >
-            <div>A peaceful stay</div>
-            <div>just 400 m from</div>
-            <div>Goga Ji Temple</div>
-          </div>
-
-          {/* CTA Button full width under headline */}
+          {/* CTA Button full width */}
           <a
             href="#book"
             className="cta-btn-hover"
