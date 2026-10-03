@@ -518,7 +518,7 @@ export default function Hero({ onBookClick }) {
             <picture style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
               <source
                 media="(max-width: 767px)"
-                srcSet="/images/hotel-building-hero-mobile.jpg"
+                srcSet="/images/hotel-building-hero-mobile-png.jpg"
               />
               <img
                 src="/images/hotel-building-hero.jpg"
@@ -1123,11 +1123,14 @@ export default function Hero({ onBookClick }) {
           .left-hero-card {
             height: auto !important;
             min-height: 0 !important;
-            aspect-ratio: 5 / 4 !important;
+            aspect-ratio: 4 / 3 !important;
             border-radius: 24px !important;
+            background-color: #ffffff !important;
           }
           .hero-building-image {
-            object-position: center 35% !important;
+            object-fit: contain !important;
+            object-position: center center !important;
+            mix-blend-mode: multiply !important;
           }
           .hero-search-card {
             top: auto !important;

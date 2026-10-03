@@ -1,14 +1,29 @@
 import React, { useState } from 'react';
-import { X, Calendar, User, Phone, CheckCircle, MessageCircle, PhoneCall, ShieldCheck } from 'lucide-react';
-import { HOTEL_INFO } from '../data/hotelData';
+import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble } from 'lucide-react';
+
+const CHECK_IN_TIMES = [
+  '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
+  '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM', '04:00 PM',
+  '05:00 PM', '06:00 PM', '07:00 PM', '08:00 PM', '09:00 PM', '10:00 PM',
+];
+
+const CHECK_OUT_TIMES = [
+  '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
+  '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM',
+];
 
 export default function BookingModal({ isOpen, onClose, initialRoomType = 'ac' }) {
   const [roomType, setRoomType] = useState(initialRoomType);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [checkInDate, setCheckInDate] = useState(() => {
-    return new Date().toISOString().split('T')[0];
+  const [checkInDate, setCheckInDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [checkOutDate, setCheckOutDate] = useState(() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
   });
+  const [checkInTime, setCheckInTime] = useState('12:00 PM');
+  const [checkOutTime, setCheckOutTime] = useState('11:00 AM');
   const [roomsCount, setRoomsCount] = useState(1);
   const [guestsCount, setGuestsCount] = useState(2);
 
@@ -16,190 +31,296 @@ export default function BookingModal({ isOpen, onClose, initialRoomType = 'ac' }
 
   const roomPrice = roomType === 'ac' ? 1200 : 1000;
   const roomName = roomType === 'ac' ? 'Deluxe AC Room' : 'Cooler Room';
-  const totalAmount = roomPrice * roomsCount;
+
+  // Calculate nights
+  const nights = Math.max(1, Math.round(
+    (new Date(checkOutDate) - new Date(checkInDate)) / (1000 * 60 * 60 * 24)
+  ));
+  const totalAmount = roomPrice * roomsCount * nights;
 
   const handleWhatsAppBooking = (e) => {
     e.preventDefault();
-    const message = `Hello Vijay ji, I would like to book a room at Hotel Jangid, Gogamedi.
-• Room: ${roomName} (${roomsCount} room)
-• Check-in Date: ${checkInDate}
-• Guests: ${guestsCount}
-• Guest Name: ${name || 'Guest'}
-• Mobile: ${phone || 'Not provided'}
-• Total Estimated: ₹${totalAmount}/night.
-Please confirm room availability.`;
+    const message =
+      `Namaste Vijay Ji 🙏, I would like to book a room at Hotel Jangid, Gogamedi.\n` +
+      `\n• Room Type: ${roomName}` +
+      `\n• Rooms: ${roomsCount}` +
+      `\n• Check-in: ${checkInDate} at ${checkInTime}` +
+      `\n• Check-out: ${checkOutDate} at ${checkOutTime}` +
+      `\n• Nights: ${nights}` +
+      `\n• Guests: ${guestsCount}` +
+      `\n• Guest Name: ${name || 'Not provided'}` +
+      `\n• Mobile: ${phone || 'Not provided'}` +
+      `\n• Estimated Total: ₹${totalAmount.toLocaleString('en-IN')}` +
+      `\n\nPlease confirm room availability.`;
 
-    const encoded = encodeURIComponent(message);
-    window.open(`https://wa.me/919414487691?text=${encoded}`, '_blank');
+    window.open(`https://wa.me/919414487691?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
     <div
       onClick={onClose}
-      className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in duration-200"
+      style={{
+        position: 'fixed', inset: 0, zIndex: 1000,
+        background: 'rgba(0,0,0,0.55)',
+        backdropFilter: 'blur(8px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '16px',
+        animation: 'modalFadeIn 0.22s ease-out',
+      }}
     >
+      <style>{`
+        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+        .bm-input {
+          width: 100%; background: #F7F2E9; border: 1.5px solid #D9CDBA;
+          border-radius: 12px; padding: 10px 14px; font-size: 13px;
+          color: #1A1A1A; outline: none; transition: border-color 0.18s;
+          font-family: inherit; box-sizing: border-box; appearance: none;
+        }
+        .bm-input:focus { border-color: #A8936A; background: #FDF6EA; }
+        .bm-input::placeholder { color: #B0A898; }
+        .bm-label { font-size: 11px; font-weight: 600; color: #7A7060; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 5px; display: block; }
+        .bm-room-btn {
+          padding: 12px 14px; border-radius: 16px; border: 1.5px solid #D9CDBA;
+          text-align: left; cursor: pointer; transition: all 0.18s;
+          background: #F7F2E9; width: 100%;
+        }
+        .bm-room-btn.active { border-color: #A8936A; background: #EEE3CF; }
+        .bm-room-btn:not(.active):hover { border-color: #C4B49A; background: #F2EBE0; }
+      `}</style>
+
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative max-w-lg w-full bg-[#0d1424] text-white rounded-3xl border border-[#dfc59e]/30 shadow-2xl p-6 sm:p-8 overflow-hidden"
+        style={{
+          position: 'relative',
+          maxWidth: '520px', width: '100%',
+          background: '#FDF6EA',
+          borderRadius: '28px',
+          border: '1.5px solid #D9CDBA',
+          boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08)',
+          padding: '28px 28px 24px',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+        }}
       >
-        {/* Close Button */}
+        {/* Close */}
         <button
           onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-white/10 hover:bg-white/20 text-gray-300 hover:text-white transition-colors"
+          style={{
+            position: 'absolute', top: '16px', right: '16px',
+            width: '34px', height: '34px', borderRadius: '50%',
+            border: '1.5px solid #D9CDBA', background: '#F0E9DC',
+            cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: '#7A7060', transition: 'all 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#E5D9C9'; e.currentTarget.style.color = '#1A1A1A'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#F0E9DC'; e.currentTarget.style.color = '#7A7060'; }}
         >
-          <X className="w-5 h-5" />
+          <X size={15} />
         </button>
 
-        {/* Modal Header */}
-        <div className="mb-6">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#dfc59e]/15 border border-[#dfc59e]/30 text-[#dfc59e] text-xs font-semibold uppercase tracking-wider mb-2">
-            <span>Direct Hotel Reservation</span>
+        {/* Header */}
+        <div style={{ marginBottom: '20px' }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: '6px',
+            padding: '4px 14px', borderRadius: '999px',
+            border: '1px solid #D9CDBA', background: 'transparent',
+            fontSize: '11px', fontWeight: 600, color: '#7A7060',
+            letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px',
+          }}>
+            Direct Hotel Reservation
           </div>
-          <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
+          <h3 style={{ margin: 0, fontSize: '28px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
             Book Your Stay
           </h3>
-          <p className="text-xs text-gray-400 mt-1">
-            400m from Shri Goga Ji Temple • Free Courtyard Parking • 24/7 Geyser
+          <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#9A8E80' }}>
+            400m from Shri Goga Ji Temple • Free Parking • 24/7 Geyser
           </p>
         </div>
 
-        {/* Booking Form */}
-        <form onSubmit={handleWhatsAppBooking} className="space-y-4">
-          {/* Room Type Selector */}
+        <form onSubmit={handleWhatsAppBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+          {/* Room Type */}
           <div>
-            <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">
+            <label className="bm-label">
+              <BedDouble size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
               Select Room Type
             </label>
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => setRoomType('ac')}
-                className={`p-3 rounded-2xl border text-left transition-all ${
-                  roomType === 'ac'
-                    ? 'border-[#dfc59e] bg-[#dfc59e]/15 text-white'
-                    : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
-                }`}
-              >
-                <div className="font-bold text-sm text-white">Deluxe AC Room</div>
-                <div className="text-xs text-[#dfc59e] font-semibold mt-0.5">₹1,200 / night</div>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setRoomType('cooler')}
-                className={`p-3 rounded-2xl border text-left transition-all ${
-                  roomType === 'cooler'
-                    ? 'border-[#dfc59e] bg-[#dfc59e]/15 text-white'
-                    : 'border-white/10 bg-white/5 text-gray-400 hover:border-white/20'
-                }`}
-              >
-                <div className="font-bold text-sm text-white">Cooler Room</div>
-                <div className="text-xs text-[#dfc59e] font-semibold mt-0.5">₹1,000 / night</div>
-              </button>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {[
+                { key: 'ac', name: 'Deluxe AC Room', price: '₹1,200 / night' },
+                { key: 'cooler', name: 'Cooler Room', price: '₹1,000 / night' },
+              ].map(r => (
+                <button
+                  key={r.key}
+                  type="button"
+                  onClick={() => setRoomType(r.key)}
+                  className={`bm-room-btn ${roomType === r.key ? 'active' : ''}`}
+                >
+                  <div style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A' }}>{r.name}</div>
+                  <div style={{ fontSize: '12px', color: '#A8936A', fontWeight: 600, marginTop: '2px' }}>{r.price}</div>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* Dates & Guests */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <div>
-              <label className="block text-xs text-gray-400 mb-1">Check-in Date</label>
-              <div className="relative">
+          {/* Check-in Row: Date + Time */}
+          <div>
+            <label className="bm-label">
+              <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+              Check-in
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div>
                 <input
                   type="date"
                   value={checkInDate}
-                  onChange={(e) => setCheckInDate(e.target.value)}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#dfc59e]"
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={(e) => {
+                    setCheckInDate(e.target.value);
+                    // ensure checkout is after checkin
+                    if (e.target.value >= checkOutDate) {
+                      const d = new Date(e.target.value);
+                      d.setDate(d.getDate() + 1);
+                      setCheckOutDate(d.toISOString().split('T')[0]);
+                    }
+                  }}
+                  className="bm-input"
                   required
                 />
               </div>
+              <div>
+                <select value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="bm-input">
+                  {CHECK_IN_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
             </div>
+          </div>
 
+          {/* Check-out Row: Date + Time */}
+          <div>
+            <label className="bm-label">
+              <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+              Check-out
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              <div>
+                <input
+                  type="date"
+                  value={checkOutDate}
+                  min={checkInDate}
+                  onChange={(e) => setCheckOutDate(e.target.value)}
+                  className="bm-input"
+                  required
+                />
+              </div>
+              <div>
+                <select value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="bm-input">
+                  {CHECK_OUT_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Rooms + Guests */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Rooms</label>
-              <select
-                value={roomsCount}
-                onChange={(e) => setRoomsCount(Number(e.target.value))}
-                className="w-full bg-[#121a2d] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#dfc59e]"
-              >
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <option key={n} value={n} className="bg-[#0d1424] text-white">
-                    {n} Room{n > 1 ? 's' : ''}
-                  </option>
-                ))}
+              <label className="bm-label">Rooms</label>
+              <select value={roomsCount} onChange={(e) => setRoomsCount(Number(e.target.value))} className="bm-input">
+                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Room{n > 1 ? 's' : ''}</option>)}
               </select>
             </div>
-
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Guests</label>
-              <select
-                value={guestsCount}
-                onChange={(e) => setGuestsCount(Number(e.target.value))}
-                className="w-full bg-[#121a2d] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-[#dfc59e]"
-              >
-                {[1, 2, 3, 4, 6, 8, 10].map((n) => (
-                  <option key={n} value={n} className="bg-[#0d1424] text-white">
-                    {n} Guest{n > 1 ? 's' : ''}
-                  </option>
-                ))}
+              <label className="bm-label">
+                <Users size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                Guests
+              </label>
+              <select value={guestsCount} onChange={(e) => setGuestsCount(Number(e.target.value))} className="bm-input">
+                {[1, 2, 3, 4, 5, 6, 8, 10].map(n => <option key={n} value={n}>{n} Guest{n > 1 ? 's' : ''}</option>)}
               </select>
             </div>
           </div>
 
-          {/* Guest Name & Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Name + Phone */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Your Name</label>
+              <label className="bm-label">Your Name</label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Ramesh Kumar"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#dfc59e]"
+                className="bm-input"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs text-gray-400 mb-1">Phone Number</label>
+              <label className="bm-label">Phone Number</label>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="e.g. 98765 43210"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-[#dfc59e]"
+                className="bm-input"
                 required
               />
             </div>
           </div>
 
           {/* Price Summary */}
-          <div className="bg-white/5 rounded-2xl p-3 border border-white/10 flex items-center justify-between text-xs">
-            <div>
-              <span className="text-gray-400">Total Price: </span>
-              <strong className="text-white font-bold text-sm">₹{totalAmount}</strong>
-              <span className="text-gray-400 text-[11px]"> / night</span>
+          <div style={{
+            background: '#F0E9DC', borderRadius: '16px', padding: '14px 16px',
+            border: '1.5px solid #D9CDBA', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          }}>
+            <div style={{ fontSize: '13px', color: '#5A5040' }}>
+              <span>{roomsCount} Room × {nights} Night{nights > 1 ? 's' : ''}</span>
+              <div style={{ marginTop: '2px' }}>
+                <span style={{ fontSize: '11px', color: '#9A8E80' }}>Total: </span>
+                <strong style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>
+                  ₹{totalAmount.toLocaleString('en-IN')}
+                </strong>
+              </div>
             </div>
-            <div className="flex items-center gap-1.5 text-emerald-400 text-[11px]">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Pay at Hotel Available</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#27864A', fontWeight: 600 }}>
+              <ShieldCheck size={14} />
+              <span>Pay at Hotel</span>
             </div>
           </div>
 
           {/* Action Buttons */}
-          <div className="pt-2 flex flex-col sm:flex-row gap-3">
+          <div style={{ display: 'flex', gap: '10px', paddingTop: '2px' }}>
             <button
               type="submit"
-              className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-bold text-xs shadow-lg shadow-emerald-900/30 transition-all cursor-pointer"
+              style={{
+                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: '8px', padding: '13px 16px', borderRadius: '14px',
+                background: 'linear-gradient(135deg, #25D366 0%, #1DAD54 100%)',
+                border: 'none', color: '#fff', fontWeight: 700, fontSize: '13px',
+                cursor: 'pointer', boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
+                transition: 'all 0.18s', fontFamily: 'inherit',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
             >
-              <MessageCircle className="w-4 h-4" />
-              <span>Confirm on WhatsApp</span>
+              <MessageCircle size={16} />
+              Confirm on WhatsApp
             </button>
 
             <a
               href="tel:+919414487691"
-              className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white/10 hover:bg-white/15 text-white font-semibold text-xs border border-white/20 transition-all"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                gap: '6px', padding: '13px 16px', borderRadius: '14px',
+                background: '#F0E9DC', border: '1.5px solid #D9CDBA',
+                color: '#1A1A1A', fontWeight: 600, fontSize: '13px',
+                textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
+                fontFamily: 'inherit',
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
+              onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
             >
-              <PhoneCall className="w-4 h-4 text-[#dfc59e]" />
-              <span>Call Vijay Ji</span>
+              <PhoneCall size={15} style={{ color: '#A8936A' }} />
+              Call Vijay Ji
             </a>
           </div>
         </form>
