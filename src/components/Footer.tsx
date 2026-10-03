@@ -129,6 +129,38 @@ export default function Footer() {
           opacity: 0.8;
           transform: translateY(-2px);
         }
+        .wordmark-wrapper {
+          width: 100%;
+          overflow: hidden;
+          margin-top: 24px;
+          margin-bottom: -0.12em;
+          line-height: 0.8;
+          text-align: center;
+          white-space: nowrap;
+          user-select: none;
+          pointer-events: none;
+          display: flex;
+          justify-content: center;
+          align-items: flex-end;
+          font-family: "Playfair Display", "DM Serif Display", "Instrument Serif", Georgia, serif;
+          font-weight: 400;
+          letter-spacing: -0.02em;
+        }
+        .wordmark-letter {
+          display: inline-block;
+          background: linear-gradient(
+            to bottom,
+            rgba(255, 255, 255, 0.28) 0%,
+            rgba(255, 255, 255, 0.14) 45%,
+            rgba(255, 255, 255, 0.00) 95%
+          );
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
+          -webkit-text-fill-color: transparent;
+          text-shadow: none;
+          box-shadow: none;
+        }
         @media (max-width: 767px) {
           .desktop-only { display: none !important; }
         }
@@ -544,12 +576,14 @@ export default function Footer() {
           <div
             style={{
               width: '100%',
-              height: '335px',
+              minHeight: '335px',
+              height: 'auto',
               backgroundColor: colors.footerBg,
               borderTopLeftRadius: '28px',
               borderBottomLeftRadius: '28px',
               borderBottomRightRadius: '28px',
-              padding: '44px 56px',
+              overflow: 'hidden',
+              padding: '44px 56px 0px 56px',
               boxSizing: 'border-box',
               display: 'flex',
               flexDirection: 'column',
@@ -678,6 +712,29 @@ export default function Footer() {
               </div>
             </div>
 
+            {/* GIANT FADED BRAND WORDMARK "Jangid" */}
+            <div
+              aria-hidden="true"
+              className="wordmark-wrapper"
+              style={{
+                fontSize: 'clamp(96px, 23vw, 280px)',
+              }}
+            >
+              {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
+                <span
+                  key={idx}
+                  className="wordmark-letter"
+                  style={{
+                    transform: isInView ? 'translateY(0)' : 'translateY(60%)',
+                    opacity: isInView ? 1 : 0,
+                    transition: `transform 900ms cubic-bezier(0.16, 1, 0.3, 1) ${idx * 70}ms, opacity 900ms ease-out ${idx * 70}ms`,
+                  }}
+                >
+                  {letter}
+                </span>
+              ))}
+            </div>
+
           </div>
 
         </div>
@@ -691,7 +748,8 @@ export default function Footer() {
             width: '100%',
             backgroundColor: colors.footerBg,
             borderRadius: '24px',
-            padding: '24px 20px',
+            overflow: 'hidden',
+            padding: '24px 20px 0px 20px',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
@@ -918,6 +976,31 @@ export default function Footer() {
               <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
               <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
             </div>
+          </div>
+
+          {/* GIANT FADED BRAND WORDMARK "Jangid" ON MOBILE */}
+          <div
+            aria-hidden="true"
+            className="wordmark-wrapper"
+            style={{
+              fontSize: '24vw',
+              marginTop: '16px',
+              marginBottom: '-0.12em',
+            }}
+          >
+            {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
+              <span
+                key={idx}
+                className="wordmark-letter"
+                style={{
+                  transform: isInView ? 'translateY(0)' : 'translateY(60%)',
+                  opacity: isInView ? 1 : 0,
+                  transition: `transform 900ms cubic-bezier(0.16, 1, 0.3, 1) ${idx * 70}ms, opacity 900ms ease-out ${idx * 70}ms`,
+                }}
+              >
+                {letter}
+              </span>
+            ))}
           </div>
         </div>
 
