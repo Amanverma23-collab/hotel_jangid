@@ -137,5 +137,38 @@ body {
   }
 }
 
+/* ==================== STICKY REVEAL FOOTER ==================== */
+:root {
+  --page-bg: #FDF6EA;
+}
 
+.site-main {
+  position: relative;
+  z-index: 2;                     /* above the footer */
+  background: var(--page-bg, #FAF8F5);     /* opaque, so it covers the footer */
+}
 
+.ftr-reveal {
+  position: relative;
+  z-index: 1;
+  background: var(--page-bg, #FAF8F5);
+}
+
+.ftr-reveal.is-fixed {
+  height: var(--ftr-h);           /* = min(H, V). Set by JS */
+  clip-path: inset(0);            /* clips the fixed footer to this box = reveal */
+}
+
+.ftr-reveal.is-fixed .ftr {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  transform: translate3d(0, var(--ftr-slide, 0px), 0);
+  will-change: transform;         /* only on the footer itself */
+}
+
+.ftr-reveal:not(.is-fixed) .ftr {
+  position: relative;
+  transform: none;
+}
