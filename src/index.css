@@ -137,40 +137,5 @@ body {
   }
 }
 
-/* ==================== STICKY REVEAL FOOTER ==================== */
-:root {
-  --page-bg: #FDF6EA;
-}
-
-.site-main {
-  position: relative;
-  z-index: 2;
-  background: var(--page-bg, #FAF8F5);
-}
-
-.ftr-reveal {
-  position: relative;
-  z-index: 1;
-  background: var(--page-bg, #FAF8F5);
-}
-
-/* effect ON (set by JS only when the footer fits the screen) */
-.ftr-reveal.is-fixed {
-  height: var(--ftr-h);
-  clip-path: inset(0);
-}
-
-.ftr-reveal.is-fixed .ftr {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-/* effect OFF = normal static footer, scrolls like any section */
-.ftr-reveal:not(.is-fixed) .ftr {
-  position: relative;
-}
-
 
 
