@@ -7,12 +7,13 @@ import {
   ShieldCheck,
   Star,
   X,
-  Compass,
-  FileText,
-  UserCheck,
+  ArrowUp,
+  ChevronRight,
+  Clock,
+  Lock,
+  Sparkles,
   CheckCircle2,
 } from 'lucide-react';
-import { Button } from './ui/button';
 import { HOTEL_INFO } from '../data/hotelData';
 
 interface AnimatedContainerProps extends React.ComponentProps<typeof motion.div> {
@@ -33,10 +34,10 @@ function AnimatedContainer({
 
   return (
     <motion.div
-      initial={{ filter: 'blur(4px)', translateY: -6, opacity: 0 }}
+      initial={{ filter: 'blur(4px)', translateY: 10, opacity: 0 }}
       whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ delay, duration: 0.5 }}
+      transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       {...props}
     >
       {children}
@@ -47,247 +48,346 @@ function AnimatedContainer({
 export default function Footer() {
   const [modalContent, setModalContent] = useState<string | null>(null);
 
-  const socialLinks = [
-    {
-      title: 'Call Host',
-      href: 'tel:+919414487691',
-      icon: PhoneCall,
-    },
-    {
-      title: 'WhatsApp',
-      href: 'https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid',
-      icon: MessageCircle,
-    },
-    {
-      title: 'Location',
-      href: HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi',
-      icon: MapPin,
-    },
-  ];
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <>
-      {/* 
-        Sticky Footer with Curtain Reveal Effect 
-        Outer container sets the document height and clipPath boundary.
-        Inner container is fixed bottom-0, smoothly uncurtained as preceding sections scroll up.
-      */}
       <footer
         id="contact"
-        className="relative w-full h-[520px] md:h-[420px]"
-        style={{ clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' }}
+        className="relative w-full bg-[#080C15] text-slate-100 overflow-hidden font-sans border-t border-amber-500/20"
       >
-        <div className="fixed bottom-0 left-0 w-full h-[520px] md:h-[420px] bg-[#080d17] text-gray-200">
-          
-          {/* Ambient Radial Glowing Gradients */}
-          <div aria-hidden className="absolute inset-0 isolate z-0 contain-strict pointer-events-none overflow-hidden">
-            <div className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,rgba(223,197,158,0.1)_0,rgba(201,159,91,0.03)_50%,transparent_80%)] absolute top-0 left-0 h-[380px] w-[460px] -translate-y-16 rounded-full blur-2xl" />
-            <div className="bg-[radial-gradient(50%_50%_at_50%_50%,rgba(201,159,91,0.08)_0,transparent_100%)] absolute bottom-0 right-0 h-[320px] w-[420px] rounded-full blur-2xl" />
-          </div>
+        {/* Ambient Warm Golden Glow Effects */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+          <div className="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(223,197,158,0.12)_0,rgba(201,159,91,0.03)_50%,transparent_75%)] blur-3xl" />
+          <div className="absolute -bottom-20 right-10 w-[500px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(201,159,91,0.09)_0,transparent_70%)] blur-3xl" />
+          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
+        </div>
 
-          <div className="relative z-10 max-w-7xl mx-auto h-full px-5 sm:px-8 lg:px-12 py-8 md:py-10 flex flex-col justify-between border-t border-white/10">
-            
-            {/* Main Content Row */}
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-10 pt-2">
+        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-14 pb-12">
+          
+          {/* TOP CALLOUT BAR: Warm Welcome & Direct Quick Actions */}
+          <AnimatedContainer delay={0.05} className="mb-14">
+            <div className="rounded-3xl bg-gradient-to-r from-white/[0.06] via-white/[0.03] to-white/[0.06] border border-amber-400/25 p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
+              <div className="absolute -right-12 -top-12 w-44 h-44 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
               
-              {/* Left Column: Brand & Identity (5 cols) */}
-              <AnimatedContainer className="md:col-span-5 space-y-3.5">
-                <div className="flex items-center gap-3">
-                  <span className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#dfc59e] to-[#c99f5b] text-[#080d17] flex items-center justify-center font-serif font-black text-xl shadow-md">
-                    J
-                  </span>
-                  <div>
-                    <h2 className="font-serif font-bold text-2xl text-white tracking-wide leading-tight">
-                      {HOTEL_INFO.name}
-                    </h2>
-                    <span className="text-xs text-[#dfc59e] font-sans font-medium tracking-wider uppercase">
-                      होटल जांगिड़ • Gogamedi, Rajasthan
-                    </span>
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                <div className="space-y-2 max-w-2xl">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase">
+                    <Sparkles className="size-3.5 text-amber-400" />
+                    <span>Shri Goga Ji Dham • Gogamedi, Rajasthan</span>
                   </div>
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white tracking-wide">
+                    Planning your stay at Gogamedi?
+                  </h3>
+                  <p className="text-sm text-slate-300 leading-relaxed">
+                    Surjeet & Vijay Jangid welcome you to a peaceful, honest, and spotless family-run hotel located just 400m from the sacred temple.
+                  </p>
                 </div>
 
-                <p className="text-gray-400 text-xs sm:text-sm leading-relaxed max-w-sm">
-                  Situated <strong className="text-white font-medium">400 m from Shri Goga Ji Temple</strong> and <strong className="text-white font-medium">900 m from the railway station</strong>. A quiet, honest family-run hotel managed with care by Surjeet & Vijay Jangid.
-                </p>
+                {/* Quick CTA Actions */}
+                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                  <a
+                    href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-sm shadow-lg shadow-emerald-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
+                  >
+                    <MessageCircle className="size-4" />
+                    <span>WhatsApp Booking</span>
+                    <span className="w-2 h-2 rounded-full bg-emerald-200 animate-pulse ml-1" />
+                  </a>
 
-                {/* Social & Contact Icon Buttons */}
-                <div className="flex items-center gap-2 pt-1">
-                  {socialLinks.map((link) => (
-                    <a
-                      key={link.title}
-                      href={link.href}
-                      target={link.href.startsWith('http') ? '_blank' : undefined}
-                      rel="noopener noreferrer"
-                      title={link.title}
-                    >
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        className="size-8 rounded-lg border-white/15 bg-white/5 hover:bg-[#c99f5b] hover:text-[#080d17] hover:border-[#c99f5b] transition-all duration-300"
-                      >
-                        <link.icon className="size-4" />
-                        <span className="sr-only">{link.title}</span>
-                      </Button>
-                    </a>
-                  ))}
                   <a
                     href="tel:+919414487691"
-                    className="ml-2 text-xs font-semibold text-[#dfc59e] hover:text-white transition-colors"
+                    className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/30 font-semibold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
                   >
-                    +91 94144 87691
+                    <PhoneCall className="size-4 text-amber-400" />
+                    <span>Call +91 94144 87691</span>
+                  </a>
+
+                  <a
+                    href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-colors"
+                    title="Get Directions on Google Maps"
+                  >
+                    <MapPin className="size-4" />
+                    <span className="sr-only">Directions</span>
                   </a>
                 </div>
+              </div>
+            </div>
+          </AnimatedContainer>
 
-                {/* Trust Badges */}
-                <div className="flex flex-wrap items-center gap-2 pt-1">
-                  <div className="flex items-center gap-1.5 rounded-lg bg-white/[0.04] border border-white/10 px-2.5 py-1 text-[11px] text-[#dfc59e]">
-                    <ShieldCheck className="size-3.5 text-[#dfc59e]" />
-                    <span>Government Registered</span>
+          {/* MAIN 4-COLUMN LUXURY ARCHITECTURE */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 mb-14">
+            
+            {/* COLUMN 1: Brand & Heritage (Col 1-5) */}
+            <AnimatedContainer delay={0.1} className="lg:col-span-5 space-y-5">
+              <div className="flex items-center gap-3.5">
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-serif font-black text-2xl shadow-xl shadow-amber-500/20 border border-amber-300/40">
+                    J
                   </div>
-                  <div className="flex items-center gap-1.5 rounded-lg bg-white/[0.04] border border-white/10 px-2.5 py-1 text-[11px] text-amber-300">
-                    <Star className="size-3 fill-amber-400 text-amber-400" />
-                    <span className="font-semibold text-white">5.0</span>
-                    <span className="text-gray-400">Google Rating</span>
+                  <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
+                  </span>
+                </div>
+                <div>
+                  <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white tracking-wide leading-tight">
+                    {HOTEL_INFO.name}
+                  </h2>
+                  <p className="text-xs text-amber-300/90 font-medium tracking-wider uppercase mt-0.5">
+                    होटल जांगिड़ • गोगामेड़ी, राजस्थान
+                  </p>
+                </div>
+              </div>
+
+              <p className="text-slate-300 text-sm leading-relaxed max-w-md">
+                Experience authentic Rajasthani hospitality in a clean, quiet sanctuary. Thoughtfully managed by <span className="text-amber-200 font-medium">Surjeet & Vijay Jangid</span> to ensure pilgrims and travelers enjoy complete comfort and peace of mind.
+              </p>
+
+              {/* Distance Highlights */}
+              <div className="grid grid-cols-2 gap-3 max-w-md pt-1">
+                <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 flex items-center gap-2.5">
+                  <span className="text-lg">🛕</span>
+                  <div>
+                    <div className="text-xs font-bold text-white">400 Meters</div>
+                    <div className="text-[11px] text-slate-400">Shri Goga Ji Mandir</div>
                   </div>
                 </div>
-              </AnimatedContainer>
 
-              {/* Col 1: Quick Links (2.5 cols) */}
-              <AnimatedContainer delay={0.2} className="md:col-span-2 lg:col-span-2 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-                  Quick Links
-                </h3>
-                <ul className="text-gray-400 space-y-2 text-xs sm:text-sm">
-                  <li>
-                    <a href="#rooms" className="hover:text-white transition-colors">
-                      Rooms & Rates (₹1,000 / ₹1,200)
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#amenities" className="hover:text-white transition-colors">
-                      World-Class Amenities
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#testimonials" className="hover:text-white transition-colors">
-                      Gallery & Google Reviews
-                    </a>
-                  </li>
-                  <li>
-                    <a
-                      href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:text-[#dfc59e] transition-colors text-[#dfc59e] font-medium"
-                    >
-                      Direct WhatsApp Booking
-                    </a>
-                  </li>
-                </ul>
-              </AnimatedContainer>
+                <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 flex items-center gap-2.5">
+                  <span className="text-lg">🚂</span>
+                  <div>
+                    <div className="text-xs font-bold text-white">900 Meters</div>
+                    <div className="text-[11px] text-slate-400">Gogamedi Station</div>
+                  </div>
+                </div>
+              </div>
 
-              {/* Col 2: Policies & Compliance (2.5 cols) */}
-              <AnimatedContainer delay={0.3} className="md:col-span-3 lg:col-span-3 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-                  Policies & Terms
-                </h3>
-                <p className="text-[11px] text-gray-500">
-                  Razorpay 256-bit Secure Gateway Guidelines:
-                </p>
-                <ul className="text-gray-400 space-y-2 text-xs sm:text-sm">
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('privacy')}
-                      className="hover:text-[#dfc59e] text-left underline underline-offset-4 cursor-pointer transition-colors"
-                    >
-                      Privacy Policy
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('terms')}
-                      className="hover:text-[#dfc59e] text-left underline underline-offset-4 cursor-pointer transition-colors"
-                    >
-                      Terms & Conditions
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('refund')}
-                      className="hover:text-[#dfc59e] text-left underline underline-offset-4 cursor-pointer transition-colors"
-                    >
-                      Cancellation & Refund Policy
-                    </button>
-                  </li>
-                </ul>
-              </AnimatedContainer>
+              {/* Trust & Verification Badges */}
+              <div className="flex flex-wrap items-center gap-2.5 pt-2">
+                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 border border-amber-400/25 px-3 py-1.5 text-xs text-amber-200 font-medium">
+                  <ShieldCheck className="size-4 text-amber-400" />
+                  <span>Rajasthan Govt Registered</span>
+                </div>
 
-              {/* Col 3: Direct Host Contact (2 cols) */}
-              <AnimatedContainer delay={0.4} className="md:col-span-2 lg:col-span-2 space-y-3">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-white">
-                  Host Contact
-                </h3>
-                <ul className="text-gray-400 space-y-2 text-xs sm:text-sm">
-                  <li className="text-white font-medium">
-                    Vijay Jangid (Host)
-                  </li>
-                  <li>
-                    <a href="tel:+919414487691" className="hover:text-[#dfc59e] transition-colors">
-                      +91 94144 87691
-                    </a>
-                  </li>
-                  <li className="text-gray-500 text-xs">
-                    Surjeet Jangid (Founder)
-                  </li>
-                  <li className="text-gray-500 text-xs">
-                    Gogamedi, Hanumangarh, RJ
-                  </li>
-                </ul>
-              </AnimatedContainer>
+                <a
+                  href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 px-3 py-1.5 text-xs text-slate-200 font-medium transition-colors"
+                >
+                  <Star className="size-3.5 fill-amber-400 text-amber-400" />
+                  <span className="font-bold text-white">5.0</span>
+                  <span className="text-slate-400">Google Reviews</span>
+                </a>
+              </div>
+            </AnimatedContainer>
 
+            {/* COLUMN 2: Explore Hotel (Col 6-7) */}
+            <AnimatedContainer delay={0.2} className="lg:col-span-2 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
+                <span>Explore Hotel</span>
+                <span className="w-6 h-[1px] bg-amber-400/30" />
+              </h3>
+
+              <ul className="space-y-2.5 text-sm text-slate-300">
+                <li>
+                  <a href="#rooms" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>AC Deluxe (₹1,200)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#rooms" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Air-Cooled (₹1,000)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#amenities" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Hotel Amenities</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#testimonials" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Guest Reviews & Gallery</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="#location" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Temple Map & Route</span>
+                  </a>
+                </li>
+              </ul>
+            </AnimatedContainer>
+
+            {/* COLUMN 3: Policies & Security (Col 8-9) */}
+            <AnimatedContainer delay={0.3} className="lg:col-span-2 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
+                <span>Policies & Trust</span>
+                <span className="w-6 h-[1px] bg-amber-400/30" />
+              </h3>
+
+              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium">
+                <Lock className="size-3" />
+                <span>Razorpay 256-bit Encrypted</span>
+              </div>
+
+              <ul className="space-y-2.5 text-sm text-slate-300">
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('privacy')}
+                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
+                  >
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Privacy Policy</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('terms')}
+                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
+                  >
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Terms & Conditions</span>
+                  </button>
+                </li>
+                <li>
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('refund')}
+                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
+                  >
+                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                    <span>Cancellation & Refund</span>
+                  </button>
+                </li>
+                <li className="pt-1 text-xs text-slate-400 leading-relaxed">
+                  ✓ Govt Photo ID (Aadhaar / Voter ID) required at check-in.
+                </li>
+              </ul>
+            </AnimatedContainer>
+
+            {/* COLUMN 4: Direct Host Helpdesk Card (Col 10-12) */}
+            <AnimatedContainer delay={0.4} className="lg:col-span-3 space-y-4">
+              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
+                <span>Direct Host Desk</span>
+                <span className="w-6 h-[1px] bg-amber-400/30" />
+              </h3>
+
+              <div className="rounded-2xl bg-gradient-to-b from-white/[0.07] to-white/[0.02] border border-amber-400/20 p-4 space-y-3 shadow-lg">
+                <div className="flex items-center justify-between pb-2 border-b border-white/10">
+                  <div>
+                    <h4 className="font-semibold text-white text-sm">Vijay Jangid</h4>
+                    <p className="text-xs text-amber-300">Host & Operations</p>
+                  </div>
+                  <div className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-full">
+                    <Clock className="size-3" />
+                    <span>Available 24/7</span>
+                  </div>
+                </div>
+
+                <div className="text-xs text-slate-300 space-y-1">
+                  <div className="text-slate-400">Founder: <span className="text-slate-200">Surjeet Jangid</span></div>
+                  <div className="text-slate-400">Location: <span className="text-slate-200">Gogamedi, Hanumangarh, RJ</span></div>
+                </div>
+
+                <a
+                  href="tel:+919414487691"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 transition-colors shadow-md shadow-amber-400/10"
+                >
+                  <PhoneCall className="size-3.5" />
+                  <span>+91 94144 87691</span>
+                </a>
+              </div>
+            </AnimatedContainer>
+
+          </div>
+
+          {/* BOTTOM COPYRIGHT & COMPLIANCE BAR */}
+          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-center md:text-left">
+              <p>© {new Date().getFullYear()} {HOTEL_INFO.name}, Gogamedi. All rights reserved.</p>
+              <span className="hidden md:inline text-white/20">•</span>
+              <p className="text-slate-400">Government Registered Tourism Property</p>
             </div>
 
-            {/* Bottom Copyright & Credits Line */}
-            <div className="border-t border-white/10 pt-4 flex flex-col items-center justify-between gap-2 text-xs text-gray-400 md:flex-row">
-              <p>© {new Date().getFullYear()} {HOTEL_INFO.name}, Gogamedi. All rights reserved.</p>
-              <div className="flex items-center gap-1.5 text-gray-400">
-                <span>Crafted by</span>
-                <strong className="text-gray-300 font-semibold tracking-wide">Nikxlab Studio</strong>
+            {/* Payment & Back to top */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-[11px] text-slate-400 bg-white/[0.03] border border-white/10 px-3 py-1 rounded-xl">
+                <span>Secure UPI</span>
+                <span className="text-white/20">|</span>
+                <span>Cards</span>
+                <span className="text-white/20">|</span>
+                <span>NetBanking</span>
               </div>
+
+              <button
+                type="button"
+                onClick={scrollToTop}
+                aria-label="Scroll back to top"
+                className="p-2 rounded-xl bg-white/5 hover:bg-amber-400 hover:text-slate-950 border border-white/10 transition-all duration-300 group cursor-pointer"
+                title="Back to Top"
+              >
+                <ArrowUp className="size-4 group-hover:-translate-y-0.5 transition-transform" />
+              </button>
             </div>
 
           </div>
+
+          {/* Designer Credit */}
+          <div className="pt-4 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1">
+            <span>Designed & crafted for Shri Goga Ji Pilgrims by</span>
+            <span className="text-slate-300 font-semibold tracking-wide">Nikxlab Studio</span>
+          </div>
+
         </div>
       </footer>
 
-      {/* Razorpay Compliance Modal */}
+      {/* RAZORPAY COMPLIANCE MODAL */}
       {modalContent && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+          role="dialog"
+          aria-modal="true"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setModalContent(null)}
         >
           <div
-            className="bg-[#FAF8F5] text-ink-950 max-w-xl w-full max-h-[85vh] overflow-y-auto rounded-3xl p-6 sm:p-8 border border-[#dfc59e]/30 shadow-2xl relative"
+            className="bg-[#FAF8F5] text-slate-900 max-w-xl w-full max-h-[85vh] overflow-y-auto rounded-3xl p-6 sm:p-8 border border-amber-200/50 shadow-2xl relative"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setModalContent(null)}
-              className="absolute top-5 right-5 p-1.5 rounded-full hover:bg-gray-200 transition-colors cursor-pointer"
+              className="absolute top-5 right-5 p-2 rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
               aria-label="Close dialog"
             >
-              <X className="w-5 h-5 text-gray-700" />
+              <X className="w-5 h-5 text-slate-700" />
             </button>
 
             {modalContent === 'privacy' && (
               <div className="space-y-4">
-                <h3 className="font-serif font-bold text-2xl text-ink-950">Privacy Policy</h3>
-                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <div className="flex items-center gap-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
+                  <ShieldCheck className="size-4 text-amber-700" />
+                  <span>Guest Privacy & Data Protection</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-slate-950">Privacy Policy</h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                   Jangid Hotel values your privacy. Personal information collected during online booking (Name, Mobile Number, City) is strictly used for room reservations, check-in registration, and direct host-to-guest communication.
                 </p>
-                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
                   We never sell or share guest contact details with third parties. All online payments are handled directly by Razorpay with 256-bit SSL encryption. No banking credentials or card details are stored on our servers.
                 </p>
               </div>
@@ -295,11 +395,15 @@ export default function Footer() {
 
             {modalContent === 'terms' && (
               <div className="space-y-4">
-                <h3 className="font-serif font-bold text-2xl text-ink-950">Terms & Conditions</h3>
-                <ul className="space-y-2 text-xs sm:text-sm text-gray-700 list-disc pl-5">
-                  <li>Standard check-in time is 12:00 PM and check-out is 11:00 AM.</li>
+                <div className="flex items-center gap-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
+                  <CheckCircle2 className="size-4 text-amber-700" />
+                  <span>Standard Booking Terms</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-slate-950">Terms & Conditions</h3>
+                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc pl-5">
+                  <li>Standard check-in time is 12:00 PM and check-out is 11:00 AM (flexible on advance notice to host).</li>
                   <li>Every adult guest must produce a valid government photo ID (Aadhaar Card, Voter ID, or Driving License) upon arrival.</li>
-                  <li>Jangid Hotel is strictly a rooms-only property. Cooking inside rooms and illegal activities are prohibited.</li>
+                  <li>Jangid Hotel is strictly a family & pilgrim rooms-only property. Cooking inside rooms and illegal activities are prohibited.</li>
                   <li>Guests are kindly requested to preserve room cleanliness and hotel property.</li>
                 </ul>
               </div>
@@ -307,25 +411,30 @@ export default function Footer() {
 
             {modalContent === 'refund' && (
               <div className="space-y-4">
-                <h3 className="font-serif font-bold text-2xl text-ink-950">Cancellation & Refund Policy</h3>
-                <p className="text-xs sm:text-sm text-gray-700 leading-relaxed">
-                  We recognize that pilgrimage and travel schedules can change:
+                <div className="flex items-center gap-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
+                  <ShieldCheck className="size-4 text-amber-700" />
+                  <span>100% Transparent Policy</span>
+                </div>
+                <h3 className="font-serif font-bold text-2xl text-slate-950">Cancellation & Refund Policy</h3>
+                <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  We recognize that pilgrimage and travel schedules can change unexpectedly:
                 </p>
-                <ul className="space-y-2 text-xs sm:text-sm text-gray-700 list-disc pl-5">
+                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc pl-5">
                   <li>Cancellations requested 24 hours prior to check-in are eligible for a 90% refund processed back to the original payment source within 5–7 business days.</li>
-                  <li>For cancellations made within 24 hours of check-in, dates can be rescheduled without additional fees by contacting Vijay Jangid.</li>
+                  <li>For cancellations made within 24 hours of check-in, dates can be rescheduled without additional fees by contacting host Vijay Jangid.</li>
                   <li>For immediate support or questions regarding refunds, call +91 94144 87691.</li>
                 </ul>
               </div>
             )}
 
-            <div className="pt-5 border-t border-gray-200 mt-5 text-right">
-              <Button
+            <div className="pt-6 border-t border-slate-200 mt-6 flex justify-end">
+              <button
+                type="button"
                 onClick={() => setModalContent(null)}
-                className="bg-ink-950 text-white hover:bg-ink-800 rounded-xl px-5"
+                className="bg-slate-900 text-white hover:bg-slate-800 rounded-xl px-6 py-2.5 text-sm font-semibold cursor-pointer transition-colors"
               >
                 Close
-              </Button>
+              </button>
             </div>
           </div>
         </div>

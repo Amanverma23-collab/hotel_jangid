@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
 
 /**
  * Pixel-Accurate "Testimonials" Section
@@ -204,6 +204,30 @@ export default function GalleryTestimonialsSection() {
   const containerRef = useRef(null);
   const [scale, setScale] = useState(1.2);
   const [inView, setInView] = useState(false);
+  const [activePhotoIndex, setActivePhotoIndex] = useState(null);
+
+  // Keyboard navigation & body scroll lock for Lightbox Modal
+  useEffect(() => {
+    if (activePhotoIndex === null) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setActivePhotoIndex(null);
+      } else if (e.key === 'ArrowRight') {
+        setActivePhotoIndex((prev) => (prev + 1) % PHOTOS.length);
+      } else if (e.key === 'ArrowLeft') {
+        setActivePhotoIndex((prev) => (prev - 1 + PHOTOS.length) % PHOTOS.length);
+      }
+    };
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [activePhotoIndex]);
 
   // Responsive scale handler to ensure exact proportions on any device width
   useEffect(() => {
@@ -275,15 +299,20 @@ export default function GalleryTestimonialsSection() {
               flexShrink: 0,
             }}
           >
-            {/* 14 ABSOLUTELY POSITIONED REAL HOTEL PHOTOS */}
-            {PHOTOS.map((photo) => (
-              <img
+            {/* 14 ABSOLUTELY POSITIONED REAL HOTEL PHOTOS WITH INTERACTIVE ZOOM & LIGHTBOX TRIGGER */}
+            {PHOTOS.map((photo, idx) => (
+              <div
                 key={photo.id}
-                src={photo.src}
-                alt={photo.alt}
-                loading="lazy"
-                width={photo.w}
-                height={photo.h}
+                role="button"
+                tabIndex={0}
+                aria-label={`View photo: ${photo.alt}`}
+                onClick={() => setActivePhotoIndex(idx)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setActivePhotoIndex(idx);
+                  }
+                }}
                 style={{
                   position: 'absolute',
                   left: `${photo.x}px`,
@@ -291,14 +320,60 @@ export default function GalleryTestimonialsSection() {
                   width: `${photo.w}px`,
                   height: `${photo.h}px`,
                   borderRadius: '22px',
-                  objectFit: 'cover',
-                  border: 'none',
-                  boxShadow: 'none',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
                   opacity: inView ? 1 : 0,
                   transform: inView ? 'translateY(0)' : 'translateY(20px)',
-                  transition: `opacity 0.6s ease-out ${photo.staggerDelay}ms, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${photo.staggerDelay}ms`,
+                  transition: `opacity 0.6s ease-out ${photo.staggerDelay}ms, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${photo.staggerDelay}ms, box-shadow 0.3s ease`,
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                 }}
-              />
+                className="group gallery-photo-card"
+              >
+                <img
+                  src={photo.src}
+                  alt={photo.alt}
+                  loading="lazy"
+                  width={photo.w}
+                  height={photo.h}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.3s ease',
+                  }}
+                  className="group-hover:scale-110"
+                />
+                {/* Subtle Hover Lens Overlay */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    backgroundColor: 'rgba(0, 0, 0, 0.25)',
+                    opacity: 0,
+                    transition: 'opacity 0.3s ease',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                  className="group-hover:opacity-100"
+                >
+                  <div
+                    style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '50%',
+                      backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                    }}
+                  >
+                    <ZoomIn size={16} color="#0B132B" />
+                  </div>
+                </div>
+              </div>
             ))}
 
             {/* CENTER TEXT: Sits in empty space below cols 4 & 5 and between cols 2 and 7 */}
@@ -516,6 +591,304 @@ export default function GalleryTestimonialsSection() {
         </div>
 
       </div>
+
+      {/* LUXURY ANIMATED LIGHTBOX MODAL */}
+      {activePhotoIndex !== null && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Hotel Jangid Photo Gallery Preview"
+          onClick={() => setActivePhotoIndex(null)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 99999,
+            backgroundColor: 'rgba(5, 8, 15, 0.94)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            padding: '16px',
+            animation: 'fadeInLightbox 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+          }}
+        >
+          {/* Keyframe animation for smooth entrance */}
+          <style>{`
+            @keyframes fadeInLightbox {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+            @keyframes zoomInPhoto {
+              from { opacity: 0; transform: scale(0.92); }
+              to { opacity: 1; transform: scale(1); }
+            }
+            .lightbox-thumb-strip::-webkit-scrollbar {
+              height: 4px;
+            }
+            .lightbox-thumb-strip::-webkit-scrollbar-thumb {
+              background: rgba(255, 255, 255, 0.3);
+              border-radius: 4px;
+            }
+          `}</style>
+
+          {/* Top Bar: Title, Counter & Close */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+              maxWidth: '1200px',
+              margin: '0 auto',
+              padding: '8px 12px',
+              zIndex: 10,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <span
+                style={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  color: '#FAF8F5',
+                  padding: '4px 12px',
+                  borderRadius: '999px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                }}
+              >
+                {activePhotoIndex + 1} / {PHOTOS.length}
+              </span>
+              <span
+                style={{
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  fontSize: '14px',
+                  fontWeight: 500,
+                  display: 'none',
+                }}
+                className="sm:inline"
+              >
+                {PHOTOS[activePhotoIndex].alt}
+              </span>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={() => setActivePhotoIndex(null)}
+                aria-label="Close Lightbox"
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  color: '#FFFFFF',
+                  borderRadius: '999px',
+                  padding: '8px 16px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.25)')}
+                onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.12)')}
+              >
+                <X size={18} />
+                <span>Close</span>
+                <span style={{ fontSize: '11px', opacity: 0.6, marginLeft: '2px' }} className="hidden sm:inline">ESC</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Center Stage: Prev Button, Main Active Image, Next Button */}
+          <div
+            style={{
+              position: 'relative',
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              maxWidth: '1200px',
+              width: '100%',
+              margin: '0 auto',
+              padding: '10px 0',
+              overflow: 'hidden',
+            }}
+          >
+            {/* Prev Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActivePhotoIndex((prev) => (prev - 1 + PHOTOS.length) % PHOTOS.length);
+              }}
+              aria-label="Previous Photo"
+              style={{
+                position: 'absolute',
+                left: '12px',
+                zIndex: 20,
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                backdropFilter: 'blur(8px)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(223, 197, 158, 0.9)';
+                e.currentTarget.style.color = '#0B132B';
+                e.currentTarget.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <ChevronLeft size={26} />
+            </button>
+
+            {/* Active Photo Container */}
+            <div
+              onClick={(e) => e.stopPropagation()}
+              key={activePhotoIndex}
+              style={{
+                position: 'relative',
+                maxHeight: 'calc(100vh - 210px)',
+                maxWidth: '92vw',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                animation: 'zoomInPhoto 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+              }}
+            >
+              <img
+                src={PHOTOS[activePhotoIndex].src}
+                alt={PHOTOS[activePhotoIndex].alt}
+                style={{
+                  maxHeight: 'calc(100vh - 240px)',
+                  maxWidth: '100%',
+                  objectFit: 'contain',
+                  borderRadius: '18px',
+                  boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.15)',
+                }}
+              />
+              <p
+                style={{
+                  color: 'rgba(255, 255, 255, 0.9)',
+                  fontSize: '13px',
+                  fontWeight: 500,
+                  marginTop: '10px',
+                  textAlign: 'center',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+                }}
+              >
+                {PHOTOS[activePhotoIndex].alt}
+              </p>
+            </div>
+
+            {/* Next Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActivePhotoIndex((prev) => (prev + 1) % PHOTOS.length);
+              }}
+              aria-label="Next Photo"
+              style={{
+                position: 'absolute',
+                right: '12px',
+                zIndex: 20,
+                width: '48px',
+                height: '48px',
+                borderRadius: '50%',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                border: '1px solid rgba(255, 255, 255, 0.25)',
+                color: '#FFFFFF',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                backdropFilter: 'blur(8px)',
+                transition: 'all 0.2s ease',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(223, 197, 158, 0.9)';
+                e.currentTarget.style.color = '#0B132B';
+                e.currentTarget.style.transform = 'scale(1.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.15)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.transform = 'scale(1)';
+              }}
+            >
+              <ChevronRight size={26} />
+            </button>
+          </div>
+
+          {/* Bottom Thumbnails Navigation Strip */}
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="lightbox-thumb-strip"
+            style={{
+              width: '100%',
+              maxWidth: '900px',
+              margin: '0 auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-start',
+              gap: '8px',
+              overflowX: 'auto',
+              padding: '6px 4px 10px 4px',
+              zIndex: 10,
+            }}
+          >
+            {PHOTOS.map((thumb, idx) => (
+              <button
+                key={thumb.id}
+                type="button"
+                onClick={() => setActivePhotoIndex(idx)}
+                style={{
+                  position: 'relative',
+                  flexShrink: 0,
+                  width: '56px',
+                  height: '42px',
+                  borderRadius: '8px',
+                  overflow: 'hidden',
+                  padding: 0,
+                  cursor: 'pointer',
+                  border: idx === activePhotoIndex ? '2px solid #dfc59e' : '1px solid rgba(255, 255, 255, 0.2)',
+                  opacity: idx === activePhotoIndex ? 1 : 0.45,
+                  transform: idx === activePhotoIndex ? 'scale(1.08)' : 'scale(1)',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: '#000',
+                }}
+              >
+                <img
+                  src={thumb.src}
+                  alt={thumb.alt}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                  }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </section>
   );
 }
