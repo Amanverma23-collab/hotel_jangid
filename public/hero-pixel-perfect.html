@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jangid Hotel — Your Comfort Outside Home</title>
+  
+  <!-- Modern Typography: Plus Jakarta Sans (UI) & Playfair Display (Serif Italic for "Comfort") -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ========================================================
+       1. GLOBAL RESET & DESIGN TOKENS
+       ======================================================== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-page: #CFC6BF;          /* Page background: warm taupe/grey */
+      --bg-container: #F7F6F4;     /* Container background: warm off-white */
+      --bg-booking: #F1F0EE;       /* Booking card background */
+      --bg-pill: #EDECEA;          /* Navbar pill background */
+      --bg-input: #F3F2F0;         /* Search input pill background */
+      --text-main: #111111;        /* Primary dark text */
+      --text-muted: #555555;       /* Subtitle & muted text */
+      --text-nav: #333333;         /* Navbar link text */
+      --font-ui: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      --font-serif: "Playfair Display", "Instrument Serif", Georgia, serif;
+      --radius-container: 28px;
+      --radius-card: 28px;
+      --radius-search: 22px;
+      --radius-pill: 999px;
+    }
+
+    body {
+      background-color: var(--bg-page);
+      font-family: var(--font-ui);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 12px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      font-family: inherit;
+      border: none;
+      background: none;
+      cursor: pointer;
+    }
+
+    /* ========================================================
+       2. OUTER FRAME CONTAINER
+       ======================================================== */
+    .hero-container {
+      background-color: var(--bg-container);
+      border-radius: var(--radius-container);
+      padding: 12px;
+      max-width: 1440px;
+      width: 100%;
+      min-height: calc(100vh - 32px);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+      position: relative;
+    }
+
+    /* ========================================================
+       3. NAVBAR (Inside Container, Top)
+       Height ~56px, flex space-between, vertically centered
+       ======================================================== */
+    .hero-navbar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px 0 12px;
+      position: relative;
+      z-index: 30;
+    }
+
+    /* Left: Logo (building/cottage icon + text "JANGID HOTEL") */
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      font-size: 15px;
+      color: var(--text-main);
+      text-transform: uppercase;
+    }
+
+    .brand-icon {
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Center: 4 links, 13px, color #333, gap 44px */
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 44px;
+    }
+
+    .nav-link {
+      font-size: 13px;
+      color: var(--text-nav);
+      font-weight: 500;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: #000000;
+    }
+
+    /* Right: Actions (gap 8px) */
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Book Now pill (replacing dummy language pill) */
+    .book-now-pill {
+      height: 36px;
+      background-color: var(--bg-pill);
+      border-radius: var(--radius-pill);
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--text-main);
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.2s ease;
+      text-decoration: none;
+    }
+
+    .book-now-pill:hover {
+      background-color: #E2E0DD;
+    }
+
+    /* Round icon buttons (36px, bg #EDECEA) */
+    .icon-btn-round {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--bg-pill);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .icon-btn-round:hover {
+      background-color: #E2E0DD;
+    }
+
+    .icon-btn-round.whatsapp-btn:hover {
+      background-color: #25D366;
+      color: #FFFFFF;
+    }
+
+    /* Black pill button: Phone + "Contact Us" */
+    .contact-pill-btn {
+      height: 38px;
+      background-color: #111111;
+      color: #FFFFFF;
+      border-radius: var(--radius-pill);
+      padding: 0 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+      transition: background-color 0.2s ease;
+    }
+
+    .contact-pill-btn:hover {
+      background-color: #000000;
+    }
+
+    /* Mobile Menu Toggle */
+    .mobile-menu-btn {
+      display: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--bg-pill);
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+    }
+
+    .mobile-dropdown {
+      display: none;
+      background: #FFFFFF;
+      border-radius: 20px;
+      padding: 16px;
+      margin: 8px 0 12px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      flex-direction: column;
+      gap: 10px;
+      z-index: 40;
+    }
+
+    .mobile-dropdown.open {
+      display: flex;
+    }
+
+    .mobile-nav-link {
+      font-size: 14px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 10px;
+      background-color: var(--bg-container);
+    }
+
+    /* ========================================================
+       4. MAIN BENTO GRID LAYOUT
+       Columns: 1.7fr (left) | 1fr (right column), gap 14px
+       ======================================================== */
+    .bento-grid {
+      flex: 1;
+      display: grid;
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    /* Desktop Grid Sizing */
+    @media (min-width: 1024px) {
+      .bento-grid {
+        grid-template-columns: 1.7fr 1fr;
+        height: calc(100vh - 110px);
+      }
+    }
+
+    /* ========================================================
+       4A. LEFT BIG HERO CARD
+       ======================================================== */
+    .hero-card-left {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background-color: #E5E2DC;
+      animation: heroCardFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Background Carousel Slides */
+    .slide-img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1);
+      transition: opacity 1s ease-in-out, transform 12s ease-out;
+      will-change: transform, opacity;
+    }
+
+    .slide-img.active {
+      opacity: 1;
+      transform: scale(1.06);
+    }
+
+    /* Dark gradient overlay on the bottom 45% (rgba(0,0,0,0) -> rgba(0,0,0,0.48)) */
+    .hero-left-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.48) 0%, rgba(0,0,0,0.22) 30%, rgba(0,0,0,0) 45%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* TOP-LEFT: 3 Frosted Glass Pills (top 12px, left 12px) */
+    .hero-glass-pills {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+
+    .pills-row-1 {
+      display: flex;
+      gap: 10px;
+    }
+
+    .glass-pill {
+      height: 32px;
+      padding: 0 22px;
+      border-radius: var(--radius-pill);
+      background-color: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.40);
+      color: #FFFFFF;
+      font-size: 13px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+      user-select: none;
+    }
+
+    /* TOP-RIGHT: White Search Box Card (~190px wide x 112px tall, radius 22px, padding 14px) */
+    .hero-search-box {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 190px;
+      background-color: #FFFFFF;
+      border-radius: var(--radius-search);
+      padding: 14px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      z-index: 10;
+    }
+
+    .search-box-text {
+      font-size: 12.5px;
+      color: var(--text-nav);
+      line-height: 1.35;
+      font-weight: 400;
+    }
+
+    .search-input-pill {
+      background-color: var(--bg-input);
+      height: 36px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      padding-right: 2px;
+      margin-top: 10px;
+    }
+
+    .search-input-pill input {
+      background: transparent;
+      border: none;
+      outline: none;
+      font-size: 12px;
+      font-family: inherit;
+      color: var(--text-main);
+      width: 100%;
+    }
+
+    .search-input-pill input::placeholder {
+      color: #888888;
+    }
+
+    .search-submit-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: #111111;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .search-submit-btn:hover {
+      background-color: #000000;
+    }
+
+    /* BOTTOM-LEFT: Headline (left 14px, bottom ~40px) */
+    .hero-headline-wrap {
+      position: absolute;
+      left: 20px;
+      bottom: 36px;
+      z-index: 10;
+      padding-bottom: 16px;
+      padding-right: 16px;
+    }
+
+    .hero-headline {
+      color: #FFFFFF;
+      font-size: clamp(38px, 4.8vw, 60px);
+      line-height: 1.22;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+      padding-bottom: 8px;
+      animation: headlineMaskReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+    }
+
+    .hero-headline em {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-weight: 400;
+      display: inline-block;
+      padding-bottom: 6px;
+      padding-right: 6px;
+    }
+
+    /* BOTTOM-RIGHT: Slider Dots (3 dots, 8px, first solid, others 40% opacity, bottom 14px, right 14px) */
+    .hero-slider-dots {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      z-index: 10;
+    }
+
+    .slider-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #FFFFFF;
+      opacity: 0.4;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: opacity 0.3s ease;
+    }
+
+    .slider-dot.active {
+      opacity: 1;
+    }
+
+    /* ========================================================
+       4B. RIGHT COLUMN CONTAINER & CARDS
+       ======================================================== */
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .top-right-card {
+      height: 200px;
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background-color: #D1CCC6;
+      animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards;
+    }
+
+    .top-right-slide {
+      opacity: 0;
+      transition: opacity 0.9s ease-in-out, transform 0.9s ease-out;
+      transform: scale(1.04);
+    }
+
+    .top-right-slide.active {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .card-img-cover {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s ease-out;
+    }
+
+    .top-right-card:hover .card-img-cover {
+      transform: scale(1.05);
+    }
+
+    .card-dark-gradient-50 {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 50%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Top-Left: Two small round icon buttons (30px, white 90% bg, gallery + play, gap 6px, top 10px, left 10px) */
+    .top-right-icons-left {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 6px;
+      z-index: 10;
+    }
+
+    .icon-badge-white {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.90);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Top-Right: One small white round icon button (30px) with diagonal arrow ↗ */
+    .icon-badge-arrow {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.90);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-main);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .top-right-card:hover .icon-badge-arrow {
+      transform: rotate(45deg);
+    }
+
+    /* Bottom-Left: Title "Jangid Hotel" (~34px) + Map-Pin "Gogamedi, Rajasthan" (12px, 85% opacity) */
+    .top-right-title-wrap {
+      position: absolute;
+      left: 16px;
+      bottom: 14px;
+      z-index: 10;
+    }
+
+    .top-right-title {
+      color: #FFFFFF;
+      font-size: 34px;
+      font-weight: 400;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+
+    .top-right-location {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 12px;
+      margin-top: 2px;
+    }
+
+    /* Bottom-Right: Small underlined white text "Directions" (12px) */
+    .top-right-directions {
+      position: absolute;
+      right: 16px;
+      bottom: 14px;
+      color: #FFFFFF;
+      font-size: 12px;
+      text-decoration: underline;
+      font-weight: 500;
+      z-index: 10;
+    }
+
+    /* ========================================================
+       3C. BOOKING CARD (~144px)
+       bg #F1F0EE, radius 28px, padding 16px 18px
+       ======================================================== */
+    .booking-card {
+      background-color: var(--bg-booking);
+      border-radius: var(--radius-card);
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.16s backwards;
+    }
+
+    .booking-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .booking-label {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .booking-value {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12.5px;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    /* Outlined pill button: "Book Now" (38px, 1px solid #222) */
+    .btn-book-now {
+      width: 100%;
+      height: 38px;
+      border-radius: var(--radius-pill);
+      border: 1px solid #222222;
+      background-color: #FFFFFF;
+      color: var(--text-main);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-top: 2px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .btn-book-now:hover {
+      background-color: #111111;
+      color: #FFFFFF;
+    }
+
+    /* ========================================================
+       3D. TWO SMALL IMAGE CARDS (Side by Side, ~118px)
+       ======================================================== */
+    .bottom-small-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      height: 118px;
+      animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.24s backwards;
+    }
+
+    .room-thumb-card {
+      position: relative;
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      background-color: #D1CCC6;
+      cursor: pointer;
+    }
+
+    .room-thumb-card .card-img-cover {
+      transition: transform 0.6s ease-out;
+    }
+
+    .room-thumb-card:hover .card-img-cover {
+      transform: scale(1.05);
+    }
+
+    .room-thumb-card .card-dark-gradient-60 {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.70) 0%, rgba(0, 0, 0, 0) 60%);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Frosted glass arrow button (30px, ↗ arrow, frosted white border) */
+    .glass-arrow-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: rgba(255, 255, 255, 0.40);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.60);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      z-index: 10;
+      transition: transform 0.3s ease;
+    }
+
+    .room-thumb-card:hover .glass-arrow-btn {
+      transform: rotate(45deg);
+    }
+
+    /* Bottom-left label (11px, white) */
+    .room-thumb-label {
+      position: absolute;
+      left: 12px;
+      bottom: 10px;
+      font-size: 11px;
+      font-weight: 500;
+      color: #FFFFFF;
+      line-height: 1.1;
+      text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+      z-index: 10;
+    }
+
+    /* ========================================================
+       5. KEYFRAME ANIMATIONS
+       ======================================================== */
+    @keyframes heroCardFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(1.04);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes cardSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes headlineMaskReveal {
+      from {
+        opacity: 0;
+        transform: translateY(100%);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* ========================================================
+       6. RESPONSIVE BREAKPOINTS
+       ======================================================== */
+    /* Tablet (768px - 1023px) */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .bento-grid {
+        grid-template-columns: 1fr;
+      }
+      .hero-card-left {
+        height: 60vh;
+        min-height: 480px;
+      }
+      .right-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        height: auto;
+      }
+      .top-right-card {
+        grid-column: 1 / 2;
+        height: 220px;
+      }
+      .booking-card {
+        grid-column: 2 / 3;
+        height: 220px;
+        justify-content: center;
+      }
+      .bottom-small-cards {
+        grid-column: 1 / 3;
+        height: 140px;
+      }
+    }
+
+    /* Mobile (< 768px) */
+    @media (max-width: 767px) {
+      body {
+        padding: 8px;
+      }
+      .hero-container {
+        border-radius: 24px;
+        padding: 8px;
+      }
+      .nav-links,
+      .book-now-pill,
+      .lang-pill,
+      .icon-btn-round,
+      .contact-pill-btn {
+        display: none !important;
+      }
+      .logo {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+      .mobile-menu-btn {
+        display: flex !important;
+      }
+      .bento-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .hero-card-left {
+        height: 70vh;
+        min-height: 460px;
+        border-radius: 24px;
+      }
+      .hero-search-box {
+        top: auto;
+        bottom: 120px;
+        right: 12px;
+        left: 12px;
+        width: auto;
+      }
+      .hero-headline-wrap {
+        left: 14px;
+        bottom: 24px;
+      }
+      .hero-headline {
+        font-size: 38px;
+      }
+      .right-column {
+        gap: 12px;
+        height: auto;
+      }
+      .top-right-card,
+      .booking-card {
+        border-radius: 24px;
+      }
+      .bottom-small-cards {
+        gap: 12px;
+      }
+      .room-thumb-card {
+        border-radius: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== 1. PAGE CONTAINER ==================== -->
+  <main class="hero-container">
+
+    <!-- ==================== 2. NAVBAR (Inside Container, Top) ==================== -->
+    <header class="hero-navbar">
+      <!-- LEFT: Logo = small building/cottage icon + text "JANGID HOTEL" -->
+      <a href="#" class="nav-brand">
+        <div class="brand-icon">
+          <!-- Building / Cottage icon -->
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
+            <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+            <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
+            <path d="M10 6h4"/>
+            <path d="M10 10h4"/>
+            <path d="M10 14h4"/>
+            <path d="M10 18h4"/>
+          </svg>
+        </div>
+        <span>JANGID HOTEL</span>
+      </a>
+
+      <!-- CENTER: 4 site links, 13px, color #333, gap 44px -->
+      <nav class="nav-links">
+        <a href="#about" class="nav-link">About</a>
+        <a href="#rooms" class="nav-link">Rooms</a>
+        <a href="#amenities" class="nav-link">Amenities</a>
+        <a href="#testimonials" class="nav-link">Gallery & Reviews</a>
+      </nav>
+
+      <!-- RIGHT: Book Now, WhatsApp, Directions, Call Now (gap 8px) -->
+      <div class="nav-actions">
+        <!-- a) Book Now pill (replaces dummy EN lang dropdown) -->
+        <a href="#rooms" class="book-now-pill" onclick="alert('Booking Room at Jangid Hotel! Direct Call: +91 9414487691')">
+          <span>Book Now</span>
+        </a>
+
+        <!-- b) Round icon button: WhatsApp direct chat (replaces dummy user icon) -->
+        <a href="https://wa.me/919414487691?text=Hello%20Hotel%20Jangid,%20I%20want%20to%20inquire%20about%20room%20booking" target="_blank" rel="noopener noreferrer" class="icon-btn-round whatsapp-btn" title="Chat on WhatsApp (+91 9414487691)" aria-label="Chat on WhatsApp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.196 8.196 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24m4.52 11.63c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.03-1.24-.75-.67-1.26-1.5-1.41-1.75-.15-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.15.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.13.17 1.78 2.71 4.3 3.8.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.18-.47-.3" />
+          </svg>
+        </a>
+
+        <!-- c) Round icon button: Google Maps directions (replaces dummy bell icon) -->
+        <a href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6" target="_blank" rel="noopener noreferrer" class="icon-btn-round" title="Google Maps Location & Directions (400m to Temple)" aria-label="Google Maps Location">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+            <circle cx="12" cy="10" r="3"></circle>
+          </svg>
+        </a>
+
+        <!-- d) Black pill button: Phone + "Call Now" -->
+        <a href="tel:+919414487691" class="contact-pill-btn" title="Call Hotel Jangid: +91 9414487691">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>Call Now</span>
+        </a>
+
+        <!-- Mobile Menu Toggle Button -->
+        <button type="button" class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Mobile Dropdown Navigation -->
+    <div class="mobile-dropdown" id="mobileDropdown">
+      <a href="#about" class="mobile-nav-link">About</a>
+      <a href="#rooms" class="mobile-nav-link">Rooms</a>
+      <a href="#amenities" class="mobile-nav-link">Amenities</a>
+      <a href="#testimonials" class="mobile-nav-link">Gallery & Reviews</a>
+    </div>
+
+    <!-- ==================== 3. MAIN BENTO GRID ==================== -->
+    <section class="bento-grid">
+
+      <!-- ---------- 3A. LEFT BIG HERO CARD ---------- -->
+      <div class="hero-card-left" id="heroCardLeft">
+        <!-- Hotel Jangid Exterior Building Photo (Responsive: Mobile Vertical vs Desktop Landscape) -->
+        <picture style="position: absolute; inset: 0; width: 100%; height: 100%;">
+          <source media="(max-width: 767px)" srcset="/images/hotel-building-hero-mobile.jpg" />
+          <img
+            src="/images/hotel-building-hero.jpg"
+            alt="Hotel Jangid Main Luxury Building in Gogamedi"
+            class="card-img-cover"
+            id="heroBuildingImg"
+            style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
+          />
+        </picture>
+
+        <!-- Dark Gradient Overlay on bottom for crisp text readability -->
+        <div class="hero-left-overlay"></div>
+
+
+
+
+
+        <!-- BOTTOM-LEFT: Headline (left 14px, bottom ~40px) -->
+        <div class="hero-headline-wrap">
+          <h1 class="hero-headline">
+            Stay Close to<br />
+            <em>Goga Ji</em> Temple
+          </h1>
+        </div>
+      </div>
+
+      <!-- ---------- RIGHT COLUMN (3B, 3C, 3D) ---------- -->
+      <div class="right-column">
+
+        <!-- ---------- 3B. TOP-RIGHT IMAGE CARD (Slideshow: 400m Route Map & Temple, ~200px) ---------- -->
+        <div class="top-right-card" id="topRightCard">
+          <img
+            src="/images/route-map-400m.jpg"
+            alt="400 Meter Walking Route from Hotel Jangid to Shri Goga Mandir"
+            class="card-img-cover top-right-slide active"
+            id="topSlide0"
+          />
+          <img
+            src="/images/gogamedi-temple.jpg"
+            alt="Shri Goga Ji Maharaj Temple, Gogamedi"
+            class="card-img-cover top-right-slide"
+            id="topSlide1"
+          />
+          <div class="card-dark-gradient-50"></div>
+
+          <!-- Top-Left: 400m to Goga Ji Mandir (No Box) -->
+          <div style="position: absolute; top: 12px; left: 14px; z-index: 10; display: inline-flex; align-items: center; gap: 5px; color: #111111; font-size: 13px; font-weight: 600; letter-spacing: -0.01em; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8), 0 0 6px rgba(255, 255, 255, 0.6);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+            <span id="topSlideSubtitle">400m to Goga Ji Mandir</span>
+          </div>
+
+          <!-- Top-Right: Arrow button (30px, ↗ arrow, top 10px, right 10px) -->
+          <a href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6" target="_blank" rel="noopener noreferrer" class="icon-badge-arrow" aria-label="View Map Directions">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </a>
+
+          <!-- Slide Dots Indicator (2 dots) -->
+          <div style="position: absolute; right: 84px; bottom: 18px; display: flex; align-items: center; gap: 6px; z-index: 10;">
+            <button type="button" class="top-slide-dot active" data-top-index="0" style="width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF; opacity: 1; border: none; padding: 0; cursor: pointer; transition: opacity 0.3s;"></button>
+            <button type="button" class="top-slide-dot" data-top-index="1" style="width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF; opacity: 0.45; border: none; padding: 0; cursor: pointer; transition: opacity 0.3s;"></button>
+          </div>
+
+          <!-- Bottom-Right: Underlined white text "Directions" -->
+          <a href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6" target="_blank" rel="noopener noreferrer" class="top-right-directions">
+            Directions
+          </a>
+        </div>
+
+        <!-- ---------- 3C. BOOKING CARD (~144px) ---------- -->
+        <div class="booking-card">
+          <!-- Row 1: Check In -->
+          <div class="booking-row">
+            <span class="booking-label">Check In</span>
+            <div class="booking-value">
+              <span>27 - 08 - 2026</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#777777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Row 2: Check Out -->
+          <div class="booking-row">
+            <span class="booking-label">Check Out</span>
+            <div class="booking-value">
+              <span>30 - 08 - 2026</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#777777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Row 3: Guests -->
+          <div class="booking-row">
+            <span class="booking-label">Guests</span>
+            <div class="booking-value">
+              <span>2 Adult(s)</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#777777" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Outlined Pill Button: "Book Now" (38px, 1px solid #222) -->
+          <button type="button" class="btn-book-now" onclick="alert('Booking Room at Jangid Hotel! Direct Call: +91 9414487691')">
+            Book Now
+          </button>
+        </div>
+
+        <!-- ---------- 3D. TWO SMALL IMAGE CARDS (Side by Side, ~118px) ---------- -->
+        <div class="bottom-small-cards">
+          <!-- Card 1: AC Room - Rs 1200 (Deluxe AC Room) -->
+          <div class="room-thumb-card" onclick="alert('Selected AC Room - Rs 1200')">
+            <img
+              src="/images/room-ac-deluxe.jpg"
+              alt="Deluxe AC Room - Rs 1200 - Hotel Jangid"
+              class="card-img-cover"
+            />
+            <div class="card-dark-gradient-60"></div>
+            <!-- Top-Right: Frosted glass arrow button (30px) -->
+            <div class="glass-arrow-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </div>
+            <!-- Bottom-Left Label -->
+            <span class="room-thumb-label">AC Room - Rs 1200</span>
+          </div>
+
+          <!-- Card 2: Non-AC Room - Rs 1000 (Cooler Room Non-AC) -->
+          <div class="room-thumb-card" onclick="alert('Selected Non-AC Room - Rs 1000')">
+            <img
+              src="/images/room-standard-ac.jpg"
+              alt="Non-AC Room - Rs 1000 - Hotel Jangid"
+              class="card-img-cover"
+            />
+            <div class="card-dark-gradient-60"></div>
+            <!-- Top-Right: Frosted glass arrow button (30px) -->
+            <div class="glass-arrow-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </div>
+            <!-- Bottom-Left Label -->
+            <span class="room-thumb-label">Non-AC Room - Rs 1000</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1. Mobile Menu Toggle
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const mobileDropdown = document.getElementById('mobileDropdown');
+      if (mobileBtn && mobileDropdown) {
+        mobileBtn.addEventListener('click', () => {
+          mobileDropdown.classList.toggle('open');
+        });
+      }
+
+      // 2. Top-Right Card Slideshow (Route Map & Goga Ji Temple)
+      const topSlides = [
+        document.getElementById('topSlide0'),
+        document.getElementById('topSlide1')
+      ];
+      const topDots = document.querySelectorAll('.top-slide-dot');
+      const topSubtitle = document.getElementById('topSlideSubtitle');
+      const nextTopSlideBtn = document.getElementById('nextTopSlideBtn');
+      const subtitles = ['400m to Goga Ji Mandir', 'Gogamedi, Rajasthan'];
+      let currentTopSlide = 0;
+      let topInterval;
+
+      function goToTopSlide(idx) {
+        topSlides[currentTopSlide].classList.remove('active');
+        if (topDots[currentTopSlide]) topDots[currentTopSlide].style.opacity = '0.45';
+
+        currentTopSlide = idx;
+
+        topSlides[currentTopSlide].classList.add('active');
+        if (topDots[currentTopSlide]) topDots[currentTopSlide].style.opacity = '1';
+        if (topSubtitle) topSubtitle.textContent = subtitles[currentTopSlide];
+      }
+
+      function nextTopSlide() {
+        const next = (currentTopSlide + 1) % topSlides.length;
+        goToTopSlide(next);
+      }
+
+      topInterval = setInterval(nextTopSlide, 4000);
+
+      topDots.forEach((dot, idx) => {
+        dot.addEventListener('click', () => {
+          clearInterval(topInterval);
+          goToTopSlide(idx);
+          topInterval = setInterval(nextTopSlide, 4000);
+        });
+      });
+
+      if (nextTopSlideBtn) {
+        nextTopSlideBtn.addEventListener('click', () => {
+          clearInterval(topInterval);
+          nextTopSlide();
+          topInterval = setInterval(nextTopSlide, 4000);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

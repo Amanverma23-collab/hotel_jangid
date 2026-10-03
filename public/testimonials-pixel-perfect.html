@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pixel-Accurate Testimonials Section</title>
+  
+  <!-- Google Fonts: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* Reset & Base Setup */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: #FFFFFF;
+      padding: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ==================== 1. SECTION WRAPPER ==================== */
+    .testimonials-section {
+      background-color: #FFFFFF;
+      width: 100%;
+      padding: 70px 0 90px 0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .testimonials-scaler {
+      width: 100%;
+      position: relative;
+    }
+
+    /* ==================== 2. PHOTO GALLERY BOX ==================== */
+    .gallery-outer {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+    }
+
+    .gallery-box {
+      position: relative;
+      width: 976px;
+      height: 372px;
+      flex-shrink: 0;
+      transform-origin: top center;
+    }
+
+    /* Every photo styling: border-radius 22px, object-fit cover, no border, no shadow */
+    .gallery-photo {
+      position: absolute;
+      border-radius: 22px;
+      object-fit: cover;
+      border: none;
+      box-shadow: none;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .gallery-photo.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ==================== 4. CENTER TEXT ==================== */
+    .center-text-pocket {
+      position: absolute;
+      top: 255px;
+      left: 235px;
+      width: 506px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      z-index: 10;
+      pointer-events: auto;
+    }
+
+    /* Badge: "Testimonials", pill shape, 1px solid #C9CED6, white bg, padding 6px 20px, font-size 14px, color #1F2937, height ~30px */
+    .testimonials-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      border: 1px solid #C9CED6;
+      background-color: #FFFFFF;
+      padding: 6px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #1F2937;
+      height: 30px;
+      line-height: 1;
+    }
+
+    .center-text-gap {
+      height: 24px;
+    }
+
+    /* Heading: 2 lines, centered, font-size 28px, weight 600, line-height 1.2, letter-spacing -0.5px */
+    .testimonials-heading {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 600;
+      line-height: 1.2;
+      letter-spacing: -0.5px;
+      text-align: center;
+    }
+
+    .heading-line1 {
+      display: block;
+      color: #0B0B0F;
+    }
+
+    .heading-line2 {
+      display: block;
+      color: #8E9AAF;
+      margin-top: 2px;
+    }
+
+    /* ==================== 5. TESTIMONIAL CARDS ==================== */
+    .cards-wrapper {
+      max-width: 960px;
+      margin: 60px auto 0 auto;
+      padding: 0 24px;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      text-align: left;
+    }
+
+    .testimonial-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* 5 stars, color #F5A623, size 14px, 2px gap */
+    .stars-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      color: #F5A623;
+    }
+
+    .star-icon {
+      width: 14px;
+      height: 14px;
+      fill: #F5A623;
+    }
+
+    .quote-text {
+      margin-top: 16px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #4B5563;
+      font-weight: 400;
+    }
+
+    .profile-row {
+      margin-top: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Avatar: round 38px (border-radius 50%) */
+    .avatar-img {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: none;
+    }
+
+    .profile-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .profile-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1.2;
+    }
+
+    .profile-role {
+      font-size: 12.5px;
+      font-weight: 400;
+      color: #6B7280;
+      line-height: 1.2;
+      margin-top: 2px;
+    }
+
+    /* ==================== 6. RESPONSIVE ==================== */
+    @media (max-width: 768px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==================== 1. SECTION WRAPPER ==================== -->
+  <section class="testimonials-section" id="testimonials">
+    <div class="testimonials-scaler" id="scalerContainer">
+
+      <!-- ==================== 2. PHOTO GALLERY (976px x 372px) ==================== -->
+      <div class="gallery-outer" id="galleryOuter">
+        <div class="gallery-box" id="galleryBox">
+
+          <!-- COL 1 (x=0) -> 2 photos -->
+          <!-- 1A: y=39, h=151 -->
+          <img class="gallery-photo" style="left: 0px; top: 39px; width: 106px; height: 151px; transition-delay: 240ms;"
+               src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=400&q=80"
+               alt="1A: Cozy lounge corner, grey fabric sofa, tall black floor lamp, two people sitting" loading="lazy">
+          
+          <!-- 1B: y=202, h=150 -->
+          <img class="gallery-photo" style="left: 0px; top: 202px; width: 106px; height: 150px; transition-delay: 240ms;"
+               src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80"
+               alt="1B: Young man in grey t-shirt standing and working at a desk, side view" loading="lazy">
+
+          <!-- COL 2 (x=125) -> 3 photos -->
+          <!-- 2A: y=20, h=109 -->
+          <img class="gallery-photo" style="left: 125px; top: 20px; width: 106px; height: 109px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?auto=format&fit=crop&w=400&q=80"
+               alt="2A: Open-plan office with exposed brick walls and orange wooden ceiling beams" loading="lazy">
+          
+          <!-- 2B: y=141, h=110 -->
+          <img class="gallery-photo" style="left: 125px; top: 141px; width: 106px; height: 110px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=400&q=80"
+               alt="2B: Hand writing with a pen on paper, coffee cup blurred in background" loading="lazy">
+          
+          <!-- 2C: y=263, h=109 -->
+          <img class="gallery-photo" style="left: 125px; top: 263px; width: 106px; height: 109px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1527192491265-7e15c55b1ed2?auto=format&fit=crop&w=400&q=80"
+               alt="2C: Long wooden communal table with hanging pendant bulbs" loading="lazy">
+
+          <!-- COL 3 (x=249) -> 1 tall photo: y=39, h=235 -->
+          <img class="gallery-photo" style="left: 249px; top: 39px; width: 106px; height: 235px; transition-delay: 120ms;"
+               src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80"
+               alt="COL 3: Woman sitting side-on at long desk working on a laptop" loading="lazy">
+
+          <!-- COL 4 (x=373) -> 1 tall photo: y=0, h=235 (highest, center-left) -->
+          <img class="gallery-photo" style="left: 373px; top: 0px; width: 106px; height: 235px; transition-delay: 0ms;"
+               src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=400&q=80"
+               alt="COL 4: Modern dark industrial open office, black ceiling with linear LED lights" loading="lazy">
+
+          <!-- COL 5 (x=498) -> 1 tall photo: y=0, h=235 (highest, center-right) -->
+          <img class="gallery-photo" style="left: 498px; top: 0px; width: 106px; height: 235px; transition-delay: 0ms;"
+               src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?auto=format&fit=crop&w=400&q=80"
+               alt="COL 5: Woman with curly hair bun sitting at white round table with laptop" loading="lazy">
+
+          <!-- COL 6 (x=622) -> 1 tall photo: y=39, h=235 -->
+          <img class="gallery-photo" style="left: 622px; top: 39px; width: 106px; height: 235px; transition-delay: 120ms;"
+               src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=400&q=80"
+               alt="COL 6: Big green indoor palm plant in front of window with laptop on table" loading="lazy">
+
+          <!-- COL 7 (x=746) -> 3 photos -->
+          <!-- 7A: y=20, h=109 -->
+          <img class="gallery-photo" style="left: 746px; top: 20px; width: 106px; height: 109px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=400&q=80"
+               alt="7A: Man in dark profile typing on a laptop, moody dark warm background" loading="lazy">
+          
+          <!-- 7B: y=141, h=110 -->
+          <img class="gallery-photo" style="left: 746px; top: 141px; width: 106px; height: 110px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=400&q=80"
+               alt="7B: Dark steel-framed glass partition / black grid windows" loading="lazy">
+          
+          <!-- 7C: y=263, h=109 -->
+          <img class="gallery-photo" style="left: 746px; top: 263px; width: 106px; height: 109px; transition-delay: 180ms;"
+               src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=400&q=80"
+               alt="7C: Group of 5-6 people having a meeting around a table in a cafe" loading="lazy">
+
+          <!-- COL 8 (x=870) -> 2 photos -->
+          <!-- 8A: y=39, h=151 -->
+          <img class="gallery-photo" style="left: 870px; top: 39px; width: 106px; height: 151px; transition-delay: 240ms;"
+               src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=400&q=80"
+               alt="8A: Conference hall with blue lighting, circle of chairs" loading="lazy">
+          
+          <!-- 8B: y=202, h=150 -->
+          <img class="gallery-photo" style="left: 870px; top: 202px; width: 106px; height: 150px; transition-delay: 240ms;"
+               src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=400&q=80"
+               alt="8B: Top-down aerial view of lounge area with small round white table" loading="lazy">
+
+          <!-- ==================== 4. CENTER TEXT ==================== -->
+          <!-- Sits in empty space below cols 3-6 and between cols 2 and 7 -->
+          <div class="center-text-pocket">
+            <div class="testimonials-badge">
+              Testimonials
+            </div>
+            <div class="center-text-gap"></div>
+            <h2 class="testimonials-heading">
+              <span class="heading-line1">Heard it from our guests,</span>
+              <span class="heading-line2">not from us</span>
+            </h2>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==================== 5. TESTIMONIAL CARDS ==================== -->
+      <div class="cards-wrapper">
+        <div class="cards-grid">
+
+          <!-- CARD 1 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="stars-row">
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </div>
+              <p class="quote-text">
+                "WorkNook makes finding a coworking space so easy! I can book a desk in minutes and get straight to work. Highly recommend!"
+              </p>
+            </div>
+            <div class="profile-row">
+              <img class="avatar-img" src="/images/avatars/avatar-naveen-kochhar.png" alt="Naveen Kochhar" loading="lazy">
+              <div class="profile-info">
+                <span class="profile-name">Naveen Kochhar</span>
+                <span class="profile-role">Verified Guest • Google Review</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="stars-row">
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </div>
+              <p class="quote-text">
+                "Good Location & best service. Very close to Goga Ji Maharaj temple—just a 5-minute walk. Excellent family hospitality."
+              </p>
+            </div>
+            <div class="profile-row">
+              <img class="avatar-img" src="/images/avatars/avatar-yogesh-pandav.png" alt="सेवक योगेश पाँड़व" loading="lazy">
+              <div class="profile-info">
+                <span class="profile-name">सेवक योगेश पाँड़व</span>
+                <span class="profile-role">Pilgrim Guest • Google Review</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3 -->
+          <div class="testimonial-card">
+            <div>
+              <div class="stars-row">
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                <svg class="star-icon" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+              </div>
+              <p class="quote-text">
+                "Good environment, hygienic rooms, family hotel. Friendly atmosphere, continuous hot water, and honest management."
+              </p>
+            </div>
+            <div class="profile-row">
+              <img class="avatar-img" src="/images/avatars/avatar-sanjay-kumar.png" alt="Sanjay Kumar" loading="lazy">
+              <div class="profile-info">
+                <span class="profile-name">Sanjay Kumar</span>
+                <span class="profile-role">Family Stay • Google Review</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== 6. RESPONSIVE RESIZE SCRIPT & ANIMATION ==================== -->
+  <script>
+    // Responsive scale handler for gallery box
+    function updateResponsiveScale() {
+      const container = document.getElementById('scalerContainer');
+      const box = document.getElementById('galleryBox');
+      const outer = document.getElementById('galleryOuter');
+      if (!container || !box || !outer) return;
+
+      const availableWidth = container.offsetWidth;
+      if (availableWidth < 976) {
+        const targetWidth = availableWidth - 24;
+        const scale = Math.max(0.32, targetWidth / 976);
+        box.style.transform = `scale(${scale})`;
+        outer.style.height = `${372 * scale}px`;
+      } else {
+        box.style.transform = 'scale(1)';
+        outer.style.height = '372px';
+      }
+    }
+
+    window.addEventListener('resize', updateResponsiveScale);
+    window.addEventListener('DOMContentLoaded', updateResponsiveScale);
+    updateResponsiveScale();
+
+    // Staggered fade-in intersection observer
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const photos = document.querySelectorAll('.gallery-photo');
+          photos.forEach(p => p.classList.add('visible'));
+          observer.disconnect();
+        }
+      });
+    }, { threshold: 0.15 });
+
+    const targetSection = document.getElementById('testimonials');
+    if (targetSection) observer.observe(targetSection);
+  </script>
+
+</body>
+</html>
