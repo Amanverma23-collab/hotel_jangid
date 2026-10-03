@@ -146,6 +146,7 @@ export default function Footer() {
           font-family: "Playfair Display", "DM Serif Display", "Instrument Serif", Georgia, serif;
           font-weight: 400;
           letter-spacing: -0.02em;
+          font-size: clamp(96px, 23vw, 280px);
         }
         .wordmark-letter {
           display: inline-block;
@@ -162,11 +163,237 @@ export default function Footer() {
           text-shadow: none;
           box-shadow: none;
         }
-        @media (max-width: 767px) {
-          .desktop-only { display: none !important; }
+
+        /* ==================== 1. ONE SHAPE, SIZE VIA VARIABLES ==================== */
+        .ftr {
+          --page-bg: #FDF6EA;
+          --footer-bg: #566B4B;
+          --nw: 225px;   /* notch width  (desktop) */
+          --nh: 225px;   /* notch height (desktop) */
+          --r:  28px;    /* corner radius (desktop) */
+          background: transparent;
+          width: 100%;
+          max-width: 1240px;
+          position: relative;
+          z-index: 10;
         }
-        @media (min-width: 768px) {
-          .mobile-only { display: none !important; }
+        @media (max-width: 767px) {
+          .ftr {
+            --nw: 112px;
+            --nh: 112px;
+            --r:  20px;
+          }
+        }
+
+        .ftr-head {
+          display: flex;
+          align-items: stretch;
+          width: 100%;
+        }
+
+        /* the cut-out (shows page background) */
+        .ftr-notch {
+          width: var(--nw);
+          height: var(--nh);
+          flex: none;
+          background: transparent;
+          position: relative;
+        }
+        /* logo mark inside the notch: ~80% of notch width, near the top-left */
+        .ftr-notch svg {
+          width: 80%;
+          height: auto;
+          margin: 4% 0 0 4%;
+          display: block;
+        }
+
+        /* top panel, to the right of the notch */
+        .ftr-top {
+          flex: 1;
+          min-height: var(--nh);
+          background: var(--footer-bg);
+          border-radius: var(--r) var(--r) 0 0;        /* rounded top-left + top-right */
+          position: relative;
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          padding: 46px 56px 20px 56px;
+          box-sizing: border-box;
+        }
+        /* concave inner corner where the notch meets the bottom panel */
+        .ftr-top::before {
+          content: "";
+          position: absolute;
+          right: 100%;
+          bottom: 0;
+          width: var(--r);
+          height: var(--r);
+          background: radial-gradient(
+            circle at 0 0,
+            transparent calc(var(--r) - 0.5px),
+            var(--footer-bg) var(--r)
+          );
+          pointer-events: none;
+        }
+
+        /* bottom panel, full width, sits directly under the head */
+        .ftr-bottom {
+          background: var(--footer-bg);
+          border-radius: var(--r) 0 var(--r) var(--r);  /* top-left convex, bottom corners round */
+          margin-top: -1px;                             /* hides any hairline seam */
+          position: relative;
+          overflow: hidden;
+          padding: 44px 56px 16px 56px;
+          box-sizing: border-box;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-height: 335px;
+        }
+
+        .ftr-top-links {
+          display: flex;
+          gap: 58px;
+          align-items: flex-start;
+        }
+        .ftr-col {
+          display: flex;
+          flex-direction: column;
+        }
+        .ftr-col-heading {
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--heading-tint, #B9CDA8);
+          margin-bottom: 20px;
+        }
+        .ftr-col-list {
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
+        }
+        .ftr-socials {
+          display: flex;
+          gap: 26px;
+          align-items: center;
+          padding-top: 2px;
+        }
+
+        .ftr-mobile-links {
+          display: none;
+        }
+
+        .ftr-cta-row {
+          display: flex;
+          justify-content: flex-end;
+          align-items: center;
+          padding-top: 20px;
+        }
+        .ftr-cta-btn {
+          width: 170px;
+          height: 70px;
+          border-radius: 20px;
+          background-color: var(--btn-bg, #FFFFFF);
+          color: var(--btn-text, #566B4B);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          font-size: 15px;
+          font-weight: 600;
+          flex-shrink: 0;
+        }
+
+        .ftr-divider-wrap {
+          width: 100%;
+        }
+        .ftr-divider {
+          width: 100%;
+          height: 1px;
+          background-color: rgba(255, 255, 255, 0.45);
+          margin: 24px 0 16px 0;
+        }
+
+        .ftr-bottom-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          width: 100%;
+        }
+        .ftr-bottom-address {
+          text-align: right;
+          font-size: 11px;
+          line-height: 1.35;
+          letter-spacing: 0.5px;
+          color: rgba(255, 255, 255, 0.85);
+          text-transform: uppercase;
+        }
+
+        /* Mobile adjustments (< 768px) */
+        @media (max-width: 767px) {
+          .ftr-top {
+            height: var(--nh);
+            min-height: var(--nh);
+            padding: 0 20px;
+            justify-content: flex-end;
+            align-items: center;
+          }
+          .ftr-top-links {
+            display: none !important;
+          }
+          .ftr-socials {
+            gap: 18px;
+            padding-top: 0;
+          }
+          .ftr-bottom {
+            padding: 0 0 14px 0;
+            min-height: auto;
+          }
+          .ftr-mobile-links {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px 20px;
+            padding: 28px 24px 0 24px;
+            box-sizing: border-box;
+          }
+          .ftr-mobile-links .ftr-col-heading {
+            margin-bottom: 12px;
+          }
+          .ftr-mobile-links .ftr-col-list {
+            gap: 12px;
+          }
+          .ftr-cta-row {
+            width: 100%;
+            padding: 24px 24px 0 24px;
+            box-sizing: border-box;
+          }
+          .ftr-cta-btn {
+            width: 100%;
+            height: 56px;
+            border-radius: 16px;
+          }
+          .ftr-divider-wrap {
+            padding: 0 24px;
+            box-sizing: border-box;
+          }
+          .ftr-divider {
+            margin: 20px 0 16px 0;
+          }
+          .ftr-bottom-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+            padding: 0 24px;
+            box-sizing: border-box;
+          }
+          .ftr-bottom-address {
+            text-align: left;
+          }
+          .wordmark-wrapper {
+            font-size: 24vw !important;
+            margin-top: 16px !important;
+            margin-bottom: 0 !important;
+            padding-bottom: 4px !important;
+          }
         }
       `}</style>
 
@@ -282,651 +509,321 @@ export default function Footer() {
       </div>
 
       {/* ==================== 2. MAIN FOOTER SILHOUETTE CONTAINER ==================== */}
-      <footer
+            <footer
         id="contact"
         ref={footerRef}
+        className="ftr"
         style={{
-          position: 'relative',
-          zIndex: 10,
-          width: '100%',
-          maxWidth: '1240px',
+          '--page-bg': colors.pageBg,
+          '--footer-bg': colors.footerBg,
+          '--heading-tint': colors.headingTint,
+          '--btn-bg': colors.btnBg,
+          '--btn-text': colors.btnText,
           opacity: isInView ? 1 : 0,
           transform: isInView ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}
+        } as React.CSSProperties}
       >
-        {/* ============================================================== */}
-        {/* DESKTOP & TABLET VIEW (>= 768px)                                */}
-        {/* ============================================================== */}
-        <div className="desktop-only" style={{ width: '100%', position: 'relative' }}>
-          
-          {/* TOP SECTION: NOTCH (LEFT 225px) + TOP-RIGHT PANEL (REST) */}
-          <div style={{ display: 'flex', width: '100%', height: '225px', position: 'relative' }}>
-            
-            {/* NOTCH CUT-OUT (225 x 225px) containing LOGO MARK in footer-bg */}
-            <div
-              style={{
-                width: '225px',
-                height: '225px',
-                flexShrink: 0,
-                position: 'relative',
-                display: 'flex',
-                alignItems: 'flex-start',
-                justifyContent: 'flex-start',
-                paddingTop: '6px',
-                paddingLeft: '6px',
-                backgroundColor: 'transparent',
-              }}
+        {/* ==================== 1. HEADER (NOTCH + TOP PANEL) ==================== */}
+        <div className="ftr-head">
+          {/* THE NOTCH CUT-OUT (shows page-bg through transparent cutout) */}
+          <div className="ftr-notch">
+            <svg
+              viewBox="0 0 180 180"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
             >
-              {/* LOGO MARK: bold rounded blob mark made of 2 solid shapes (180x180) */}
-              <div
-                style={{
-                  width: '180px',
-                  height: '180px',
-                  position: 'relative',
-                }}
-              >
-                <svg
-                  width="180"
-                  height="180"
-                  viewBox="0 0 180 180"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Shape 1: Tall rounded rectangle on left with big top-right radius */}
-                  <path
-                    d="M 38 0 H 68 Q 115 0 115 48 V 140 Q 115 178 77 178 H 38 Q 0 178 0 140 V 38 Q 0 0 38 0 Z"
-                    fill={colors.footerBg}
-                  />
-                  {/* Shape 2: Solid circle at bottom-right (diameter ~82px) with small page-bg gap */}
-                  <circle cx="138" cy="137" r="41" fill={colors.footerBg} />
+              {/* Shape 1: Tall rounded rectangle on left with big top-right radius */}
+              <path
+                d="M 38 0 H 68 Q 115 0 115 48 V 140 Q 115 178 77 178 H 38 Q 0 178 0 140 V 38 Q 0 0 38 0 Z"
+                fill="var(--footer-bg)"
+              />
+              {/* Shape 2: Solid circle at bottom-right (diameter ~82px) with small page-bg gap */}
+              <circle cx="138" cy="137" r="41" fill="var(--footer-bg)" />
 
-                  {/* Inner subtle stylized J contour in page-bg */}
-                  <path
-                    d="M 68 45 V 110 Q 68 135 48 135 Q 32 135 32 120"
-                    stroke={colors.pageBg}
-                    strokeWidth="11"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </div>
-
-              {/* CONCAVE FILLET (24px radius) at the inner notch corner */}
-              {/* Sits at the bottom-right of the notch, connecting the vertical notch wall with the horizontal bottom panel edge */}
-              <div
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  width: '24px',
-                  height: '24px',
-                  pointerEvents: 'none',
-                }}
-              >
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  style={{ display: 'block' }}
-                >
-                  <path
-                    d="M 24 0 L 24 24 L 0 24 A 24 24 0 0 0 24 0 Z"
-                    fill={colors.footerBg}
-                  />
-                </svg>
-              </div>
-            </div>
-
-            {/* ==================== 3. TOP-RIGHT PANEL ==================== */}
-            <div
-              style={{
-                flex: 1,
-                height: '225px',
-                backgroundColor: colors.footerBg,
-                borderTopLeftRadius: '28px',
-                borderTopRightRadius: '28px',
-                padding: '46px 56px 20px 56px',
-                boxSizing: 'border-box',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-start',
-              }}
-            >
-              {/* LEFT: 4 Link Columns (Explore, Rooms, Nearby, Legal) */}
-              <div style={{ display: 'flex', gap: '58px', alignItems: 'flex-start' }}>
-                
-                {/* Column 1: Explore */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      color: colors.headingTint,
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Explore
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <a href="#hero" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Home</span>
-                    </a>
-                    <a href="#rooms" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Rooms</span>
-                    </a>
-                    <a href="#about" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>About Us</span>
-                    </a>
-                    <a href="#contact" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Contact</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Column 2: Rooms */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      color: colors.headingTint,
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Rooms
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <a href="#rooms" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>AC Room</span>
-                    </a>
-                    <a href="#rooms" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Non-AC Room</span>
-                    </a>
-                    <a href="#book" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Book Now</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Column 3: Nearby */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      color: colors.headingTint,
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Nearby
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <a href="#amenities" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Goga Ji Temple</span>
-                    </a>
-                    <a href="#amenities" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>Railway Station</span>
-                    </a>
-                    <a href="#location" className="footer-link-item">
-                      <span className="arrow-icon">→</span>
-                      <span>How to Reach</span>
-                    </a>
-                  </div>
-                </div>
-
-                {/* Column 4: Legal */}
-                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <div
-                    style={{
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      color: colors.headingTint,
-                      marginBottom: '20px',
-                    }}
-                  >
-                    Legal
-                  </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('privacy')}
-                      className="footer-link-item"
-                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                    >
-                      <span className="arrow-icon">→</span>
-                      <span>Privacy Policy</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('terms')}
-                      className="footer-link-item"
-                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                    >
-                      <span className="arrow-icon">→</span>
-                      <span>Terms & Conditions</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setModalContent('refund')}
-                      className="footer-link-item"
-                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-                    >
-                      <span className="arrow-icon">→</span>
-                      <span>Refund Policy</span>
-                    </button>
-                  </div>
-                </div>
-
-              </div>
-
-              {/* RIGHT: 4 Small Social Icons (Instagram, Facebook, WhatsApp, Maps) */}
-              <div style={{ display: 'flex', gap: '26px', alignItems: 'center', paddingTop: '2px' }}>
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="Instagram"
-                >
-                  <Instagram size={18} />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="Facebook"
-                >
-                  <Facebook size={18} />
-                </a>
-                <a
-                  href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="WhatsApp"
-                >
-                  <MessageCircle size={18} />
-                </a>
-                <a
-                  href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="Google Maps"
-                >
-                  <MapPin size={18} />
-                </a>
-              </div>
-
-            </div>
+              {/* Inner subtle stylized J contour in page-bg */}
+              <path
+                d="M 68 45 V 110 Q 68 135 48 135 Q 32 135 32 120"
+                stroke="var(--page-bg)"
+                strokeWidth="11"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
 
-          {/* ==================== 4. BOTTOM PANEL ==================== */}
-          <div
-            style={{
-              width: '100%',
-              minHeight: '335px',
-              height: 'auto',
-              backgroundColor: colors.footerBg,
-              borderTopLeftRadius: '28px',
-              borderBottomLeftRadius: '28px',
-              borderBottomRightRadius: '28px',
-              overflow: 'hidden',
-              padding: '44px 56px 16px 56px',
-              boxSizing: 'border-box',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between',
-              position: 'relative',
-              marginTop: '-1px', // Seamless junction with top-right panel
-            }}
-          >
-            {/* CTA ROW */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                paddingTop: '20px',
-              }}
-            >
+          {/* TOP PANEL (right of the notch) */}
+          <div className="ftr-top">
+            {/* DESKTOP 4 LINK COLUMNS (hidden on mobile) */}
+            <div className="ftr-top-links">
+              {/* Column 1: Explore */}
+              <div className="ftr-col">
+                <div className="ftr-col-heading">Explore</div>
+                <div className="ftr-col-list">
+                  <a href="#hero" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Home</span>
+                  </a>
+                  <a href="#rooms" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Rooms</span>
+                  </a>
+                  <a href="#about" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>About Us</span>
+                  </a>
+                  <a href="#contact" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Contact</span>
+                  </a>
+                </div>
+              </div>
 
-              {/* CTA BUTTON (170 x 70px, radius 20px, text: Book Your Stay) */}
+              {/* Column 2: Rooms */}
+              <div className="ftr-col">
+                <div className="ftr-col-heading">Rooms</div>
+                <div className="ftr-col-list">
+                  <a href="#rooms" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>AC Room</span>
+                  </a>
+                  <a href="#rooms" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Non-AC Room</span>
+                  </a>
+                  <a href="#book" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Book Now</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Column 3: Nearby */}
+              <div className="ftr-col">
+                <div className="ftr-col-heading">Nearby</div>
+                <div className="ftr-col-list">
+                  <a href="#amenities" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Goga Ji Temple</span>
+                  </a>
+                  <a href="#amenities" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Railway Station</span>
+                  </a>
+                  <a href="#location" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>How to Reach</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Column 4: Legal */}
+              <div className="ftr-col">
+                <div className="ftr-col-heading">Legal</div>
+                <div className="ftr-col-list">
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('privacy')}
+                    className="footer-link-item"
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Privacy Policy</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('terms')}
+                    className="footer-link-item"
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Terms & Conditions</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setModalContent('refund')}
+                    className="footer-link-item"
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Refund Policy</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* 4 SOCIAL ICONS (vertically centered on mobile, top-right on desktop) */}
+            <div className="ftr-socials">
               <a
-                href="#book"
-                className="cta-btn-hover"
-                style={{
-                  width: '170px',
-                  height: '70px',
-                  borderRadius: '20px',
-                  backgroundColor: colors.btnBg,
-                  color: colors.btnText,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textDecoration: 'none',
-                  fontSize: '15px',
-                  fontWeight: 600,
-                  flexShrink: 0,
-                }}
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                title="Instagram"
               >
-                Book Your Stay
-              </a>
-            </div>
-
-            {/* DIVIDER LINE (1px line, rgba(255,255,255,0.45)) */}
-            <div
-              style={{
-                width: '100%',
-                height: '1px',
-                backgroundColor: 'rgba(255, 255, 255, 0.45)',
-                margin: '24px 0 16px 0',
-              }}
-            />
-
-            {/* BOTTOM ROW (below divider): Copyright & Barcode on left, Uppercase Address on right */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                width: '100%',
-              }}
-            >
-              {/* LEFT: Copyright + Barcode */}
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    color: 'rgba(255, 255, 255, 0.85)',
-                    letterSpacing: '0.2px',
-                  }}
-                >
-                  © 2026 Hotel Jangid, Gogamedi
-                </span>
-
-                {/* DECORATIVE BARCODE STRIP (SVG ~110 x 14px) */}
-                <svg
-                  width="110"
-                  height="14"
-                  viewBox="0 0 110 14"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{ opacity: 0.85 }}
-                >
-                  <rect x="0" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="4" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="7" y="0" width="3" height="14" fill="#FFFFFF" />
-                  <rect x="12" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="15" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="19" y="0" width="4" height="14" fill="#FFFFFF" />
-                  <rect x="25" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="28" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="32" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="35" y="0" width="3" height="14" fill="#FFFFFF" />
-                  <rect x="40" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="44" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="47" y="0" width="3" height="14" fill="#FFFFFF" />
-                  <rect x="52" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="56" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="59" y="0" width="4" height="14" fill="#FFFFFF" />
-                  <rect x="65" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="69" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="72" y="0" width="3" height="14" fill="#FFFFFF" />
-                  <rect x="77" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="81" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="84" y="0" width="2" height="14" fill="#FFFFFF" />
-                  <rect x="88" y="0" width="1" height="14" fill="#FFFFFF" />
-                  <rect x="91" y="0" width="3" height="14" fill="#FFFFFF" />
-                  {/* End tiny logo square */}
-                  <rect x="98" y="2" width="10" height="10" rx="2" fill="#FFFFFF" />
-                  <rect x="101" y="5" width="4" height="4" rx="1" fill={colors.footerBg} />
-                </svg>
-              </div>
-
-              {/* RIGHT: 3 lines, UPPERCASE, 11px, line-height 1.35, letter-spacing 0.5px */}
-              <div
-                style={{
-                  textAlign: 'right',
-                  fontSize: '11px',
-                  lineHeight: 1.35,
-                  letterSpacing: '0.5px',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  textTransform: 'uppercase',
-                }}
-              >
-                <div>+91 94144 87691</div>
-                <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
-                <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
-              </div>
-            </div>
-
-            {/* GIANT FADED BRAND WORDMARK "Jangid" */}
-            <div
-              aria-hidden="true"
-              className="wordmark-wrapper"
-              style={{
-                fontSize: 'clamp(96px, 23vw, 280px)',
-              }}
-            >
-              {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
-                <span
-                  key={idx}
-                  className="wordmark-letter"
-                  style={{
-                    transform: isInView ? 'translateY(0)' : 'translateY(60%)',
-                    opacity: isInView ? 1 : 0,
-                    transition: `transform 900ms cubic-bezier(0.16, 1, 0.3, 1) ${idx * 70}ms, opacity 900ms ease-out ${idx * 70}ms`,
-                  }}
-                >
-                  {letter}
-                </span>
-              ))}
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* ============================================================== */}
-        {/* MOBILE VIEW (< 768px)                                           */}
-        {/* ============================================================== */}
-        <div
-          className="mobile-only"
-          style={{
-            width: '100%',
-            backgroundColor: colors.footerBg,
-            borderRadius: '24px',
-            overflow: 'hidden',
-            padding: '24px 20px 14px 20px',
-            boxSizing: 'border-box',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '24px',
-          }}
-        >
-          {/* Top Notch Tab: 110x110 with Logo Mark */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <div
-              style={{
-                width: '100px',
-                height: '100px',
-                backgroundColor: colors.pageBg,
-                borderRadius: '18px',
-                padding: '10px',
-                boxSizing: 'border-box',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <svg
-                width="80"
-                height="80"
-                viewBox="0 0 180 180"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M 38 0 H 68 Q 115 0 115 48 V 140 Q 115 178 77 178 H 38 Q 0 178 0 140 V 38 Q 0 0 38 0 Z"
-                  fill={colors.footerBg}
-                />
-                <circle cx="138" cy="137" r="41" fill={colors.footerBg} />
-                <path
-                  d="M 68 45 V 110 Q 68 135 48 135 Q 32 135 32 120"
-                  stroke={colors.pageBg}
-                  strokeWidth="11"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-
-            {/* Social Icons row on mobile */}
-            <div style={{ display: 'flex', gap: '18px', alignItems: 'center', paddingTop: '8px' }}>
-              <a href="https://instagram.com" className="social-icon-btn" title="Instagram">
                 <Instagram size={18} />
               </a>
-              <a href="https://facebook.com" className="social-icon-btn" title="Facebook">
+              <a
+                href="https://facebook.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                title="Facebook"
+              >
                 <Facebook size={18} />
               </a>
-              <a href="https://wa.me/919414487691" className="social-icon-btn" title="WhatsApp">
+              <a
+                href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                title="WhatsApp"
+              >
                 <MessageCircle size={18} />
               </a>
-              <a href={HOTEL_INFO.mapUrl || '#'} className="social-icon-btn" title="Maps">
+              <a
+                href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="social-icon-btn"
+                title="Google Maps"
+              >
                 <MapPin size={18} />
               </a>
             </div>
           </div>
+        </div>
 
-          {/* Link columns (2 per row on mobile) */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: '24px 16px',
-            }}
-          >
-            {/* Explore */}
+        {/* ==================== 2. BOTTOM PANEL (FULL WIDTH) ==================== */}
+        <div className="ftr-bottom">
+          {/* MOBILE 4 LINK COLUMNS (hidden on desktop, 2x2 grid on mobile) */}
+          <div className="ftr-mobile-links">
+            {/* Column 1: Explore */}
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
-                Explore
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <a href="#hero" className="footer-link-item">→ Home</a>
-                <a href="#rooms" className="footer-link-item">→ Rooms</a>
-                <a href="#about" className="footer-link-item">→ About Us</a>
-                <a href="#contact" className="footer-link-item">→ Contact</a>
+              <div className="ftr-col-heading">Explore</div>
+              <div className="ftr-col-list">
+                <a href="#hero" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Home</span>
+                </a>
+                <a href="#rooms" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Rooms</span>
+                </a>
+                <a href="#about" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>About Us</span>
+                </a>
+                <a href="#contact" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Contact</span>
+                </a>
               </div>
             </div>
 
-            {/* Rooms */}
+            {/* Column 2: Rooms */}
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
-                Rooms
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <a href="#rooms" className="footer-link-item">→ AC Room</a>
-                <a href="#rooms" className="footer-link-item">→ Non-AC</a>
-                <a href="#book" className="footer-link-item">→ Book Now</a>
+              <div className="ftr-col-heading">Rooms</div>
+              <div className="ftr-col-list">
+                <a href="#rooms" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>AC Room</span>
+                </a>
+                <a href="#rooms" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Non-AC Room</span>
+                </a>
+                <a href="#book" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Book Now</span>
+                </a>
               </div>
             </div>
 
-            {/* Nearby */}
+            {/* Column 3: Nearby */}
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
-                Nearby
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                <a href="#amenities" className="footer-link-item">→ Goga Ji Temple</a>
-                <a href="#amenities" className="footer-link-item">→ Railway Station</a>
-                <a href="#location" className="footer-link-item">→ How to Reach</a>
+              <div className="ftr-col-heading">Nearby</div>
+              <div className="ftr-col-list">
+                <a href="#amenities" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Goga Ji Temple</span>
+                </a>
+                <a href="#amenities" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Railway Station</span>
+                </a>
+                <a href="#location" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>How to Reach</span>
+                </a>
               </div>
             </div>
 
-            {/* Legal */}
+            {/* Column 4: Legal */}
             <div>
-              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
-                Legal
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              <div className="ftr-col-heading">Legal</div>
+              <div className="ftr-col-list">
                 <button
                   type="button"
                   onClick={() => setModalContent('privacy')}
                   className="footer-link-item"
-                  style={{ background: 'none', border: 'none', padding: 0 }}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                 >
-                  → Privacy Policy
+                  <span className="arrow-icon">→</span>
+                  <span>Privacy Policy</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setModalContent('terms')}
                   className="footer-link-item"
-                  style={{ background: 'none', border: 'none', padding: 0 }}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                 >
-                  → Terms of Stay
+                  <span className="arrow-icon">→</span>
+                  <span>Terms & Conditions</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => setModalContent('refund')}
                   className="footer-link-item"
-                  style={{ background: 'none', border: 'none', padding: 0 }}
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
                 >
-                  → Refund Policy
+                  <span className="arrow-icon">→</span>
+                  <span>Refund Policy</span>
                 </button>
               </div>
             </div>
           </div>
 
-          {/* CTA Button full width */}
-          <a
-            href="#book"
-            className="cta-btn-hover"
-            style={{
-              width: '100%',
-              height: '56px',
-              borderRadius: '16px',
-              backgroundColor: colors.btnBg,
-              color: colors.btnText,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textDecoration: 'none',
-              fontSize: '15px',
-              fontWeight: 600,
-            }}
-          >
-            Book Your Stay
-          </a>
+          {/* CTA ROW */}
+          <div className="ftr-cta-row">
+            <a
+              href="#book"
+              className="cta-btn-hover ftr-cta-btn"
+            >
+              Book Your Stay
+            </a>
+          </div>
 
-          {/* Mobile Divider */}
-          <div
-            style={{
-              width: '100%',
-              height: '1px',
-              backgroundColor: 'rgba(255, 255, 255, 0.35)',
-              margin: '6px 0',
-            }}
-          />
+          {/* DIVIDER LINE */}
+          <div className="ftr-divider-wrap">
+            <div className="ftr-divider" />
+          </div>
 
-          {/* Mobile bottom address & copyright */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.85)' }}>
+          {/* BOTTOM ROW (below divider): Copyright & Barcode on left, Address on right */}
+          <div className="ftr-bottom-row">
+            {/* LEFT: Copyright + Barcode */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <span
+                style={{
+                  fontSize: '11px',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  letterSpacing: '0.2px',
+                }}
+              >
                 © 2026 Hotel Jangid, Gogamedi
               </span>
+
+              {/* DECORATIVE BARCODE STRIP (SVG ~110 x 14px) */}
               <svg
                 width="110"
                 height="14"
@@ -959,35 +856,24 @@ export default function Footer() {
                 <rect x="84" y="0" width="2" height="14" fill="#FFFFFF" />
                 <rect x="88" y="0" width="1" height="14" fill="#FFFFFF" />
                 <rect x="91" y="0" width="3" height="14" fill="#FFFFFF" />
+                {/* End tiny logo square */}
                 <rect x="98" y="2" width="10" height="10" rx="2" fill="#FFFFFF" />
-                <rect x="101" y="5" width="4" height="4" rx="1" fill={colors.footerBg} />
+                <rect x="101" y="5" width="4" height="4" rx="1" fill="var(--footer-bg)" />
               </svg>
             </div>
 
-            <div
-              style={{
-                fontSize: '11px',
-                lineHeight: 1.4,
-                letterSpacing: '0.4px',
-                color: 'rgba(255, 255, 255, 0.85)',
-                textTransform: 'uppercase',
-              }}
-            >
+            {/* RIGHT: 3 lines, UPPERCASE address */}
+            <div className="ftr-bottom-address">
               <div>+91 94144 87691</div>
               <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
               <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
             </div>
           </div>
 
-          {/* GIANT FADED BRAND WORDMARK "Jangid" ON MOBILE */}
+          {/* GIANT FADED BRAND WORDMARK "Jangid" */}
           <div
             aria-hidden="true"
             className="wordmark-wrapper"
-            style={{
-              fontSize: '24vw',
-              marginTop: '16px',
-              marginBottom: '0',
-            }}
           >
             {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
               <span
@@ -1004,7 +890,6 @@ export default function Footer() {
             ))}
           </div>
         </div>
-
       </footer>
 
       {/* RAZORPAY COMPLIANCE MODAL */}
