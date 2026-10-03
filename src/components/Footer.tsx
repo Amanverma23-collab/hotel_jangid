@@ -58,13 +58,11 @@ export default function Footer() {
         ringStroke: '#C7C7D8',
       };
 
-  // Safety switch: Measure footer height vs viewport height
+  // Measure and manage sticky curtain reveal effect
   useEffect(() => {
     const reveal = revealRef.current || document.getElementById('ftrReveal');
     const ftr = ftrRef.current || document.getElementById('ftr');
     if (!reveal || !ftr) return;
-
-    const desktop = window.matchMedia('(min-width: 768px)');
 
     function updateReveal() {
       if (!reveal || !ftr) return;
@@ -72,24 +70,39 @@ export default function Footer() {
       reveal.style.removeProperty('--ftr-h');
       const h  = ftr.offsetHeight;
       const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-      if (desktop.matches && h <= vh - 8) {              // fits -> reveal effect ON
+      // Enable sticky reveal whenever footer fits in viewport (or fallback to static if extreme small height)
+      if (h > 0 && h <= vh + 10) {
         reveal.style.setProperty('--ftr-h', h + 'px');
         reveal.classList.add('is-fixed');
-      }                                                   // else -> static footer
+      }
     }
+
+    updateReveal();
+    requestAnimationFrame(updateReveal);
+    const t1 = setTimeout(updateReveal, 60);
+    const t2 = setTimeout(updateReveal, 200);
+    const t3 = setTimeout(updateReveal, 600);
 
     window.addEventListener('load', updateReveal);
     window.addEventListener('resize', updateReveal);
-    desktop.addEventListener?.('change', updateReveal);
+    window.addEventListener('orientationchange', updateReveal);
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(updateReveal);
     }
-    updateReveal();
+
+    const ro = new ResizeObserver(() => {
+      requestAnimationFrame(updateReveal);
+    });
+    ro.observe(ftr);
 
     return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
       window.removeEventListener('load', updateReveal);
       window.removeEventListener('resize', updateReveal);
-      desktop.removeEventListener?.('change', updateReveal);
+      window.removeEventListener('orientationchange', updateReveal);
+      ro.disconnect();
     };
   }, []);
 
@@ -169,7 +182,7 @@ export default function Footer() {
         .wordmark-wrapper {
           width: 100%;
           overflow: visible;
-          margin-top: 24px;
+          margin-top: clamp(10px, 1.8vh, 20px);
           margin-bottom: 0;
           padding-bottom: 0.04em;
           line-height: 0.8;
@@ -183,12 +196,12 @@ export default function Footer() {
           font-family: "Playfair Display", "DM Serif Display", "Instrument Serif", Georgia, serif;
           font-weight: 400;
           letter-spacing: -0.02em;
-          font-size: min(23vw, 36vh);
+          font-size: clamp(56px, min(17vw, 20vh), 180px);
         }
         .wordmark,
         .wordmark-letter {
           --lift: 0.08em;                 /* raise the wordmark slightly; tune 0.04em - 0.12em */
-          font-size: min(23vw, 36vh);
+          font-size: clamp(56px, min(17vw, 20vh), 180px);
           display: inline-block;
           line-height: 0.8;
           letter-spacing: -0.02em;
@@ -235,6 +248,8 @@ export default function Footer() {
           left: 0;
           right: 0;
           bottom: 0;
+          width: 100%;
+          z-index: 1;
         }
         /* effect OFF = normal static footer, scrolls like any section */
         .ftr-reveal:not(.is-fixed) .ftr {
@@ -244,13 +259,13 @@ export default function Footer() {
         .ftr {
           --page-bg: #FDF6EA;
           --footer-bg: #566B4B;
-          --nw: 225px;   /* notch width  (desktop) */
-          --nh: 225px;   /* notch height (desktop) */
-          --r:  28px;    /* corner radius (desktop) */
+          --nw: clamp(160px, 16vw, 225px);   /* notch width  (desktop) */
+          --nh: clamp(160px, 18vh, 210px);   /* notch height (desktop) */
+          --r:  28px;                        /* corner radius (desktop) */
           background: var(--page-bg);
           width: 100%;
           box-sizing: border-box;
-          padding: clamp(24px, 4vh, 48px) 16px clamp(16px, 2.5vh, 24px) 16px;
+          padding: clamp(14px, 1.8vh, 24px) 16px clamp(10px, 1.4vh, 16px) 16px;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -306,8 +321,8 @@ export default function Footer() {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          padding-block: clamp(24px, 4vh, 48px);
-          padding-inline: 56px;
+          padding-block: clamp(14px, 1.8vh, 24px);
+          padding-inline: clamp(24px, 3.5vw, 56px);
           box-sizing: border-box;
         }
         /* concave inner corner where the notch meets the bottom panel */
@@ -414,8 +429,8 @@ export default function Footer() {
           width: 100%;
           height: 1px;
           background-color: rgba(255, 255, 255, 0.45);
-          margin-top: clamp(24px, 5vh, 48px);
-          margin-bottom: 16px;
+          margin-top: clamp(14px, 2vh, 24px);
+          margin-bottom: 12px;
         }
 
         .ftr-bottom-row {
@@ -509,29 +524,30 @@ export default function Footer() {
             box-sizing: border-box;
           }
           .ftr-divider {
-            margin-top: 32px !important;
-            margin-bottom: 16px !important;
+            margin-top: 18px !important;
+            margin-bottom: 12px !important;
           }
           .ftr-bottom-row {
             display: none !important;
           }
           .wordmark-wrap,
           .wordmark-wrapper {
-            font-size: 24vw !important;
-            margin-top: 16px !important;
+            font-size: clamp(38px, 18vw, 76px) !important;
+            margin-top: 10px !important;
             margin-bottom: 0 !important;
             padding-bottom: 0.04em !important;
             overflow: visible !important;
           }
           .wordmark,
           .wordmark-letter {
+            font-size: clamp(38px, 18vw, 76px) !important;
             --lift: 0.08em;
             padding-bottom: 0.26em;
             margin-bottom: calc(-0.26em + var(--lift));
             overflow: visible;
           }
           .ftr-sticky-inner {
-            padding: 32px 12px 16px 12px !important;
+            padding: 24px 12px 14px 12px !important;
           }
         }
       `}</style>
