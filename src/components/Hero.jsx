@@ -68,10 +68,26 @@ export default function Hero({ onBookClick }) {
   const [topRightSlide, setTopRightSlide] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Real upcoming date format DD - MM - YYYY
-  const [checkInDate, setCheckInDate] = useState('27 - 08 - 2026');
-  const [checkOutDate, setCheckOutDate] = useState('30 - 08 - 2026');
+  // Real upcoming date format DD - MM - YYYY with dynamic native picker support
+  const getTodayIso = () => new Date().toISOString().split('T')[0];
+  const getTomorrowIso = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  };
+
+  const [checkInDate, setCheckInDate] = useState(getTodayIso);
+  const [checkOutDate, setCheckOutDate] = useState(getTomorrowIso);
   const [guestsCount, setGuestsCount] = useState('2 Adult(s)');
+
+  const formatDisplayDate = (isoStr) => {
+    if (!isoStr) return '';
+    const parts = isoStr.split('-');
+    if (parts.length === 3) {
+      return `${parts[2]} - ${parts[1]} - ${parts[0]}`;
+    }
+    return isoStr;
+  };
 
   // Auto-advance Top-Right card slides every 4s with smooth crossfade
   useEffect(() => {
@@ -82,8 +98,13 @@ export default function Hero({ onBookClick }) {
   }, []);
 
   const handleBookNow = (roomType = 'ac') => {
+    const guestsNum = parseInt(guestsCount, 10) || 2;
     if (onBookClick) {
-      onBookClick(roomType);
+      onBookClick(roomType, {
+        checkIn: checkInDate,
+        checkOut: checkOutDate,
+        guests: guestsNum,
+      });
     } else {
       const el = document.getElementById('rooms') || document.getElementById('booking');
       if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -767,44 +788,105 @@ export default function Hero({ onBookClick }) {
               {/* Row 1: Check In */}
               <div
                 style={{
+                  position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  padding: '2px 4px',
+                  borderRadius: '6px',
+                  transition: 'background-color 0.15s',
                 }}
+                className="hover:bg-black/5"
               >
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#111111' }}>
                   Check In
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '12.5px', color: '#555555' }}>{checkInDate}</span>
+                  <span style={{ fontSize: '12.5px', color: '#555555' }}>{formatDisplayDate(checkInDate)}</span>
                   <ChevronDown size={14} color="#777777" />
                 </div>
+                <input
+                  type="date"
+                  value={checkInDate}
+                  min={getTodayIso()}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (!val) return;
+                    setCheckInDate(val);
+                    if (val >= checkOutDate) {
+                      const next = new Date(val);
+                      next.setDate(next.getDate() + 1);
+                      setCheckOutDate(next.toISOString().split('T')[0]);
+                    }
+                  }}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    zIndex: 10,
+                  }}
+                  aria-label="Select Check In date"
+                />
               </div>
 
               {/* Row 2: Check Out */}
               <div
                 style={{
+                  position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  padding: '2px 4px',
+                  borderRadius: '6px',
+                  transition: 'background-color 0.15s',
                 }}
+                className="hover:bg-black/5"
               >
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#111111' }}>
                   Check Out
                 </span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                  <span style={{ fontSize: '12.5px', color: '#555555' }}>{checkOutDate}</span>
+                  <span style={{ fontSize: '12.5px', color: '#555555' }}>{formatDisplayDate(checkOutDate)}</span>
                   <ChevronDown size={14} color="#777777" />
                 </div>
+                <input
+                  type="date"
+                  value={checkOutDate}
+                  min={checkInDate || getTodayIso()}
+                  onChange={(e) => {
+                    if (e.target.value) setCheckOutDate(e.target.value);
+                  }}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    zIndex: 10,
+                  }}
+                  aria-label="Select Check Out date"
+                />
               </div>
 
               {/* Row 3: Guests */}
               <div
                 style={{
+                  position: 'relative',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  padding: '2px 4px',
+                  borderRadius: '6px',
+                  transition: 'background-color 0.15s',
                 }}
+                className="hover:bg-black/5"
               >
                 <span style={{ fontSize: '12.5px', fontWeight: 600, color: '#111111' }}>
                   Guests
@@ -813,6 +895,26 @@ export default function Hero({ onBookClick }) {
                   <span style={{ fontSize: '12.5px', color: '#555555' }}>{guestsCount}</span>
                   <ChevronDown size={14} color="#777777" />
                 </div>
+                <select
+                  value={guestsCount}
+                  onChange={(e) => setGuestsCount(e.target.value)}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    width: '100%',
+                    height: '100%',
+                    opacity: 0,
+                    cursor: 'pointer',
+                    zIndex: 10,
+                  }}
+                  aria-label="Select number of guests"
+                >
+                  <option value="1 Adult">1 Adult</option>
+                  <option value="2 Adult(s)">2 Adult(s)</option>
+                  <option value="3 Adult(s)">3 Adult(s)</option>
+                  <option value="4 Adult(s)">4 Adult(s)</option>
+                  <option value="5+ Guests">5+ Guests</option>
+                </select>
               </div>
 
               {/* Full-width outlined pill button: "Book Now" (height 38px, 1px solid #222) */}

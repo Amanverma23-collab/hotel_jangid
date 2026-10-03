@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble } from 'lucide-react';
 
 const CHECK_IN_TIMES = [
@@ -12,12 +12,20 @@ const CHECK_OUT_TIMES = [
   '12:00 PM', '01:00 PM', '02:00 PM', '03:00 PM',
 ];
 
-export default function BookingModal({ isOpen, onClose, initialRoomType = 'ac' }) {
+export default function BookingModal({
+  isOpen,
+  onClose,
+  initialRoomType = 'ac',
+  initialCheckIn,
+  initialCheckOut,
+  initialGuests = 2,
+}) {
   const [roomType, setRoomType] = useState(initialRoomType);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [checkInDate, setCheckInDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [checkInDate, setCheckInDate] = useState(() => initialCheckIn || new Date().toISOString().split('T')[0]);
   const [checkOutDate, setCheckOutDate] = useState(() => {
+    if (initialCheckOut) return initialCheckOut;
     const d = new Date();
     d.setDate(d.getDate() + 1);
     return d.toISOString().split('T')[0];
@@ -25,7 +33,16 @@ export default function BookingModal({ isOpen, onClose, initialRoomType = 'ac' }
   const [checkInTime, setCheckInTime] = useState('12:00 PM');
   const [checkOutTime, setCheckOutTime] = useState('11:00 AM');
   const [roomsCount, setRoomsCount] = useState(1);
-  const [guestsCount, setGuestsCount] = useState(2);
+  const [guestsCount, setGuestsCount] = useState(initialGuests || 2);
+
+  useEffect(() => {
+    if (isOpen) {
+      if (initialRoomType) setRoomType(initialRoomType);
+      if (initialCheckIn) setCheckInDate(initialCheckIn);
+      if (initialCheckOut) setCheckOutDate(initialCheckOut);
+      if (initialGuests) setGuestsCount(initialGuests);
+    }
+  }, [isOpen, initialRoomType, initialCheckIn, initialCheckOut, initialGuests]);
 
   if (!isOpen) return null;
 

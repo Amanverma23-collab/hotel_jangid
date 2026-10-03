@@ -10,10 +10,14 @@ import BookingModal from './components/BookingModal';
 export default function App() {
   const [selectedRoomType, setSelectedRoomType] = useState('ac');
   const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [bookingPrefill, setBookingPrefill] = useState(null);
 
-  const handleOpenBooking = (type) => {
+  const handleOpenBooking = (type, prefill = null) => {
     if (typeof type === 'string' && (type === 'ac' || type === 'cooler')) {
       setSelectedRoomType(type);
+    }
+    if (prefill && typeof prefill === 'object') {
+      setBookingPrefill(prefill);
     }
     setIsBookingModalOpen(true);
   };
@@ -26,7 +30,7 @@ export default function App() {
         <Navbar onBookClick={() => handleOpenBooking('ac')} />
 
         {/* 2. Full-Bleed Luxury Hero Section */}
-        <Hero onBookClick={() => handleOpenBooking('ac')} />
+        <Hero onBookClick={handleOpenBooking} />
 
         {/* 3. About / Owners Pixel-Accurate Bento Grid Section */}
         <OwnersSection />
@@ -46,6 +50,9 @@ export default function App() {
         isOpen={isBookingModalOpen}
         onClose={() => setIsBookingModalOpen(false)}
         initialRoomType={selectedRoomType}
+        initialCheckIn={bookingPrefill?.checkIn}
+        initialCheckOut={bookingPrefill?.checkOut}
+        initialGuests={bookingPrefill?.guests}
       />
     </main>
   );
