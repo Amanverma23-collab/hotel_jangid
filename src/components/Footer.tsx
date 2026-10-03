@@ -179,6 +179,7 @@ export default function Footer() {
         }
         .footer-link-item:hover .arrow-icon {
           transform: translateX(4px);
+        }
         .social-icon-btn {
           color: #FFFFFF;
           transition: opacity 0.2s ease, transform 0.2s ease;
@@ -300,15 +301,18 @@ export default function Footer() {
 
         /* the cut-out (shows page background) */
         .ftr-notch {
-          width: var(--nw);
-          height: var(--nh);
-          flex: none;
+          width: var(--nw, 225px);
+          height: var(--nh, 225px);
+          max-width: var(--nw, 225px);
+          max-height: var(--nh, 225px);
+          flex: 0 0 var(--nw, 225px);
           background: transparent;
           position: relative;
         }
         /* logo mark inside the notch: ~80% of notch width, near the top-left */
         .ftr-notch svg {
           width: 80%;
+          max-width: 180px;
           height: auto;
           margin: 4% 0 0 4%;
           display: block;
@@ -680,6 +684,7 @@ export default function Footer() {
               viewBox="0 0 180 180"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              style={{ width: '80%', maxWidth: '100%', height: 'auto', display: 'block' }}
             >
               {/* Shape 1: Tall rounded rectangle on left with big top-right radius */}
               <path
