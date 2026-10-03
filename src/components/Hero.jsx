@@ -8,6 +8,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 
 /**
  * Pixel-Accurate HERO SECTION matching user specification & reference screenshot.
@@ -378,7 +379,7 @@ export default function Hero({ onBookClick }) {
               }}
               aria-label="Toggle navigation menu"
             >
-              {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+              <MenuToggleIcon open={mobileMenuOpen} className="size-5" duration={400} />
             </button>
           </div>
         </header>

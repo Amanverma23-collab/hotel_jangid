@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Building2, Phone, MapPin, Menu, X } from 'lucide-react';
+import { Building2, Phone, MapPin } from 'lucide-react';
+import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 
 export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
@@ -298,7 +299,7 @@ export default function Navbar({ onBookClick }) {
             }}
             aria-label="Toggle navigation menu"
           >
-            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
+            <MenuToggleIcon open={mobileMenuOpen} className="size-5" duration={400} />
           </button>
         </div>
 
