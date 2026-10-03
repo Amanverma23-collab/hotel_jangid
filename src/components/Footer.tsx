@@ -288,6 +288,42 @@ export default function Footer() {
           pointer-events: none;
         }
 
+        .ftr-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          flex-shrink: 0;
+        }
+        .ftr-social,
+        .ftr-socials {
+          display: flex;
+          gap: 26px;
+          align-items: center;
+          padding-top: 2px;
+        }
+        .ftr-cta {
+          margin-top: 48px;                  /* space between the icons and the button */
+          height: 60px;
+          padding: 0 36px;
+          border-radius: 18px;
+          background: #FFFFFF;
+          color: #566B4B;
+          font-size: 16px;
+          font-weight: 600;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          white-space: nowrap;
+          text-decoration: none;
+          cursor: pointer;
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .ftr-cta:hover {
+          background: #FDF6EA;
+          transform: scale(1.03);
+          box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+        }
+
         /* bottom panel, full width, sits directly under the head */
         .ftr-bottom {
           background: var(--footer-bg);
@@ -295,17 +331,16 @@ export default function Footer() {
           margin-top: -1px;                             /* hides any hairline seam */
           position: relative;
           overflow: hidden;
-          padding: 44px 56px 0 56px;
+          padding: 0 56px;
           box-sizing: border-box;
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
-          min-height: 335px;
         }
         .ftr-bottom .wordmark-wrap {
           padding-bottom: 0.04em;
         }
 
+        .ftr-links,
         .ftr-top-links {
           display: flex;
           gap: 58px;
@@ -326,36 +361,12 @@ export default function Footer() {
           flex-direction: column;
           gap: 16px;
         }
-        .ftr-socials {
-          display: flex;
-          gap: 26px;
-          align-items: center;
-          padding-top: 2px;
-        }
 
         .ftr-mobile-links {
           display: none;
         }
-
-        .ftr-cta-row {
-          display: flex;
-          justify-content: flex-end;
-          align-items: center;
-          padding-top: 20px;
-        }
-        .ftr-cta-btn {
-          width: 170px;
-          height: 70px;
-          border-radius: 20px;
-          background-color: var(--btn-bg, #FFFFFF);
-          color: var(--btn-text, #566B4B);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          font-size: 15px;
-          font-weight: 600;
-          flex-shrink: 0;
+        .ftr-mobile-cta-wrap {
+          display: none;
         }
 
         .ftr-divider-wrap {
@@ -365,7 +376,8 @@ export default function Footer() {
           width: 100%;
           height: 1px;
           background-color: rgba(255, 255, 255, 0.45);
-          margin: 24px 0 16px 0;
+          margin-top: 48px;
+          margin-bottom: 16px;
         }
 
         .ftr-bottom-row {
@@ -392,15 +404,25 @@ export default function Footer() {
             justify-content: flex-end;
             align-items: center;
           }
+          .ftr-links,
           .ftr-top-links {
             display: none !important;
           }
+          .ftr-right {
+            height: 100%;
+            justify-content: center;
+            align-items: flex-end;
+          }
+          .ftr-top .ftr-cta {
+            display: none !important;
+          }
+          .ftr-social,
           .ftr-socials {
             gap: 18px;
             padding-top: 0;
           }
           .ftr-bottom {
-            padding: 0 0 0 0;
+            padding: 0 0 0 0 !important;
             min-height: auto;
           }
           .ftr-mobile-links {
@@ -416,22 +438,40 @@ export default function Footer() {
           .ftr-mobile-links .ftr-col-list {
             gap: 12px;
           }
-          .ftr-cta-row {
+          .ftr-mobile-cta-wrap {
+            display: block !important;
             width: 100%;
-            padding: 24px 24px 0 24px;
+            padding: 0 24px;
             box-sizing: border-box;
           }
-          .ftr-cta-btn {
+          .ftr-mobile-cta {
+            display: flex !important;
             width: 100%;
             height: 56px;
-            border-radius: 16px;
+            border-radius: 18px;
+            background: #FFFFFF;
+            color: #566B4B;
+            font-size: 16px;
+            font-weight: 600;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            margin-top: 28px;
+            box-sizing: border-box;
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+          }
+          .ftr-mobile-cta:hover,
+          .ftr-mobile-cta:active {
+            background: #FDF6EA;
+            transform: scale(1.02);
           }
           .ftr-divider-wrap {
             padding: 0 24px;
             box-sizing: border-box;
           }
           .ftr-divider {
-            margin: 20px 0 16px 0;
+            margin-top: 32px !important;
+            margin-bottom: 16px !important;
           }
           .ftr-bottom-row {
             display: none !important;
@@ -614,7 +654,7 @@ export default function Footer() {
           {/* TOP PANEL (right of the notch) */}
           <div className="ftr-top">
             {/* DESKTOP 4 LINK COLUMNS (hidden on mobile) */}
-            <div className="ftr-top-links">
+            <div className="ftr-links ftr-top-links">
               {/* Column 1: Explore */}
               <div className="ftr-col">
                 <div className="ftr-col-heading">Explore</div>
@@ -650,7 +690,7 @@ export default function Footer() {
                     <span className="arrow-icon">→</span>
                     <span>Non-AC Room</span>
                   </a>
-                  <a href="#book" className="footer-link-item">
+                  <a href="#booking" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Book Now</span>
                   </a>
@@ -711,43 +751,58 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* 4 SOCIAL ICONS (vertically centered on mobile, top-right on desktop) */}
-            <div className="ftr-socials">
+            {/* RIGHT COLUMN: 4 SOCIAL ICONS + BOOK YOUR STAY CTA (DESKTOP) */}
+            <div className="ftr-right">
+              <div className="ftr-social ftr-socials">
+                <a
+                  href="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Instagram"
+                >
+                  <Instagram size={18} />
+                </a>
+                <a
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Facebook"
+                >
+                  <Facebook size={18} />
+                </a>
+                <a
+                  href="https://wa.me/919001187776?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="WhatsApp"
+                >
+                  <MessageCircle size={18} />
+                </a>
+                <a
+                  href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Google Maps"
+                >
+                  <MapPin size={18} />
+                </a>
+              </div>
               <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-icon-btn"
-                title="Instagram"
+                href="#booking"
+                className="ftr-cta"
+                onClick={(e) => {
+                  const el = document.getElementById('booking');
+                  if (el) {
+                    e.preventDefault();
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
               >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-icon-btn"
-                title="Facebook"
-              >
-                <Facebook size={18} />
-              </a>
-              <a
-                href="https://wa.me/919001187776?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-icon-btn"
-                title="WhatsApp"
-              >
-                <MessageCircle size={18} />
-              </a>
-              <a
-                href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="social-icon-btn"
-                title="Google Maps"
-              >
-                <MapPin size={18} />
+                Book Your Stay
               </a>
             </div>
           </div>
@@ -792,7 +847,7 @@ export default function Footer() {
                   <span className="arrow-icon">→</span>
                   <span>Non-AC Room</span>
                 </a>
-                <a href="#book" className="footer-link-item">
+                <a href="#booking" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Book Now</span>
                 </a>
@@ -853,17 +908,24 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* CTA ROW */}
-          <div className="ftr-cta-row">
+          {/* MOBILE "BOOK YOUR STAY" BUTTON (hidden on desktop, placed after 2x2 links on mobile) */}
+          <div className="ftr-mobile-cta-wrap">
             <a
-              href="#book"
-              className="cta-btn-hover ftr-cta-btn"
+              href="#booking"
+              className="ftr-mobile-cta"
+              onClick={(e) => {
+                const el = document.getElementById('booking');
+                if (el) {
+                  e.preventDefault();
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Book Your Stay
             </a>
           </div>
 
-          {/* DIVIDER LINE */}
+          {/* DIVIDER LINE (margin-top: 48px from top panel on desktop, 32px on mobile) */}
           <div className="ftr-divider-wrap">
             <div className="ftr-divider" />
           </div>
