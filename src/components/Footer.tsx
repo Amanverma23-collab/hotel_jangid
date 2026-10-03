@@ -29,7 +29,6 @@ export default function Footer() {
   const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
   const [isInView, setIsInView] = useState(false);
   const [footerHeight, setFooterHeight] = useState<number>(720);
-  const [isDesktop, setIsDesktop] = useState(true);
   const revealRef = useRef<HTMLDivElement>(null);
   const ftrRef = useRef<HTMLElement>(null);
 
@@ -56,14 +55,12 @@ export default function Footer() {
         ringStroke: '#C7C7D8',
       };
 
-  // Measure footer height for clip-path sticky reveal
+  // Measure footer height for clip-path sticky reveal (Both desktop & mobile)
   useEffect(() => {
     const ftr = ftrRef.current;
     if (!ftr) return;
 
-    const desktopMedia = window.matchMedia('(min-width: 768px)');
     const updateSize = () => {
-      setIsDesktop(desktopMedia.matches);
       if (ftr.offsetHeight > 0) {
         setFooterHeight(ftr.offsetHeight);
       }
@@ -108,22 +105,22 @@ export default function Footer() {
       id="ftrReveal"
       ref={revealRef}
       style={{
-        height: isDesktop && footerHeight ? `${footerHeight}px` : undefined,
-        clipPath: isDesktop ? 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' : undefined,
+        height: footerHeight ? `${footerHeight}px` : undefined,
+        clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)',
         zIndex: 1,
       }}
     >
       <div
-        className={isDesktop ? "fixed bottom-0 left-0 right-0 w-full" : "w-full"}
+        className="fixed bottom-0 left-0 right-0 w-full"
         style={{
-          height: isDesktop && footerHeight ? `${footerHeight}px` : undefined,
+          height: footerHeight ? `${footerHeight}px` : undefined,
           zIndex: 1,
         }}
       >
         <div
-          className={isDesktop ? "sticky h-full w-full" : "w-full"}
+          className="sticky h-full w-full"
           style={{
-            top: isDesktop && footerHeight ? `calc(100vh - ${footerHeight}px)` : undefined,
+            top: footerHeight ? `calc(100vh - ${footerHeight}px)` : undefined,
           }}
         >
           <footer
