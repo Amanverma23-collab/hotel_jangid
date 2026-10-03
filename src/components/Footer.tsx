@@ -33,7 +33,6 @@ export default function Footer() {
   const [isInView, setIsInView] = useState(false);
   const revealRef = useRef<HTMLDivElement>(null);
   const ftrRef = useRef<HTMLElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
 
   // Palette color definitions
   const colors = palette === 'jangid'
@@ -180,15 +179,6 @@ export default function Footer() {
         }
         .footer-link-item:hover .arrow-icon {
           transform: translateX(4px);
-        }
-        .cta-btn-hover {
-          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease;
-        }
-        .cta-btn-hover:hover {
-          background-color: #FDF6EA !important;
-          transform: scale(1.03);
-          box-shadow: 0 12px 28px rgba(0,0,0,0.18);
-        }
         .social-icon-btn {
           color: #FFFFFF;
           transition: opacity 0.2s ease, transform 0.2s ease;
@@ -248,11 +238,6 @@ export default function Footer() {
         }
 
         /* ==================== 1. STRUCTURE & VARIABLES ==================== */
-        .site-main {
-          position: relative;
-          z-index: 2;                     /* above the footer */
-          background: var(--page-bg);     /* opaque, so it covers the footer */
-        }
         .ftr-reveal {
           position: relative;
           z-index: 1;
@@ -680,7 +665,6 @@ export default function Footer() {
 
       {/* ==================== 2. MAIN FOOTER SILHOUETTE CONTAINER ==================== */}
       <div
-        ref={footerRef}
         className="ftr-card"
         style={{
           opacity: isInView ? 1 : 0,
