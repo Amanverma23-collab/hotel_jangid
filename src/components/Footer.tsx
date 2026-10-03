@@ -1,360 +1,956 @@
-import React, { useState } from 'react';
-import { motion, useReducedMotion } from 'motion/react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
-  PhoneCall,
+  Instagram,
+  Facebook,
   MessageCircle,
   MapPin,
-  ShieldCheck,
-  Star,
   X,
-  ArrowUp,
-  ChevronRight,
-  Clock,
-  Lock,
-  Sparkles,
+  ShieldCheck,
   CheckCircle2,
 } from 'lucide-react';
 import { HOTEL_INFO } from '../data/hotelData';
 
-interface AnimatedContainerProps extends React.ComponentProps<typeof motion.div> {
-  children?: React.ReactNode;
-  delay?: number;
-}
-
-function AnimatedContainer({
-  delay = 0.1,
-  children,
-  ...props
-}: AnimatedContainerProps) {
-  const shouldReduceMotion = useReducedMotion();
-
-  if (shouldReduceMotion) {
-    return <div {...props}>{children}</div>;
-  }
-
-  return (
-    <motion.div
-      initial={{ filter: 'blur(4px)', translateY: 10, opacity: 0 }}
-      whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      {...props}
-    >
-      {children}
-    </motion.div>
-  );
-}
+/**
+ * Pixel-Accurate Notched Folder-Tab FOOTER
+ *
+ * SPECIFICATION ADHERENCE:
+ * - Overall shape: Notched folder-tab silhouette with concave fillet (radius 24px).
+ * - Exact measurements: 1240px container, top-right panel (225px h), bottom panel (335px h).
+ * - Top-left notch: 225x225px revealing page-bg with solid blob logo mark.
+ * - Decorative ring behind footer: ~330x210px in --ring-fill, ~60% peeking out.
+ * - Palette tokens: Jangid olive (#566B4B) default + Cobalt blue set toggle.
+ * - 4 Link columns with arrow icons, 4 social icons top-right.
+ * - 54px 3-line headline ("A peaceful stay / just 400 m from / Goga Ji Temple").
+ * - CTA Button: 170x70px, radius 20px, hover cream.
+ * - 1px divider, copyright + SVG barcode on left, uppercase 3-line address on right.
+ * - Staggered scroll animations & fully responsive (desktop, tablet, mobile).
+ */
 
 export default function Footer() {
   const [modalContent, setModalContent] = useState<string | null>(null);
+  const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
+  const [isInView, setIsInView] = useState(false);
+  const footerRef = useRef<HTMLDivElement>(null);
 
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  // Palette color definitions
+  const colors = palette === 'jangid'
+    ? {
+        pageBg: '#FDF6EA',
+        footerBg: '#566B4B',
+        headingTint: '#B9CDA8',
+        footerText: '#FFFFFF',
+        btnBg: '#FFFFFF',
+        btnText: '#566B4B',
+        ringFill: '#E8E1D2',
+        ringStroke: '#D8D0C0',
+      }
+    : {
+        pageBg: '#F4F4FA',
+        footerBg: '#1A14B3',
+        headingTint: '#7C8DFF',
+        footerText: '#FFFFFF',
+        btnBg: '#FFFFFF',
+        btnText: '#1A14B3',
+        ringFill: '#DDDDEA',
+        ringStroke: '#C7C7D8',
+      };
+
+  // IntersectionObserver for lightweight entrance animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setIsInView(true);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (footerRef.current) {
+      observer.observe(footerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <>
+    <div
+      style={{
+        backgroundColor: colors.pageBg,
+        width: '100%',
+        minHeight: '100%',
+        boxSizing: 'border-box',
+        padding: '120px 16px 40px 16px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        fontFamily: '"Plus Jakarta Sans", "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif',
+        transition: 'background-color 0.4s ease',
+      }}
+    >
+      {/* SCOPED CSS FOR TRANSITIONS, HOVERS, AND MASKS */}
+      <style>{`
+        .footer-link-item {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #FFFFFF;
+          font-size: 13.5px;
+          line-height: 1;
+          text-decoration: none;
+          transition: transform 0.2s ease, text-decoration 0.2s ease, opacity 0.2s ease;
+        }
+        .footer-link-item:hover {
+          text-decoration: underline;
+        }
+        .footer-link-item .arrow-icon {
+          font-size: 12px;
+          display: inline-block;
+          transition: transform 0.2s ease;
+        }
+        .footer-link-item:hover .arrow-icon {
+          transform: translateX(4px);
+        }
+        .cta-btn-hover {
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+        }
+        .cta-btn-hover:hover {
+          background-color: #FDF6EA !important;
+          transform: scale(1.03);
+          box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+        }
+        .social-icon-btn {
+          color: #FFFFFF;
+          transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+        .social-icon-btn:hover {
+          opacity: 0.8;
+          transform: translateY(-2px);
+        }
+        @media (max-width: 767px) {
+          .desktop-only { display: none !important; }
+        }
+        @media (min-width: 768px) {
+          .mobile-only { display: none !important; }
+        }
+      `}</style>
+
+      {/* 5. DECORATIVE RING (BEHIND FOOTER) */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: 'absolute',
+          top: '30px',
+          left: '46%',
+          transform: isInView
+            ? 'translate(-50%, 0)'
+            : 'translate(-50%, -20px)',
+          zIndex: 1,
+          pointerEvents: 'none',
+          opacity: isInView ? 1 : 0,
+          transition: 'transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease',
+        }}
+      >
+        <svg
+          width="330"
+          height="210"
+          viewBox="0 0 330 210"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          {/* Outer flat rounded ring */}
+          <rect
+            x="2"
+            y="2"
+            width="326"
+            height="206"
+            rx="96"
+            fill={colors.ringFill}
+            stroke={colors.ringStroke}
+            strokeWidth="1.5"
+          />
+          {/* Inner cutout hole */}
+          <rect
+            x="95"
+            y="55"
+            width="140"
+            height="100"
+            rx="46"
+            fill={colors.pageBg}
+            stroke={colors.ringStroke}
+            strokeWidth="1.5"
+          />
+        </svg>
+      </div>
+
+      {/* THEME COLOR TOGGLE (Discrete reference picker: Jangid Olive vs Reference Blue) */}
+      <div
+        style={{
+          position: 'relative',
+          zIndex: 20,
+          width: '100%',
+          maxWidth: '1240px',
+          display: 'flex',
+          justifyContent: 'flex-end',
+          marginBottom: '10px',
+        }}
+      >
+        <div
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '6px',
+            backgroundColor: 'rgba(0,0,0,0.04)',
+            padding: '4px 8px',
+            borderRadius: '999px',
+            fontSize: '11px',
+            fontWeight: 600,
+            color: '#666',
+          }}
+        >
+          <span>Theme:</span>
+          <button
+            type="button"
+            onClick={() => setPalette('jangid')}
+            style={{
+              border: 'none',
+              padding: '3px 8px',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              fontSize: '11px',
+              fontWeight: 600,
+              backgroundColor: palette === 'jangid' ? '#566B4B' : 'transparent',
+              color: palette === 'jangid' ? '#FFF' : '#666',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            Jangid Olive
+          </button>
+          <button
+            type="button"
+            onClick={() => setPalette('blue')}
+            style={{
+              border: 'none',
+              padding: '3px 8px',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              fontSize: '11px',
+              fontWeight: 600,
+              backgroundColor: palette === 'blue' ? '#1A14B3' : 'transparent',
+              color: palette === 'blue' ? '#FFF' : '#666',
+              transition: 'all 0.2s ease',
+            }}
+          >
+            Reference Blue
+          </button>
+        </div>
+      </div>
+
+      {/* ==================== 2. MAIN FOOTER SILHOUETTE CONTAINER ==================== */}
       <footer
         id="contact"
-        className="relative w-full bg-[#080C15] text-slate-100 overflow-hidden font-sans border-t border-amber-500/20"
+        ref={footerRef}
+        style={{
+          position: 'relative',
+          zIndex: 10,
+          width: '100%',
+          maxWidth: '1240px',
+          opacity: isInView ? 1 : 0,
+          transform: isInView ? 'translateY(0)' : 'translateY(30px)',
+          transition: 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
       >
-        {/* Ambient Warm Golden Glow Effects */}
-        <div aria-hidden className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-          <div className="absolute -top-32 left-1/4 w-[600px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(223,197,158,0.12)_0,rgba(201,159,91,0.03)_50%,transparent_75%)] blur-3xl" />
-          <div className="absolute -bottom-20 right-10 w-[500px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(201,159,91,0.09)_0,transparent_70%)] blur-3xl" />
-          <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] opacity-30" />
-        </div>
-
-        <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 lg:px-12 pt-14 pb-12">
+        {/* ============================================================== */}
+        {/* DESKTOP & TABLET VIEW (>= 768px)                                */}
+        {/* ============================================================== */}
+        <div className="desktop-only" style={{ width: '100%', position: 'relative' }}>
           
-          {/* TOP CALLOUT BAR: Warm Welcome & Direct Quick Actions */}
-          <AnimatedContainer delay={0.05} className="mb-14">
-            <div className="rounded-3xl bg-gradient-to-r from-white/[0.06] via-white/[0.03] to-white/[0.06] border border-amber-400/25 p-6 sm:p-8 backdrop-blur-xl shadow-2xl relative overflow-hidden">
-              <div className="absolute -right-12 -top-12 w-44 h-44 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div className="space-y-2 max-w-2xl">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20 text-amber-300 text-xs font-semibold tracking-wide uppercase">
-                    <Sparkles className="size-3.5 text-amber-400" />
-                    <span>Shri Goga Ji Dham • Gogamedi, Rajasthan</span>
-                  </div>
-                  <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-white tracking-wide">
-                    Planning your stay at Gogamedi?
-                  </h3>
-                  <p className="text-sm text-slate-300 leading-relaxed">
-                    Surjeet & Vijay Jangid welcome you to a peaceful, honest, and spotless family-run hotel located just 400m from the sacred temple.
-                  </p>
-                </div>
+          {/* TOP SECTION: NOTCH (LEFT 225px) + TOP-RIGHT PANEL (REST) */}
+          <div style={{ display: 'flex', width: '100%', height: '225px', position: 'relative' }}>
+            
+            {/* NOTCH CUT-OUT (225 x 225px) containing LOGO MARK in footer-bg */}
+            <div
+              style={{
+                width: '225px',
+                height: '225px',
+                flexShrink: 0,
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'flex-start',
+                justifyContent: 'flex-start',
+                paddingTop: '6px',
+                paddingLeft: '6px',
+                backgroundColor: 'transparent',
+              }}
+            >
+              {/* LOGO MARK: bold rounded blob mark made of 2 solid shapes (180x180) */}
+              <div
+                style={{
+                  width: '180px',
+                  height: '180px',
+                  position: 'relative',
+                }}
+              >
+                <svg
+                  width="180"
+                  height="180"
+                  viewBox="0 0 180 180"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  {/* Shape 1: Tall rounded rectangle on left with big top-right radius */}
+                  <path
+                    d="M 38 0 H 68 Q 115 0 115 48 V 140 Q 115 178 77 178 H 38 Q 0 178 0 140 V 38 Q 0 0 38 0 Z"
+                    fill={colors.footerBg}
+                  />
+                  {/* Shape 2: Solid circle at bottom-right (diameter ~82px) with small page-bg gap */}
+                  <circle cx="138" cy="137" r="41" fill={colors.footerBg} />
 
-                {/* Quick CTA Actions */}
-                <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                  <a
-                    href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-semibold text-sm shadow-lg shadow-emerald-950/40 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-                  >
-                    <MessageCircle className="size-4" />
-                    <span>WhatsApp Booking</span>
-                    <span className="w-2 h-2 rounded-full bg-emerald-200 animate-pulse ml-1" />
-                  </a>
+                  {/* Inner subtle stylized J contour in page-bg */}
+                  <path
+                    d="M 68 45 V 110 Q 68 135 48 135 Q 32 135 32 120"
+                    stroke={colors.pageBg}
+                    strokeWidth="11"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </div>
 
-                  <a
-                    href="tel:+919414487691"
-                    className="inline-flex items-center justify-center gap-2.5 px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500/20 to-amber-600/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/30 font-semibold text-sm hover:scale-[1.02] active:scale-[0.98] transition-all duration-200"
-                  >
-                    <PhoneCall className="size-4 text-amber-400" />
-                    <span>Call +91 94144 87691</span>
-                  </a>
-
-                  <a
-                    href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center p-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-colors"
-                    title="Get Directions on Google Maps"
-                  >
-                    <MapPin className="size-4" />
-                    <span className="sr-only">Directions</span>
-                  </a>
-                </div>
+              {/* CONCAVE FILLET (24px radius) at the inner notch corner */}
+              {/* Sits at the bottom-right of the notch, connecting the vertical notch wall with the horizontal bottom panel edge */}
+              <div
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  width: '24px',
+                  height: '24px',
+                  pointerEvents: 'none',
+                }}
+              >
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  style={{ display: 'block' }}
+                >
+                  <path
+                    d="M 24 0 L 24 24 L 0 24 A 24 24 0 0 0 24 0 Z"
+                    fill={colors.footerBg}
+                  />
+                </svg>
               </div>
             </div>
-          </AnimatedContainer>
 
-          {/* MAIN 4-COLUMN LUXURY ARCHITECTURE */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8 mb-14">
-            
-            {/* COLUMN 1: Brand & Heritage (Col 1-5) */}
-            <AnimatedContainer delay={0.1} className="lg:col-span-5 space-y-5">
-              <div className="flex items-center gap-3.5">
-                <div className="relative">
-                  <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-200 via-amber-400 to-amber-600 text-slate-950 flex items-center justify-center font-serif font-black text-2xl shadow-xl shadow-amber-500/20 border border-amber-300/40">
-                    J
+            {/* ==================== 3. TOP-RIGHT PANEL ==================== */}
+            <div
+              style={{
+                flex: 1,
+                height: '225px',
+                backgroundColor: colors.footerBg,
+                borderTopLeftRadius: '28px',
+                borderTopRightRadius: '28px',
+                padding: '46px 56px 20px 56px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-start',
+              }}
+            >
+              {/* LEFT: 4 Link Columns (Explore, Rooms, Nearby, Legal) */}
+              <div style={{ display: 'flex', gap: '58px', alignItems: 'flex-start' }}>
+                
+                {/* Column 1: Explore */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: colors.headingTint,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    Explore
                   </div>
-                  <span className="absolute -bottom-1 -right-1 flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500" />
-                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <a href="#hero" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Home</span>
+                    </a>
+                    <a href="#rooms" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Rooms</span>
+                    </a>
+                    <a href="#about" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>About Us</span>
+                    </a>
+                    <a href="#contact" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Contact</span>
+                    </a>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="font-serif font-bold text-2xl sm:text-3xl text-white tracking-wide leading-tight">
-                    {HOTEL_INFO.name}
-                  </h2>
-                  <p className="text-xs text-amber-300/90 font-medium tracking-wider uppercase mt-0.5">
-                    होटल जांगिड़ • गोगामेड़ी, राजस्थान
-                  </p>
+
+                {/* Column 2: Rooms */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: colors.headingTint,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    Rooms
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <a href="#rooms" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>AC Room</span>
+                    </a>
+                    <a href="#rooms" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Non-AC Room</span>
+                    </a>
+                    <a href="#book" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Book Now</span>
+                    </a>
+                  </div>
                 </div>
+
+                {/* Column 3: Nearby */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: colors.headingTint,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    Nearby
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <a href="#amenities" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Goga Ji Temple</span>
+                    </a>
+                    <a href="#amenities" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>Railway Station</span>
+                    </a>
+                    <a href="#location" className="footer-link-item">
+                      <span className="arrow-icon">→</span>
+                      <span>How to Reach</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Column 4: Legal */}
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <div
+                    style={{
+                      fontSize: '15px',
+                      fontWeight: 500,
+                      color: colors.headingTint,
+                      marginBottom: '20px',
+                    }}
+                  >
+                    Legal
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <button
+                      type="button"
+                      onClick={() => setModalContent('privacy')}
+                      className="footer-link-item"
+                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                    >
+                      <span className="arrow-icon">→</span>
+                      <span>Privacy Policy</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setModalContent('terms')}
+                      className="footer-link-item"
+                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                    >
+                      <span className="arrow-icon">→</span>
+                      <span>Terms & Conditions</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setModalContent('refund')}
+                      className="footer-link-item"
+                      style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                    >
+                      <span className="arrow-icon">→</span>
+                      <span>Refund Policy</span>
+                    </button>
+                  </div>
+                </div>
+
               </div>
 
-              <p className="text-slate-300 text-sm leading-relaxed max-w-md">
-                Experience authentic Rajasthani hospitality in a clean, quiet sanctuary. Thoughtfully managed by <span className="text-amber-200 font-medium">Surjeet & Vijay Jangid</span> to ensure pilgrims and travelers enjoy complete comfort and peace of mind.
-              </p>
-
-              {/* Distance Highlights */}
-              <div className="grid grid-cols-2 gap-3 max-w-md pt-1">
-                <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 flex items-center gap-2.5">
-                  <span className="text-lg">🛕</span>
-                  <div>
-                    <div className="text-xs font-bold text-white">400 Meters</div>
-                    <div className="text-[11px] text-slate-400">Shri Goga Ji Mandir</div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-3 flex items-center gap-2.5">
-                  <span className="text-lg">🚂</span>
-                  <div>
-                    <div className="text-xs font-bold text-white">900 Meters</div>
-                    <div className="text-[11px] text-slate-400">Gogamedi Station</div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Trust & Verification Badges */}
-              <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-400/10 border border-amber-400/25 px-3 py-1.5 text-xs text-amber-200 font-medium">
-                  <ShieldCheck className="size-4 text-amber-400" />
-                  <span>Rajasthan Govt Registered</span>
-                </div>
-
+              {/* RIGHT: 4 Small Social Icons (Instagram, Facebook, WhatsApp, Maps) */}
+              <div style={{ display: 'flex', gap: '26px', alignItems: 'center', paddingTop: '2px' }}>
                 <a
-                  href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6"
+                  href="https://instagram.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.05] hover:bg-white/[0.09] border border-white/10 px-3 py-1.5 text-xs text-slate-200 font-medium transition-colors"
+                  className="social-icon-btn"
+                  title="Instagram"
                 >
-                  <Star className="size-3.5 fill-amber-400 text-amber-400" />
-                  <span className="font-bold text-white">5.0</span>
-                  <span className="text-slate-400">Google Reviews</span>
+                  <Instagram size={18} />
                 </a>
-              </div>
-            </AnimatedContainer>
-
-            {/* COLUMN 2: Explore Hotel (Col 6-7) */}
-            <AnimatedContainer delay={0.2} className="lg:col-span-2 space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
-                <span>Explore Hotel</span>
-                <span className="w-6 h-[1px] bg-amber-400/30" />
-              </h3>
-
-              <ul className="space-y-2.5 text-sm text-slate-300">
-                <li>
-                  <a href="#rooms" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>AC Deluxe (₹1,200)</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#rooms" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Air-Cooled (₹1,000)</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#amenities" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Hotel Amenities</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#testimonials" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Guest Reviews & Gallery</span>
-                  </a>
-                </li>
-                <li>
-                  <a href="#location" className="group flex items-center gap-1.5 hover:text-amber-200 transition-colors">
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Temple Map & Route</span>
-                  </a>
-                </li>
-              </ul>
-            </AnimatedContainer>
-
-            {/* COLUMN 3: Policies & Security (Col 8-9) */}
-            <AnimatedContainer delay={0.3} className="lg:col-span-2 space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
-                <span>Policies & Trust</span>
-                <span className="w-6 h-[1px] bg-amber-400/30" />
-              </h3>
-
-              <div className="flex items-center gap-1.5 text-[11px] text-emerald-400/90 font-medium">
-                <Lock className="size-3" />
-                <span>Razorpay 256-bit Encrypted</span>
-              </div>
-
-              <ul className="space-y-2.5 text-sm text-slate-300">
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setModalContent('privacy')}
-                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
-                  >
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Privacy Policy</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setModalContent('terms')}
-                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
-                  >
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Terms & Conditions</span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    onClick={() => setModalContent('refund')}
-                    className="group flex items-center gap-1.5 hover:text-amber-200 text-left cursor-pointer transition-colors"
-                  >
-                    <ChevronRight className="size-3.5 text-amber-400/50 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
-                    <span>Cancellation & Refund</span>
-                  </button>
-                </li>
-                <li className="pt-1 text-xs text-slate-400 leading-relaxed">
-                  ✓ Govt Photo ID (Aadhaar / Voter ID) required at check-in.
-                </li>
-              </ul>
-            </AnimatedContainer>
-
-            {/* COLUMN 4: Direct Host Helpdesk Card (Col 10-12) */}
-            <AnimatedContainer delay={0.4} className="lg:col-span-3 space-y-4">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-amber-300/90 flex items-center gap-2">
-                <span>Direct Host Desk</span>
-                <span className="w-6 h-[1px] bg-amber-400/30" />
-              </h3>
-
-              <div className="rounded-2xl bg-gradient-to-b from-white/[0.07] to-white/[0.02] border border-amber-400/20 p-4 space-y-3 shadow-lg">
-                <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                  <div>
-                    <h4 className="font-semibold text-white text-sm">Vijay Jangid</h4>
-                    <p className="text-xs text-amber-300">Host & Operations</p>
-                  </div>
-                  <div className="flex items-center gap-1 text-[11px] text-emerald-400 bg-emerald-950/40 border border-emerald-500/30 px-2 py-0.5 rounded-full">
-                    <Clock className="size-3" />
-                    <span>Available 24/7</span>
-                  </div>
-                </div>
-
-                <div className="text-xs text-slate-300 space-y-1">
-                  <div className="text-slate-400">Founder: <span className="text-slate-200">Surjeet Jangid</span></div>
-                  <div className="text-slate-400">Location: <span className="text-slate-200">Gogamedi, Hanumangarh, RJ</span></div>
-                </div>
-
                 <a
-                  href="tel:+919414487691"
-                  className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-amber-400 text-slate-950 font-bold text-xs hover:bg-amber-300 transition-colors shadow-md shadow-amber-400/10"
+                  href="https://facebook.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Facebook"
                 >
-                  <PhoneCall className="size-3.5" />
-                  <span>+91 94144 87691</span>
+                  <Facebook size={18} />
+                </a>
+                <a
+                  href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="WhatsApp"
+                >
+                  <MessageCircle size={18} />
+                </a>
+                <a
+                  href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Google Maps"
+                >
+                  <MapPin size={18} />
                 </a>
               </div>
-            </AnimatedContainer>
 
+            </div>
           </div>
 
-          {/* BOTTOM COPYRIGHT & COMPLIANCE BAR */}
-          <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
-            
-            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-4 gap-y-1 text-center md:text-left">
-              <p>© {new Date().getFullYear()} {HOTEL_INFO.name}, Gogamedi. All rights reserved.</p>
-              <span className="hidden md:inline text-white/20">•</span>
-              <p className="text-slate-400">Government Registered Tourism Property</p>
-            </div>
-
-            {/* Payment & Back to top */}
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 bg-white/[0.03] border border-white/10 px-3 py-1 rounded-xl">
-                <span>Secure UPI</span>
-                <span className="text-white/20">|</span>
-                <span>Cards</span>
-                <span className="text-white/20">|</span>
-                <span>NetBanking</span>
+          {/* ==================== 4. BOTTOM PANEL ==================== */}
+          <div
+            style={{
+              width: '100%',
+              height: '335px',
+              backgroundColor: colors.footerBg,
+              borderTopLeftRadius: '28px',
+              borderBottomLeftRadius: '28px',
+              borderBottomRightRadius: '28px',
+              padding: '44px 56px',
+              boxSizing: 'border-box',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              position: 'relative',
+              marginTop: '-1px', // Seamless junction with top-right panel
+            }}
+          >
+            {/* HEADLINE & CTA ROW */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                paddingTop: '20px',
+              }}
+            >
+              {/* BIG HEADLINE (54px, weight 400, line-height 0.95, letter-spacing -1.5px, 3 lines) */}
+              <div
+                style={{
+                  color: '#FFFFFF',
+                  fontWeight: 400,
+                  fontSize: '54px',
+                  lineHeight: 0.95,
+                  letterSpacing: '-1.5px',
+                }}
+              >
+                <div>A peaceful stay</div>
+                <div>just 400 m from</div>
+                <div>Goga Ji Temple</div>
               </div>
 
-              <button
-                type="button"
-                onClick={scrollToTop}
-                aria-label="Scroll back to top"
-                className="p-2 rounded-xl bg-white/5 hover:bg-amber-400 hover:text-slate-950 border border-white/10 transition-all duration-300 group cursor-pointer"
-                title="Back to Top"
+              {/* CTA BUTTON (170 x 70px, radius 20px, text: Book Your Stay) */}
+              <a
+                href="#book"
+                className="cta-btn-hover"
+                style={{
+                  width: '170px',
+                  height: '70px',
+                  borderRadius: '20px',
+                  backgroundColor: colors.btnBg,
+                  color: colors.btnText,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textDecoration: 'none',
+                  fontSize: '15px',
+                  fontWeight: 600,
+                  flexShrink: 0,
+                }}
               >
-                <ArrowUp className="size-4 group-hover:-translate-y-0.5 transition-transform" />
-              </button>
+                Book Your Stay
+              </a>
             </div>
 
-          </div>
+            {/* DIVIDER LINE (1px line, rgba(255,255,255,0.45)) */}
+            <div
+              style={{
+                width: '100%',
+                height: '1px',
+                backgroundColor: 'rgba(255, 255, 255, 0.45)',
+                margin: '24px 0 16px 0',
+              }}
+            />
 
-          {/* Designer Credit */}
-          <div className="pt-4 text-center text-[11px] text-slate-400 flex items-center justify-center gap-1">
-            <span>Designed & crafted for Shri Goga Ji Pilgrims by</span>
-            <span className="text-slate-300 font-semibold tracking-wide">Nikxlab Studio</span>
+            {/* BOTTOM ROW (below divider): Copyright & Barcode on left, Uppercase Address on right */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                width: '100%',
+              }}
+            >
+              {/* LEFT: Copyright + Barcode */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <span
+                  style={{
+                    fontSize: '11px',
+                    color: 'rgba(255, 255, 255, 0.85)',
+                    letterSpacing: '0.2px',
+                  }}
+                >
+                  © 2026 Hotel Jangid, Gogamedi
+                </span>
+
+                {/* DECORATIVE BARCODE STRIP (SVG ~110 x 14px) */}
+                <svg
+                  width="110"
+                  height="14"
+                  viewBox="0 0 110 14"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  style={{ opacity: 0.85 }}
+                >
+                  <rect x="0" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="4" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="7" y="0" width="3" height="14" fill="#FFFFFF" />
+                  <rect x="12" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="15" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="19" y="0" width="4" height="14" fill="#FFFFFF" />
+                  <rect x="25" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="28" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="32" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="35" y="0" width="3" height="14" fill="#FFFFFF" />
+                  <rect x="40" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="44" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="47" y="0" width="3" height="14" fill="#FFFFFF" />
+                  <rect x="52" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="56" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="59" y="0" width="4" height="14" fill="#FFFFFF" />
+                  <rect x="65" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="69" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="72" y="0" width="3" height="14" fill="#FFFFFF" />
+                  <rect x="77" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="81" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="84" y="0" width="2" height="14" fill="#FFFFFF" />
+                  <rect x="88" y="0" width="1" height="14" fill="#FFFFFF" />
+                  <rect x="91" y="0" width="3" height="14" fill="#FFFFFF" />
+                  {/* End tiny logo square */}
+                  <rect x="98" y="2" width="10" height="10" rx="2" fill="#FFFFFF" />
+                  <rect x="101" y="5" width="4" height="4" rx="1" fill={colors.footerBg} />
+                </svg>
+              </div>
+
+              {/* RIGHT: 3 lines, UPPERCASE, 11px, line-height 1.35, letter-spacing 0.5px */}
+              <div
+                style={{
+                  textAlign: 'right',
+                  fontSize: '11px',
+                  lineHeight: 1.35,
+                  letterSpacing: '0.5px',
+                  color: 'rgba(255, 255, 255, 0.85)',
+                  textTransform: 'uppercase',
+                }}
+              >
+                <div>+91 94144 87691</div>
+                <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
+                <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
+              </div>
+            </div>
+
           </div>
 
         </div>
+
+        {/* ============================================================== */}
+        {/* MOBILE VIEW (< 768px)                                           */}
+        {/* ============================================================== */}
+        <div
+          className="mobile-only"
+          style={{
+            width: '100%',
+            backgroundColor: colors.footerBg,
+            borderRadius: '24px',
+            padding: '24px 20px',
+            boxSizing: 'border-box',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+          }}
+        >
+          {/* Top Notch Tab: 110x110 with Logo Mark */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div
+              style={{
+                width: '100px',
+                height: '100px',
+                backgroundColor: colors.pageBg,
+                borderRadius: '18px',
+                padding: '10px',
+                boxSizing: 'border-box',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <svg
+                width="80"
+                height="80"
+                viewBox="0 0 180 180"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M 38 0 H 68 Q 115 0 115 48 V 140 Q 115 178 77 178 H 38 Q 0 178 0 140 V 38 Q 0 0 38 0 Z"
+                  fill={colors.footerBg}
+                />
+                <circle cx="138" cy="137" r="41" fill={colors.footerBg} />
+                <path
+                  d="M 68 45 V 110 Q 68 135 48 135 Q 32 135 32 120"
+                  stroke={colors.pageBg}
+                  strokeWidth="11"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+
+            {/* Social Icons row on mobile */}
+            <div style={{ display: 'flex', gap: '18px', alignItems: 'center', paddingTop: '8px' }}>
+              <a href="https://instagram.com" className="social-icon-btn" title="Instagram">
+                <Instagram size={18} />
+              </a>
+              <a href="https://facebook.com" className="social-icon-btn" title="Facebook">
+                <Facebook size={18} />
+              </a>
+              <a href="https://wa.me/919414487691" className="social-icon-btn" title="WhatsApp">
+                <MessageCircle size={18} />
+              </a>
+              <a href={HOTEL_INFO.mapUrl || '#'} className="social-icon-btn" title="Maps">
+                <MapPin size={18} />
+              </a>
+            </div>
+          </div>
+
+          {/* Link columns (2 per row on mobile) */}
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '24px 16px',
+            }}
+          >
+            {/* Explore */}
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
+                Explore
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a href="#hero" className="footer-link-item">→ Home</a>
+                <a href="#rooms" className="footer-link-item">→ Rooms</a>
+                <a href="#about" className="footer-link-item">→ About Us</a>
+                <a href="#contact" className="footer-link-item">→ Contact</a>
+              </div>
+            </div>
+
+            {/* Rooms */}
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
+                Rooms
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a href="#rooms" className="footer-link-item">→ AC Room</a>
+                <a href="#rooms" className="footer-link-item">→ Non-AC</a>
+                <a href="#book" className="footer-link-item">→ Book Now</a>
+              </div>
+            </div>
+
+            {/* Nearby */}
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
+                Nearby
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <a href="#amenities" className="footer-link-item">→ Goga Ji Temple</a>
+                <a href="#amenities" className="footer-link-item">→ Railway Station</a>
+                <a href="#location" className="footer-link-item">→ How to Reach</a>
+              </div>
+            </div>
+
+            {/* Legal */}
+            <div>
+              <div style={{ fontSize: '14px', fontWeight: 500, color: colors.headingTint, marginBottom: '12px' }}>
+                Legal
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <button
+                  type="button"
+                  onClick={() => setModalContent('privacy')}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0 }}
+                >
+                  → Privacy Policy
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalContent('terms')}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0 }}
+                >
+                  → Terms of Stay
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setModalContent('refund')}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0 }}
+                >
+                  → Refund Policy
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Headline on mobile (34px full width) */}
+          <div
+            style={{
+              color: '#FFFFFF',
+              fontWeight: 400,
+              fontSize: '34px',
+              lineHeight: 1.05,
+              letterSpacing: '-1px',
+              marginTop: '10px',
+            }}
+          >
+            <div>A peaceful stay</div>
+            <div>just 400 m from</div>
+            <div>Goga Ji Temple</div>
+          </div>
+
+          {/* CTA Button full width under headline */}
+          <a
+            href="#book"
+            className="cta-btn-hover"
+            style={{
+              width: '100%',
+              height: '56px',
+              borderRadius: '16px',
+              backgroundColor: colors.btnBg,
+              color: colors.btnText,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textDecoration: 'none',
+              fontSize: '15px',
+              fontWeight: 600,
+            }}
+          >
+            Book Your Stay
+          </a>
+
+          {/* Mobile Divider */}
+          <div
+            style={{
+              width: '100%',
+              height: '1px',
+              backgroundColor: 'rgba(255, 255, 255, 0.35)',
+              margin: '6px 0',
+            }}
+          />
+
+          {/* Mobile bottom address & copyright */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <span style={{ fontSize: '11px', color: 'rgba(255, 255, 255, 0.85)' }}>
+                © 2026 Hotel Jangid, Gogamedi
+              </span>
+              <svg
+                width="110"
+                height="14"
+                viewBox="0 0 110 14"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ opacity: 0.85 }}
+              >
+                <rect x="0" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="4" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="7" y="0" width="3" height="14" fill="#FFFFFF" />
+                <rect x="12" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="15" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="19" y="0" width="4" height="14" fill="#FFFFFF" />
+                <rect x="25" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="28" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="32" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="35" y="0" width="3" height="14" fill="#FFFFFF" />
+                <rect x="40" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="44" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="47" y="0" width="3" height="14" fill="#FFFFFF" />
+                <rect x="52" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="56" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="59" y="0" width="4" height="14" fill="#FFFFFF" />
+                <rect x="65" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="69" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="72" y="0" width="3" height="14" fill="#FFFFFF" />
+                <rect x="77" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="81" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="84" y="0" width="2" height="14" fill="#FFFFFF" />
+                <rect x="88" y="0" width="1" height="14" fill="#FFFFFF" />
+                <rect x="91" y="0" width="3" height="14" fill="#FFFFFF" />
+                <rect x="98" y="2" width="10" height="10" rx="2" fill="#FFFFFF" />
+                <rect x="101" y="5" width="4" height="4" rx="1" fill={colors.footerBg} />
+              </svg>
+            </div>
+
+            <div
+              style={{
+                fontSize: '11px',
+                lineHeight: 1.4,
+                letterSpacing: '0.4px',
+                color: 'rgba(255, 255, 255, 0.85)',
+                textTransform: 'uppercase',
+              }}
+            >
+              <div>+91 94144 87691</div>
+              <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
+              <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
+            </div>
+          </div>
+        </div>
+
       </footer>
 
       {/* RAZORPAY COMPLIANCE MODAL */}
@@ -362,7 +958,7 @@ export default function Footer() {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setModalContent(null)}
         >
           <div
@@ -439,6 +1035,6 @@ export default function Footer() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
