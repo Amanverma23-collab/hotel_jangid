@@ -243,15 +243,6 @@ export default function OwnersSection() {
                   >
                     Mr. Surjeet Jangid
                   </h3>
-                  <p
-                    style={{
-                      fontSize: '13.5px',
-                      lineHeight: 1.65,
-                      color: '#6B6B6B',
-                    }}
-                  >
-                    Welcoming pilgrims for years with quiet dignity, traditional Rajasthani warmth, and a father's enduring promise of an honest stay.
-                  </p>
                 </div>
 
                 {/* 1px Divider Line */}

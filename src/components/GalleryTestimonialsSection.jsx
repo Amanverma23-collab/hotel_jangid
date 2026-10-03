@@ -374,119 +374,113 @@ export default function GalleryTestimonialsSection() {
             boxSizing: 'border-box',
           }}
         >
+          {/* ── DESKTOP: 3-col grid | MOBILE: horizontal snap slider ── */}
+          <style>{`
+            .reviews-slider-track {
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+              gap: 30px;
+              text-align: left;
+            }
+            .review-dot { width:8px; height:8px; border-radius:50%; background:#D1D5DB; transition: background 0.2s, transform 0.2s; cursor:pointer; border:none; padding:0; }
+            .review-dot.active { background:#111827; transform: scale(1.25); }
+            @media (max-width: 767px) {
+              .reviews-slider-wrapper {
+                overflow-x: auto;
+                scroll-snap-type: x mandatory;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                margin: 0 -24px;
+                padding: 0 24px;
+              }
+              .reviews-slider-wrapper::-webkit-scrollbar { display: none; }
+              .reviews-slider-track {
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                gap: 16px !important;
+                width: max-content;
+              }
+              .review-card-item {
+                width: calc(85vw) !important;
+                min-width: calc(85vw) !important;
+                scroll-snap-align: start;
+                flex-shrink: 0;
+              }
+            }
+          `}</style>
+
+          {/* Slider wrapper */}
           <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '30px',
-              textAlign: 'left',
+            className="reviews-slider-wrapper"
+            id="reviews-slider"
+            onScroll={(e) => {
+              const el = e.currentTarget;
+              const cardW = el.querySelector('.review-card-item')?.offsetWidth || 1;
+              const idx = Math.round(el.scrollLeft / (cardW + 16));
+              const dots = document.querySelectorAll('.review-dot');
+              dots.forEach((d, i) => d.classList.toggle('active', i === idx));
             }}
           >
-            {REVIEWS.map((rev) => (
-              <div
-                key={rev.id}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <div>
-                  {/* 5 Stars: color #F5A623, size 14px, 2px gap */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '2px',
-                      color: '#F5A623',
-                    }}
-                  >
-                    {[...Array(5)].map((_, i) => (
-                      <svg
-                        key={i}
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="#F5A623"
-                        stroke="none"
-                      >
-                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
-                      </svg>
-                    ))}
+            <div className="reviews-slider-track">
+              {REVIEWS.map((rev) => (
+                <div
+                  key={rev.id}
+                  className="review-card-item"
+                  style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                >
+                  <div>
+                    {/* 5 Stars */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#F5A623' }}>
+                      {[...Array(5)].map((_, i) => (
+                        <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#F5A623" stroke="none">
+                          <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                        </svg>
+                      ))}
+                    </div>
+                    <div style={{ height: '16px' }} />
+                    <p style={{ margin: 0, fontSize: '12.5px', lineHeight: 1.55, color: '#4B5563', fontWeight: 400 }}>
+                      {rev.quote}
+                    </p>
                   </div>
 
-                  {/* 16px gap */}
-                  <div style={{ height: '16px' }} />
-
-                  {/* Quote: font-size 12.5px, line-height 1.55, color #4B5563 */}
-                  <p
-                    style={{
-                      margin: 0,
-                      fontSize: '12.5px',
-                      lineHeight: 1.55,
-                      color: '#4B5563',
-                      fontWeight: 400,
-                    }}
-                  >
-                    {rev.quote}
-                  </p>
-                </div>
-
-                <div>
-                  {/* 24px gap */}
-                  <div style={{ height: '24px' }} />
-
-                  {/* Profile Row: round avatar 38px + 10px gap + name/role stack */}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                    }}
-                  >
-                    <img
-                      src={rev.avatar}
-                      alt={rev.name}
-                      loading="lazy"
-                      width={38}
-                      height={38}
-                      style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '50%',
-                        objectFit: 'cover',
-                        flexShrink: 0,
-                        border: 'none',
-                      }}
-                    />
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {/* Name: font-size 14px, weight 700, color #111827 */}
-                      <span
-                        style={{
-                          fontSize: '14px',
-                          fontWeight: 700,
-                          color: '#111827',
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {rev.name}
-                      </span>
-                      {/* Role: font-size 12.5px, weight 400, color #6B7280 */}
-                      <span
-                        style={{
-                          fontSize: '12.5px',
-                          fontWeight: 400,
-                          color: '#6B7280',
-                          lineHeight: 1.2,
-                          marginTop: '2px',
-                        }}
-                      >
-                        {rev.role}
-                      </span>
+                  <div>
+                    <div style={{ height: '24px' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <img
+                        src={rev.avatar}
+                        alt={rev.name}
+                        loading="lazy"
+                        width={38}
+                        height={38}
+                        style={{ width: '38px', height: '38px', borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }}
+                      />
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span style={{ fontSize: '14px', fontWeight: 700, color: '#111827', lineHeight: 1.2 }}>{rev.name}</span>
+                        <span style={{ fontSize: '12.5px', fontWeight: 400, color: '#6B7280', lineHeight: 1.2, marginTop: '2px' }}>{rev.role}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Dot indicators — only visible on mobile */}
+          <div
+            style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '20px' }}
+            className="reviews-dots"
+          >
+            <style>{`@media(min-width:768px){.reviews-dots{display:none!important;}}`}</style>
+            {REVIEWS.map((_, i) => (
+              <button
+                key={i}
+                className={`review-dot ${i === 0 ? 'active' : ''}`}
+                onClick={() => {
+                  const slider = document.getElementById('reviews-slider');
+                  const cardW = slider?.querySelector('.review-card-item')?.offsetWidth || 0;
+                  slider?.scrollTo({ left: i * (cardW + 16), behavior: 'smooth' });
+                }}
+              />
             ))}
           </div>
 
@@ -506,29 +500,14 @@ export default function GalleryTestimonialsSection() {
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span
-                style={{
-                  display: 'inline-block',
-                  width: '8px',
-                  height: '8px',
-                  borderRadius: '50%',
-                  backgroundColor: '#10B981',
-                }}
-              />
-              <span>Verified 5.0 Google Rating • जांगिड़ रेस्ट हाउस (Hotel Jangid), Gogamedi</span>
+              <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }} />
+              <span>Verified 5.0 Google Rating • जांगिड़ रेस्ट हाउस (Hotel Jangid), Gogamedi</span>
             </div>
             <a
               href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6"
               target="_blank"
               rel="noopener noreferrer"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '6px',
-                color: '#111827',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#111827', fontWeight: 600, textDecoration: 'none' }}
             >
               <span>View Official Google Reviews</span>
               <ExternalLink size={14} />
@@ -540,3 +519,4 @@ export default function GalleryTestimonialsSection() {
     </section>
   );
 }
+
