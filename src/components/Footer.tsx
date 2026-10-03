@@ -268,7 +268,8 @@ export default function Footer() {
           background: var(--page-bg);
           width: 100%;
           box-sizing: border-box;
-          padding: 70px 16px 24px 16px;
+          padding: 70px 16px 0 16px;
+          padding-bottom: 0 !important;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -282,7 +283,8 @@ export default function Footer() {
             --nw: 112px;
             --nh: 112px;
             --r:  20px;
-            padding: 32px 12px 16px 12px !important;
+            padding: 32px 12px 0 12px !important;
+            padding-bottom: 0 !important;
           }
         }
 
@@ -387,7 +389,7 @@ export default function Footer() {
         /* bottom panel, full width, sits directly under the head */
         .ftr-bottom {
           background: var(--footer-bg);
-          border-radius: var(--r) 0 var(--r) var(--r);  /* top-left convex, bottom corners round */
+          border-radius: var(--r) 0 0 0;                /* top-left convex, bottom flush with screen */
           margin-top: -1px;                             /* hides any hairline seam */
           position: relative;
           overflow: hidden;
