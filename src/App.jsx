@@ -23,9 +23,9 @@ export default function App() {
   };
 
   return (
-    <main className="w-full max-w-full bg-[#FAF8F5] text-ink-900 font-sans selection:bg-[#dfc59e]/30 selection:text-ink-950">
+    <div className="w-full max-w-full bg-[#FAF8F5] text-ink-900 font-sans selection:bg-[#dfc59e]/30 selection:text-ink-950">
       {/* Content wrapper with z-index to reveal sticky footer curtain beneath */}
-      <div className="relative z-10 bg-[#FAF8F5] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.18)]">
+      <main className="site-main relative z-10 bg-[#FAF8F5] shadow-[0_25px_50px_-12px_rgba(0,0,0,0.18)]">
         {/* 1. Global Navigation Bar */}
         <Navbar onBookClick={() => handleOpenBooking('ac')} />
 
@@ -40,7 +40,7 @@ export default function App() {
 
         {/* 5. Curved Wave Photo Gallery & Real Google Reviews */}
         <GalleryTestimonialsSection />
-      </div>
+      </main>
 
       {/* 6. Luxury Sticky Footer with Curtain Reveal Effect */}
       <Footer />
@@ -54,6 +54,6 @@ export default function App() {
         initialCheckOut={bookingPrefill?.checkOut}
         initialGuests={bookingPrefill?.guests}
       />
-    </main>
+    </div>
   );
 }

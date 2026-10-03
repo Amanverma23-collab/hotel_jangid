@@ -31,11 +31,9 @@ export default function Footer() {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
   const [isInView, setIsInView] = useState(false);
-  const [footerHeight, setFooterHeight] = useState<number>(0);
 
-  const outerRef = useRef<HTMLElement>(null);
-  const innerRef = useRef<HTMLDivElement>(null);
-  const footerRef = useRef<HTMLDivElement>(null);
+  const revealRef = useRef<HTMLDivElement>(null);
+  const ftrRef = useRef<HTMLElement>(null);
 
   // Palette color definitions
   const colors = palette === 'jangid'
@@ -60,25 +58,38 @@ export default function Footer() {
         ringStroke: '#C7C7D8',
       };
 
-  // Measure dynamic footer height for sticky curtain reveal
+  // Safety switch: Measure footer height vs viewport height
   useEffect(() => {
-    if (!innerRef.current) return;
-    const updateHeight = () => {
-      if (innerRef.current) {
-        setFooterHeight(innerRef.current.offsetHeight);
-      }
-    };
-    updateHeight();
+    const reveal = revealRef.current || document.getElementById('ftrReveal');
+    const ftr = ftrRef.current || document.getElementById('ftr');
+    if (!reveal || !ftr) return;
 
-    const ro = new ResizeObserver(() => {
-      updateHeight();
-    });
-    ro.observe(innerRef.current);
-    window.addEventListener('resize', updateHeight);
+    const desktop = window.matchMedia('(min-width: 768px)');
+
+    function updateReveal() {
+      if (!reveal || !ftr) return;
+      reveal.classList.remove('is-fixed');              // measure in normal flow
+      reveal.style.removeProperty('--ftr-h');
+      const h  = ftr.offsetHeight;
+      const vh = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+      if (desktop.matches && h <= vh - 8) {              // fits -> reveal effect ON
+        reveal.style.setProperty('--ftr-h', h + 'px');
+        reveal.classList.add('is-fixed');
+      }                                                   // else -> static footer
+    }
+
+    window.addEventListener('load', updateReveal);
+    window.addEventListener('resize', updateReveal);
+    desktop.addEventListener?.('change', updateReveal);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(updateReveal);
+    }
+    updateReveal();
 
     return () => {
-      ro.disconnect();
-      window.removeEventListener('resize', updateHeight);
+      window.removeEventListener('load', updateReveal);
+      window.removeEventListener('resize', updateReveal);
+      desktop.removeEventListener?.('change', updateReveal);
     };
   }, []);
 
@@ -93,43 +104,29 @@ export default function Footer() {
       { threshold: 0.05 }
     );
 
-    if (outerRef.current) {
-      observer.observe(outerRef.current);
+    if (revealRef.current) {
+      observer.observe(revealRef.current);
     }
 
     return () => observer.disconnect();
   }, []);
 
   return (
-    <footer
-      id="contact"
-      ref={outerRef}
-      className="relative w-full"
-      style={{
-        height: footerHeight ? `${footerHeight}px` : 'auto',
-        minHeight: '480px',
-        clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)',
-        pointerEvents: 'none',
-      }}
-    >
-      <div
-        ref={innerRef}
-        className="fixed bottom-0 left-0 w-full ftr-sticky-inner"
+    <div className="ftr-reveal" id="ftrReveal" ref={revealRef}>
+      <footer
+        className="ftr"
+        id="ftr"
+        ref={ftrRef}
         style={{
-          zIndex: 0,
-          pointerEvents: 'auto',
+          '--page-bg': colors.pageBg,
+          '--footer-bg': colors.footerBg,
+          '--heading-tint': colors.headingTint,
+          '--btn-bg': colors.btnBg,
+          '--btn-text': colors.btnText,
           backgroundColor: colors.pageBg,
-          boxSizing: 'border-box',
-          padding: '70px 16px 24px 16px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          overflow: 'hidden',
-          fontFamily: '"Plus Jakarta Sans", "Inter Tight", -apple-system, BlinkMacSystemFont, sans-serif',
-          transition: 'background-color 0.4s ease',
-        }}
+        } as React.CSSProperties}
       >
-        {/* SCOPED CSS FOR TRANSITIONS, HOVERS, AND MASKS */}
+        {/* SCOPED CSS FOR REVEAL, HOVERS, AND GEOMETRY */}
         <style>{`
         .footer-link-item {
           display: flex;
@@ -186,11 +183,12 @@ export default function Footer() {
           font-family: "Playfair Display", "DM Serif Display", "Instrument Serif", Georgia, serif;
           font-weight: 400;
           letter-spacing: -0.02em;
-          font-size: clamp(96px, 23vw, 280px);
+          font-size: min(23vw, 36vh);
         }
         .wordmark,
         .wordmark-letter {
           --lift: 0.08em;                 /* raise the wordmark slightly; tune 0.04em - 0.12em */
+          font-size: min(23vw, 36vh);
           display: inline-block;
           line-height: 0.8;
           letter-spacing: -0.02em;
@@ -216,25 +214,64 @@ export default function Footer() {
           box-shadow: none;
         }
 
-        /* ==================== 1. ONE SHAPE, SIZE VIA VARIABLES ==================== */
+        /* ==================== 1. STRUCTURE & VARIABLES ==================== */
+        .site-main {
+          position: relative;
+          z-index: 2;
+          background: var(--page-bg, #FAF8F5);
+        }
+        .ftr-reveal {
+          position: relative;
+          z-index: 1;
+          background: var(--page-bg, #FAF8F5);
+        }
+        /* effect ON (set by JS only when the footer fits the screen) */
+        .ftr-reveal.is-fixed {
+          height: var(--ftr-h);
+          clip-path: inset(0);
+        }
+        .ftr-reveal.is-fixed .ftr {
+          position: fixed;
+          left: 0;
+          right: 0;
+          bottom: 0;
+        }
+        /* effect OFF = normal static footer, scrolls like any section */
+        .ftr-reveal:not(.is-fixed) .ftr {
+          position: relative;
+        }
+
         .ftr {
           --page-bg: #FDF6EA;
           --footer-bg: #566B4B;
           --nw: 225px;   /* notch width  (desktop) */
           --nh: 225px;   /* notch height (desktop) */
           --r:  28px;    /* corner radius (desktop) */
-          background: transparent;
+          background: var(--page-bg);
           width: 100%;
-          max-width: 1240px;
+          box-sizing: border-box;
+          padding: clamp(24px, 4vh, 48px) 16px clamp(16px, 2.5vh, 24px) 16px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-end;
           position: relative;
-          z-index: 10;
+          z-index: 1;
         }
         @media (max-width: 767px) {
           .ftr {
             --nw: 112px;
             --nh: 112px;
             --r:  20px;
+            padding: 24px 12px 16px 12px;
           }
+        }
+
+        .ftr-card {
+          width: 100%;
+          max-width: 1240px;
+          position: relative;
+          z-index: 10;
         }
 
         .ftr-head {
@@ -269,7 +306,8 @@ export default function Footer() {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          padding: 46px 56px 20px 56px;
+          padding-block: clamp(24px, 4vh, 48px);
+          padding-inline: 56px;
           box-sizing: border-box;
         }
         /* concave inner corner where the notch meets the bottom panel */
@@ -376,7 +414,7 @@ export default function Footer() {
           width: 100%;
           height: 1px;
           background-color: rgba(255, 255, 255, 0.45);
-          margin-top: 48px;
+          margin-top: clamp(24px, 5vh, 48px);
           margin-bottom: 16px;
         }
 
@@ -400,7 +438,8 @@ export default function Footer() {
           .ftr-top {
             height: var(--nh);
             min-height: var(--nh);
-            padding: 0 20px;
+            padding: 0 20px !important;
+            padding-block: 0 !important;
             justify-content: flex-end;
             align-items: center;
           }
@@ -610,18 +649,12 @@ export default function Footer() {
 
       {/* ==================== 2. MAIN FOOTER SILHOUETTE CONTAINER ==================== */}
       <div
-        ref={footerRef}
-        className="ftr"
+        className="ftr-card"
         style={{
-          '--page-bg': colors.pageBg,
-          '--footer-bg': colors.footerBg,
-          '--heading-tint': colors.headingTint,
-          '--btn-bg': colors.btnBg,
-          '--btn-text': colors.btnText,
           opacity: isInView ? 1 : 0,
           transform: isInView ? 'translateY(0)' : 'translateY(30px)',
           transition: 'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-        } as React.CSSProperties}
+        }}
       >
         {/* ==================== 1. HEADER (NOTCH + TOP PANEL) ==================== */}
         <div className="ftr-head">
@@ -1012,7 +1045,7 @@ export default function Footer() {
           </div>
         </div>
       </div>
-    </div>
+    </footer>
 
       {/* RAZORPAY COMPLIANCE MODAL (Rendered via Portal to escape clip-path) */}
       {modalContent && typeof document !== 'undefined' && createPortal(
@@ -1097,6 +1130,6 @@ export default function Footer() {
         </div>,
         document.body
       )}
-    </footer>
+    </div>
   );
 }
