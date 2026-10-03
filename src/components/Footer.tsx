@@ -1,9 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import {
-  Instagram,
-  Facebook,
-  MessageCircle,
   MapPin,
   X,
   ShieldCheck,
@@ -166,12 +163,23 @@ export default function Footer() {
           transform: translateX(4px);
         }
         .social-icon-btn {
-          color: #FFFFFF;
-          transition: opacity 0.2s ease, transform 0.2s ease;
+          width: 44px;
+          height: 44px;
+          border-radius: 50%;
+          background: #FFFFFF;
+          color: #111111;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease;
         }
         .social-icon-btn:hover {
-          opacity: 0.8;
-          transform: translateY(-2px);
+          background-color: #FDF6EA;
+          color: #000000;
+          transform: scale(1.08);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
         }
 
         .wordmark-wrap,
@@ -330,7 +338,7 @@ export default function Footer() {
         .ftr-social,
         .ftr-socials {
           display: flex;
-          gap: 26px;
+          gap: 14px;
           align-items: center;
           padding-top: 2px;
         }
@@ -450,9 +458,13 @@ export default function Footer() {
           .ftr-top .ftr-cta {
             display: none !important;
           }
+          .social-icon-btn {
+            width: 38px;
+            height: 38px;
+          }
           .ftr-social,
           .ftr-socials {
-            gap: 18px;
+            gap: 10px;
             padding-top: 0;
           }
           .ftr-bottom {
@@ -778,44 +790,43 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* RIGHT COLUMN: 4 SOCIAL ICONS + BOOK YOUR STAY CTA (DESKTOP) */}
+            {/* RIGHT COLUMN: WHATSAPP & LOCATION CIRCULAR BUTTONS + BOOK YOUR STAY CTA (DESKTOP) */}
             <div className="ftr-right">
               <div className="ftr-social ftr-socials">
-                <a
-                  href="https://instagram.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="Instagram"
-                >
-                  <Instagram size={18} />
-                </a>
-                <a
-                  href="https://facebook.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="social-icon-btn"
-                  title="Facebook"
-                >
-                  <Facebook size={18} />
-                </a>
                 <a
                   href="https://wa.me/919001187776?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-btn"
-                  title="WhatsApp"
+                  title="Chat on WhatsApp"
+                  aria-label="Chat on WhatsApp"
                 >
-                  <MessageCircle size={18} />
+                  <svg
+                    width="21"
+                    height="21"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                    <path
+                      d="M9 10a.5.5 0 0 0 1 0V9a.5.5 0 0 0-1 0v1a5 5 0 0 0 5 5h1a.5.5 0 0 0 0-1h-1a.5.5 0 0 0 0 1"
+                      strokeWidth="1.9"
+                    />
+                  </svg>
                 </a>
                 <a
                   href={HOTEL_INFO.mapUrl || 'https://maps.google.com/?q=Hotel+Jangid+Gogamedi'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-icon-btn"
-                  title="Google Maps"
+                  title="Hotel Location on Google Maps"
+                  aria-label="Hotel Location on Google Maps"
                 >
-                  <MapPin size={18} />
+                  <MapPin size={21} strokeWidth={1.9} />
                 </a>
               </div>
               <a
