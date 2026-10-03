@@ -193,7 +193,7 @@ export default function Navbar({ onBookClick }) {
 
           {/* b) WhatsApp direct chat round button (Desktop only) */}
           <a
-            href="https://wa.me/919414487691?text=Hello%20Hotel%20Jangid,%20I%20want%20to%20inquire%20about%20room%20booking"
+            href="https://wa.me/919001187776?text=Hello%20Hotel%20Jangid,%20I%20want%20to%20inquire%20about%20room%20booking"
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:inline-flex"
@@ -216,7 +216,7 @@ export default function Navbar({ onBookClick }) {
               e.currentTarget.style.backgroundColor = '#EDECEA';
               e.currentTarget.style.color = '#111111';
             }}
-            title="Chat on WhatsApp (+91 9414487691)"
+            title="Chat on WhatsApp (+91 90011 87776)"
             aria-label="Chat on WhatsApp"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -257,7 +257,7 @@ export default function Navbar({ onBookClick }) {
 
           {/* d) Black pill button: Phone + "Call Now" (Desktop only) */}
           <a
-            href="tel:+919414487691"
+            href="tel:+919001187776"
             className="hidden md:inline-flex"
             style={{
               height: '38px',
@@ -275,7 +275,7 @@ export default function Navbar({ onBookClick }) {
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#000000')}
             onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#111111')}
-            title="Call Hotel Jangid: +91 9414487691"
+            title="Call Hotel Jangid: +91 90011 87776"
           >
             <Phone size={13} fill="#FFFFFF" />
             <span>Call Now</span>
@@ -371,7 +371,7 @@ export default function Navbar({ onBookClick }) {
                 Book Now
               </button>
               <a
-                href="https://wa.me/919414487691"
+                href="https://wa.me/919001187776"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -393,7 +393,7 @@ export default function Navbar({ onBookClick }) {
             </div>
 
             <a
-              href="tel:+919414487691"
+              href="tel:+919001187776"
               style={{
                 width: '100%',
                 height: '40px',
@@ -411,7 +411,7 @@ export default function Navbar({ onBookClick }) {
               }}
             >
               <Phone size={14} fill="#FFFFFF" />
-              <span>Call: +91 9414487691</span>
+              <span>Call: +91 90011 87776</span>
             </a>
           </div>
         )}

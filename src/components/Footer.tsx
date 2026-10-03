@@ -699,7 +699,7 @@ export default function Footer() {
                 <Facebook size={18} />
               </a>
               <a
-                href="https://wa.me/919414487691?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
+                href="https://wa.me/919001187776?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="social-icon-btn"
@@ -890,7 +890,7 @@ export default function Footer() {
 
             {/* RIGHT: 3 lines, UPPERCASE address */}
             <div className="ftr-bottom-address">
-              <div>+91 94144 87691</div>
+              <div>+91 90011 87776</div>
               <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
               <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>
             </div>
@@ -983,7 +983,7 @@ export default function Footer() {
                 <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc pl-5">
                   <li>Cancellations requested 24 hours prior to check-in are eligible for a 90% refund processed back to the original payment source within 5–7 business days.</li>
                   <li>For cancellations made within 24 hours of check-in, dates can be rescheduled without additional fees by contacting host Vijay Jangid.</li>
-                  <li>For immediate support or questions regarding refunds, call +91 94144 87691.</li>
+                  <li>For immediate support or questions regarding refunds, call +91 90011 87776.</li>
                 </ul>
               </div>
             )}

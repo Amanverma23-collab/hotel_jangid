@@ -70,7 +70,7 @@ export default function BookingModal({
       `\n• Estimated Total: ₹${totalAmount.toLocaleString('en-IN')}` +
       `\n\nPlease confirm room availability.`;
 
-    window.open(`https://wa.me/919414487691?text=${encodeURIComponent(message)}`, '_blank');
+    window.open(`https://wa.me/919001187776?text=${encodeURIComponent(message)}`, '_blank');
   };
 
   return (
@@ -324,7 +324,7 @@ export default function BookingModal({
             </button>
 
             <a
-              href="tel:+919414487691"
+              href="tel:+919001187776"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 gap: '6px', padding: '13px 16px', borderRadius: '14px',
