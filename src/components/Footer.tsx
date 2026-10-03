@@ -164,11 +164,10 @@ export default function Footer() {
 
           background: linear-gradient(
             to bottom,
-            rgba(255, 255, 255, 0.30) 0.02em,    /* top of d / i dot / J serif */
-            rgba(255, 255, 255, 0.16) 0.37em,    /* x-height line: middle of the letters */
-            rgba(255, 255, 255, 0.08) 0.60em,
-            rgba(255, 255, 255, 0.035) 0.82em,   /* baseline: letters almost gone */
-            rgba(255, 255, 255, 0.030) 1.07em    /* J curve and g tail: faint but visible */
+            rgba(255, 255, 255, 0.28) 0em,       /* top of letters (d, i dot, J serif) */
+            rgba(255, 255, 255, 0.14) 0.36em,    /* middle of the letters */
+            rgba(255, 255, 255, 0.03) 0.76em,    /* baseline: almost gone, like the original */
+            rgba(255, 255, 255, 0.03) 1.07em     /* J curve and g tail: very faint but visible */
           );
           -webkit-background-clip: text;
           background-clip: text;
