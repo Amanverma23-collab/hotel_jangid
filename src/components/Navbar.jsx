@@ -3,12 +3,16 @@ import { Building2, Phone, MapPin, Menu, X } from 'lucide-react';
 
 export default function Navbar({ onBookClick }) {
   const [scrolled, setScrolled] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 250);
+      const isPast = window.scrollY > 250;
+      setScrolled(isPast);
+      if (isPast) setHasScrolled(true);
     };
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -42,8 +46,14 @@ export default function Navbar({ onBookClick }) {
     }
   };
 
+  // Do not render anything at all on initial page load / refresh
+  if (!hasScrolled && !scrolled) {
+    return null;
+  }
+
   return (
     <div
+      id="floating-navbar"
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${
         scrolled
           ? 'translate-y-0 opacity-100 pointer-events-auto visible'
@@ -53,6 +63,7 @@ export default function Navbar({ onBookClick }) {
         padding: '12px 12px 0 12px',
         boxSizing: 'border-box',
         visibility: scrolled ? 'visible' : 'hidden',
+        display: scrolled ? 'flex' : 'none',
       }}
       aria-hidden={!scrolled}
     >

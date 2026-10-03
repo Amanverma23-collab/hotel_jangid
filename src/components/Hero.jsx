@@ -524,6 +524,7 @@ export default function Hero({ onBookClick }) {
                 src="/images/hotel-building-hero.jpg"
                 alt="Hotel Jangid Main Luxury Building in Gogamedi"
                 loading="eager"
+                fetchPriority="high"
                 style={{
                   position: 'absolute',
                   inset: 0,
@@ -1047,24 +1048,29 @@ export default function Hero({ onBookClick }) {
         }
 
         .left-hero-card {
+          opacity: 0;
           animation: heroCardFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
           will-change: transform, opacity;
         }
 
         .hero-headline-text {
-          animation: headlineMaskReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
+          opacity: 0;
+          animation: headlineMaskReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
         }
 
         .right-card-stagger-1 {
-          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s backwards;
+          opacity: 0;
+          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.08s forwards;
         }
 
         .right-card-stagger-2 {
-          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.16s backwards;
+          opacity: 0;
+          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.16s forwards;
         }
 
         .right-card-stagger-3 {
-          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.24s backwards;
+          opacity: 0;
+          animation: cardSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.24s forwards;
         }
 
         /* Desktop (>= 1024px) */
