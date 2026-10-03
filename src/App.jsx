@@ -21,7 +21,7 @@ export default function App() {
   return (
     <main className="w-full max-w-full bg-[#FAF8F5] text-ink-900 font-sans selection:bg-[#dfc59e]/30 selection:text-ink-950">
       {/* Content wrapper with z-index to reveal sticky footer curtain beneath */}
-      <div className="relative z-10 bg-[#FAF8F5] shadow-2xl">
+      <div className="relative z-10 bg-[#FAF8F5]">
         {/* 1. Global Navigation Bar */}
         <Navbar onBookClick={() => handleOpenBooking('ac')} />
 

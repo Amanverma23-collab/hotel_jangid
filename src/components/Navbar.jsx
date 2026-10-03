@@ -44,15 +44,17 @@ export default function Navbar({ onBookClick }) {
 
   return (
     <div
-      className={`fixed top-0 left-0 right-0 z-50 pointer-events-none transition-all duration-300 flex justify-center ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 flex justify-center ${
         scrolled
-          ? 'translate-y-0 opacity-100'
-          : '-translate-y-10 opacity-0'
+          ? 'translate-y-0 opacity-100 pointer-events-auto visible'
+          : '-translate-y-full opacity-0 pointer-events-none invisible'
       }`}
       style={{
         padding: '12px 12px 0 12px',
         boxSizing: 'border-box',
+        visibility: scrolled ? 'visible' : 'hidden',
       }}
+      aria-hidden={!scrolled}
     >
       <header
         className="pointer-events-auto transition-all"
