@@ -133,7 +133,8 @@ export default function Footer() {
           width: 100%;
           overflow: hidden;
           margin-top: 24px;
-          margin-bottom: -0.12em;
+          margin-bottom: 0;
+          padding-bottom: 8px;
           line-height: 0.8;
           text-align: center;
           white-space: nowrap;
@@ -583,7 +584,7 @@ export default function Footer() {
               borderBottomLeftRadius: '28px',
               borderBottomRightRadius: '28px',
               overflow: 'hidden',
-              padding: '44px 56px 0px 56px',
+              padding: '44px 56px 16px 56px',
               boxSizing: 'border-box',
               display: 'flex',
               flexDirection: 'column',
@@ -749,7 +750,7 @@ export default function Footer() {
             backgroundColor: colors.footerBg,
             borderRadius: '24px',
             overflow: 'hidden',
-            padding: '24px 20px 0px 20px',
+            padding: '24px 20px 14px 20px',
             boxSizing: 'border-box',
             display: 'flex',
             flexDirection: 'column',
@@ -985,7 +986,7 @@ export default function Footer() {
             style={{
               fontSize: '24vw',
               marginTop: '16px',
-              marginBottom: '-0.12em',
+              marginBottom: '0',
             }}
           >
             {['J', 'a', 'n', 'g', 'i', 'd'].map((letter, idx) => (
