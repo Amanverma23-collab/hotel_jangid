@@ -206,17 +206,10 @@ export default function Navbar({ onBookClick }) {
               justifyContent: 'center',
               color: '#111111',
               textDecoration: 'none',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease',
+              transition: 'background-color 0.2s ease',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#DFDDD8';
-              e.currentTarget.style.transform = 'scale(1.08)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#EDECEA';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E0DDD9')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#EDECEA')}
             title="Chat on WhatsApp (+91 90011 87776)"
             aria-label="Chat on WhatsApp"
           >
@@ -253,17 +246,10 @@ export default function Navbar({ onBookClick }) {
               justifyContent: 'center',
               color: '#111111',
               textDecoration: 'none',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease',
+              transition: 'background-color 0.2s ease',
             }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#DFDDD8';
-              e.currentTarget.style.transform = 'scale(1.08)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = '#EDECEA';
-              e.currentTarget.style.transform = 'scale(1)';
-            }}
+            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#E0DDD9')}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#EDECEA')}
             title="Google Maps Location & Directions (400m to Temple)"
             aria-label="Google Maps Location"
           >

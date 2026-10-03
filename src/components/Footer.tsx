@@ -173,13 +173,11 @@ export default function Footer() {
           justify-content: center;
           text-decoration: none;
           box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
-          transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+          transition: background-color 0.2s ease, opacity 0.2s ease;
         }
         .social-icon-btn:hover {
           background-color: #FDF6EA;
-          color: #000000;
-          transform: scale(1.08);
-          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.16);
+          color: #111111;
         }
 
         .wordmark-wrap,
