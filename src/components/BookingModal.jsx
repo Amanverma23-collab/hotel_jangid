@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check, Tag } from 'lucide-react';
+import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { createWebsiteBooking, getCategoryPrices, supabase } from '../supabase';
-import PriceManagerModal from './PriceManagerModal';
 
 const CHECK_IN_TIMES = [
   '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
@@ -42,7 +41,6 @@ export default function BookingModal({
 
   // Live Room Rates from PMS Database
   const [roomRates, setRoomRates] = useState({ ac: 1200, cooler: 1000 });
-  const [isPriceManagerOpen, setIsPriceManagerOpen] = useState(false);
 
   // Fetch live rates on mount & listen to real-time changes
   useEffect(() => {
@@ -73,7 +71,13 @@ export default function BookingModal({
       if (initialCheckOut) setCheckOutDate(initialCheckOut);
       if (initialGuests) setGuestsCount(initialGuests);
       setBookingConfirmed(null);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
     }
+    return () => {
+      document.body.style.overflow = '';
+    };
   }, [isOpen, initialRoomType, initialCheckIn, initialCheckOut, initialGuests]);
 
   if (!isOpen) return null;
@@ -238,6 +242,15 @@ export default function BookingModal({
       >
         <style>{`
           @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.97); } to { opacity: 1; transform: scale(1); } }
+          .bm-modal-container {
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
+          }
+          .bm-modal-container::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+          }
           .bm-input {
             width: 100%; background: #F7F2E9; border: 1.5px solid #D9CDBA;
             border-radius: 12px; padding: 10px 14px; font-size: 13px;
@@ -258,16 +271,19 @@ export default function BookingModal({
 
         <div
           onClick={(e) => e.stopPropagation()}
+          className="bm-modal-container"
           style={{
             position: 'relative',
-            maxWidth: '520px', width: '100%',
+            maxWidth: '500px', width: '100%',
             background: '#FDF6EA',
-            borderRadius: '28px',
+            borderRadius: '26px',
             border: '1.5px solid #D9CDBA',
             boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08)',
-            padding: '28px 28px 24px',
-            maxHeight: '90vh',
+            padding: '24px 24px 20px',
+            maxHeight: '94vh',
             overflowY: 'auto',
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
             fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
           }}
         >
@@ -454,11 +470,11 @@ export default function BookingModal({
           ) : (
             <>
               {/* Header */}
-              <div style={{ marginBottom: '20px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
+              <div style={{ marginBottom: '14px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '6px' }}>
                   <div style={{
                     display: 'inline-flex', alignItems: 'center', gap: '6px',
-                    padding: '4px 12px', borderRadius: '999px',
+                    padding: '3px 10px', borderRadius: '999px',
                     border: '1px solid #D9CDBA', background: 'transparent',
                     fontSize: '11px', fontWeight: 600, color: '#7A7060',
                     letterSpacing: '0.06em', textTransform: 'uppercase',
@@ -467,45 +483,22 @@ export default function BookingModal({
                   </div>
                 </div>
 
-                <h3 style={{ margin: 0, fontSize: '28px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
+                <h3 style={{ margin: 0, fontSize: '24px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
                   Book Your Stay
                 </h3>
-                <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#9A8E80' }}>
+                <p style={{ margin: '3px 0 0', fontSize: '12px', color: '#9A8E80' }}>
                   400m from Shri Goga Ji Temple • Free Parking • 24/7 Geyser
                 </p>
               </div>
 
-              <form onSubmit={handleDirectBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <form onSubmit={handleDirectBooking} style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
                 {/* Room Type */}
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '5px' }}>
-                    <label className="bm-label" style={{ margin: 0 }}>
-                      <BedDouble size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
-                      Select Room Type
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => setIsPriceManagerOpen(true)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#A8936A',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '3px',
-                        padding: '0 2px',
-                        textDecoration: 'underline',
-                      }}
-                      title="Update room price in hotel database"
-                    >
-                      <Tag size={10} />
-                      Edit Rates
-                    </button>
-                  </div>
+                  <label className="bm-label">
+                    <BedDouble size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                    Select Room Type
+                  </label>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     {[
@@ -687,75 +680,12 @@ export default function BookingModal({
                       </>
                     )}
                   </button>
-
-                  {/* 2. SECONDARY ROW: WhatsApp & Call Options */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                    <button
-                      type="button"
-                      onClick={handleWhatsAppBooking}
-                      disabled={isSubmitting}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '7px',
-                        padding: '11px 14px',
-                        borderRadius: '14px',
-                        background: '#E8F5E9',
-                        border: '1.5px solid #A5D6A7',
-                        color: '#1B5E20',
-                        fontWeight: 700,
-                        fontSize: '12px',
-                        cursor: 'pointer',
-                        fontFamily: 'inherit',
-                        transition: 'all 0.15s',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#C8E6C9'}
-                      onMouseLeave={e => e.currentTarget.style.background = '#E8F5E9'}
-                    >
-                      <MessageCircle size={15} style={{ color: '#25D366' }} />
-                      Confirm on WhatsApp
-                    </button>
-
-                    <a
-                      href="tel:+919001187776"
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: '6px',
-                        padding: '11px 14px',
-                        borderRadius: '14px',
-                        background: '#F0E9DC',
-                        border: '1.5px solid #D9CDBA',
-                        color: '#1A1A1A',
-                        fontWeight: 600,
-                        fontSize: '12px',
-                        textDecoration: 'none',
-                        whiteSpace: 'nowrap',
-                        fontFamily: 'inherit',
-                        transition: 'all 0.15s',
-                      }}
-                      onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
-                      onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
-                    >
-                      <PhoneCall size={14} style={{ color: '#A8936A' }} />
-                      Call Vijay Ji
-                    </a>
-                  </div>
                 </div>
               </form>
             </>
           )}
         </div>
       </div>
-
-      {/* Hotel Manager Live Price Editor Modal */}
-      <PriceManagerModal
-        isOpen={isPriceManagerOpen}
-        onClose={() => setIsPriceManagerOpen(false)}
-        onPriceUpdated={(rates) => setRoomRates(rates)}
-      />
     </>
   );
 }
