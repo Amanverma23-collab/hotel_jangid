@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles } from 'lucide-react';
-import { createWebsiteReservation } from '../services/supabaseClient';
+import { createWebsiteBooking } from '../supabase';
 
 const CHECK_IN_TIMES = [
   '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
@@ -68,7 +68,7 @@ export default function BookingModal({
 
     try {
       // 1. Save directly into Supabase PMS Reception Software database
-      const res = await createWebsiteReservation({
+      const res = await createWebsiteBooking({
         guestName: name,
         guestPhone: phone,
         checkInDate,

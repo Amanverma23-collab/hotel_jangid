@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { HOTEL_INFO } from '../data/hotelData';
-import { createWebsiteReservation } from '../services/supabaseClient';
+import { createWebsiteBooking } from '../supabase';
 
 export default function BookingSection({ preselectedRoomType = 'ac' }) {
   // Form State
@@ -145,7 +145,7 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
     let assignedBookingId = bookingId;
 
     try {
-      const res = await createWebsiteReservation({
+      const res = await createWebsiteBooking({
         guestName,
         guestPhone: mobileNumber,
         checkInDate,
