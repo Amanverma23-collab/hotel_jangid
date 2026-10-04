@@ -170,8 +170,46 @@ export default function BookingModal({
     });
   };
 
+  // Send Existing Confirmed Booking details on WhatsApp (Never creates duplicate entry)
+  const handleSendExistingBookingWhatsApp = () => {
+    if (!bookingConfirmed) return;
+    const ref = bookingConfirmed.confirmationNumber;
+    const gName = bookingConfirmed.guestName || name || 'Guest';
+    const gPhone = bookingConfirmed.phone || phone || '';
+    const rName = bookingConfirmed.roomName || roomName;
+    const rCount = bookingConfirmed.roomsCount || roomsCount;
+    const cIn = bookingConfirmed.checkInDate || checkInDate;
+    const cInTime = bookingConfirmed.checkInTime || checkInTime;
+    const cOut = checkOutDate;
+    const cOutTime = checkOutTime;
+    const nNights = bookingConfirmed.nights || nights;
+    const nGuests = bookingConfirmed.guestsCount || guestsCount;
+    const total = bookingConfirmed.totalAmount || totalAmount;
+
+    const message =
+      'Namaste Vijay Ji 🙏, I have booked a room at Hotel Jangid, Gogamedi.\n' +
+      '\n🔖 *Booking Ref:* ' + ref +
+      '\n• Room Type: ' + rName +
+      '\n• Rooms: ' + rCount +
+      '\n• Check-in: ' + cIn + ' at ' + cInTime +
+      '\n• Check-out: ' + cOut + ' at ' + cOutTime +
+      '\n• Nights: ' + nNights +
+      '\n• Guests: ' + nGuests +
+      '\n• Guest Name: ' + gName +
+      '\n• Mobile: ' + gPhone +
+      '\n• Total: ₹' + total.toLocaleString('en-IN') + ' (Pay at Hotel)' +
+      '\n\n(Auto-recorded in Hotel Jangid PMS System • Ref: ' + ref + ')';
+
+    window.open('https://wa.me/919001187776?text=' + encodeURIComponent(message), '_blank');
+  };
+
   // WhatsApp Booking Submission
   const handleWhatsAppBooking = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (bookingConfirmed) {
+      handleSendExistingBookingWhatsApp();
+      return;
+    }
     if (e && e.preventDefault) e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       alert('Please enter your name and phone number.');
@@ -400,7 +438,7 @@ export default function BookingModal({
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 <button
                   type="button"
-                  onClick={handleWhatsAppBooking}
+                  onClick={handleSendExistingBookingWhatsApp}
                   style={{
                     width: '100%',
                     display: 'flex',
