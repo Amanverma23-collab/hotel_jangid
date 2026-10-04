@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
+import { X, MessageCircle, PhoneCall, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { createWebsiteBooking, getCategoryPrices, supabase } from '../supabase';
 import { PearlButton } from './ui/pearl-button';
@@ -693,10 +693,6 @@ export default function BookingModal({
                         ₹{totalAmount.toLocaleString('en-IN')}
                       </strong>
                     </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#27864A', fontWeight: 600 }}>
-                    <ShieldCheck size={14} />
-                    <span>Pay at Hotel</span>
                   </div>
                 </div>
 
