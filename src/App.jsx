@@ -7,6 +7,7 @@ import GalleryTestimonialsSection from './components/GalleryTestimonialsSection'
 import FAQSection from './components/FAQSection';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
+import CookieConsent from './components/CookieConsent';
 
 export default function App() {
   const [selectedRoomType, setSelectedRoomType] = useState('ac');
@@ -58,6 +59,8 @@ export default function App() {
         initialCheckOut={bookingPrefill?.checkOut}
         initialGuests={bookingPrefill?.guests}
       />
+      {/* Cookie Consent Banner */}
+      <CookieConsent />
     </div>
   );
 }

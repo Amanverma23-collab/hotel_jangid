@@ -1120,20 +1120,43 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             )}
 
             {modalContent === 'refund' && (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <div className="flex items-center gap-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
                   <ShieldCheck className="size-4 text-amber-700" />
                   <span>100% Transparent Policy</span>
                 </div>
                 <h3 className="font-serif font-bold text-2xl text-slate-950">Cancellation & Refund Policy</h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  We recognize that pilgrimage and travel schedules can change unexpectedly:
+                  Hum samajhte hain ki yatra ki planning badal sakti hai. Isliye humari refund policy bilkul simple aur transparent hai:
                 </p>
-                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 list-disc pl-5">
-                  <li>Cancellations requested 24 hours prior to check-in are eligible for a 90% refund processed back to the original payment source within 5–7 business days.</li>
-                  <li>For cancellations made within 24 hours of check-in, dates can be rescheduled without additional fees by contacting host Vijay Jangid.</li>
-                  <li>For immediate support or questions regarding refunds, call +91 90011 87776.</li>
-                </ul>
+
+                {/* Visual refund timeline */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* 100% refund card */}
+                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50/60 p-4 text-center space-y-2">
+                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 mx-auto">
+                      <CheckCircle2 className="size-5" />
+                    </div>
+                    <p className="text-xl font-bold text-emerald-800">100% Refund</p>
+                    <p className="text-xs text-emerald-700 leading-snug">
+                      Check-in se <strong>48 ghante pehle</strong> cancel karne par poora paisa wapas
+                    </p>
+                  </div>
+                  {/* No refund card */}
+                  <div className="rounded-2xl border border-red-200 bg-red-50/60 p-4 text-center space-y-2">
+                    <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-red-100 text-red-600 mx-auto">
+                      <X className="size-5" />
+                    </div>
+                    <p className="text-xl font-bold text-red-700">No Refund</p>
+                    <p className="text-xs text-red-600 leading-snug">
+                      Check-in se <strong>48 ghante se kam</strong> samay mein cancel karne par refund nahi milega
+                    </p>
+                  </div>
+                </div>
+
+                <div className="rounded-xl bg-amber-50 border border-amber-200/60 p-3.5 text-xs sm:text-sm text-amber-900 leading-relaxed">
+                  <strong>Refund Process:</strong> Approved refunds original payment method mein 5–7 business days mein reflect ho jayenge. Kisi bhi sahayta ke liye Vijay Jangid ko call karein: <a href="tel:+919001187776" className="underline font-semibold">+91 90011 87776</a>
+                </div>
               </div>
             )}
 
