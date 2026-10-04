@@ -1,5 +1,34 @@
+# Hotel Jangid Gogamedi - Robots.txt
+# Optimized for Google, Bing, and AI Search Engines (ChatGPT, Perplexity, Claude, Gemini)
+
 User-agent: *
 Allow: /
 
-# Direct Google and Bing to the sitemap
+# Explicit permission for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# AEO: Explicit permission for AI search answer engines
+User-agent: GPTBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# XML Sitemap location
 Sitemap: https://hoteljangid.in/sitemap.xml

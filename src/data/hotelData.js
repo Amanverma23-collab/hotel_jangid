@@ -93,6 +93,14 @@ export const HOTEL_INFO = {
       a: "You can book directly on our website by clicking 'Book Now' with instant confirmation, or call manager Vijay Jangid directly at +91 90011 87776."
     },
     {
+      q: "Can families, ladies, and group pilgrims stay comfortably at Hotel Jangid?",
+      a: "Yes, Hotel Jangid is a 100% family-friendly property. We provide safe, peaceful accommodation for families, female devotees, and pilgrimage groups with options for extra bedding, clean western and Indian bathrooms, and 24/7 on-site staff assistance."
+    },
+    {
+      q: "Is Hotel Jangid open 24 hours during the annual Gogamedi Mela (गोगामेड़ी मेला)?",
+      a: "Yes, Hotel Jangid operates 24x7 throughout the year, with special round-the-clock management, electricity backup, and direct temple access during the annual Bhadrapada Gogamedi Mela."
+    },
+    {
       q: "What are the check-in and check-out timings?",
       a: "Standard check-in is at 12:00 PM and check-out is at 11:00 AM. Early check-in and late check-out are accommodated based on room availability upon request."
     }

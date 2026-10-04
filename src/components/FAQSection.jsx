@@ -29,20 +29,23 @@ export default function FAQSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
-          {/* FAQ Accordion (Left Column) */}
-          <div className="lg:col-span-7 space-y-3.5">
+          {/* FAQ Accordion (Left Column) with HTML5 Microdata */}
+          <div className="lg:col-span-7 space-y-3.5" itemScope itemType="https://schema.org/FAQPage">
             {HOTEL_INFO.faqs.map((faq, idx) => {
               const isOpen = openIndex === idx;
               return (
                 <div
                   key={idx}
                   className="bg-white rounded-2xl border border-sand-300 overflow-hidden shadow-sm transition-all duration-200"
+                  itemScope
+                  itemProp="mainEntity"
+                  itemType="https://schema.org/Question"
                 >
                   <button
                     onClick={() => toggleFAQ(idx)}
                     className="w-full p-4 sm:p-5 text-left flex items-center justify-between gap-4 font-serif font-bold text-base sm:text-lg text-ink-950 hover:text-terracotta-600 transition-colors cursor-pointer"
                   >
-                    <span>{faq.q}</span>
+                    <span itemProp="name">{faq.q}</span>
                     <ChevronDown
                       className={`w-5 h-5 text-ink-500 shrink-0 transition-transform duration-300 ${
                         isOpen ? 'rotate-180 text-terracotta-600' : ''
@@ -57,8 +60,14 @@ export default function FAQSection() {
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                        itemScope
+                        itemProp="acceptedAnswer"
+                        itemType="https://schema.org/Answer"
                       >
-                        <div className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-ink-600 leading-relaxed border-t border-sand-100">
+                        <div
+                          itemProp="text"
+                          className="px-4 sm:px-5 pb-5 pt-1 text-xs sm:text-sm text-ink-600 leading-relaxed border-t border-sand-100"
+                        >
                           {faq.a}
                         </div>
                       </motion.div>

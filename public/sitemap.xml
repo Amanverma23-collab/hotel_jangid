@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://hoteljangid.in/</loc>
     <lastmod>2026-10-05</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
+    
+    <!-- Hreflang alternates -->
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hoteljangid.in/"/>
+    <xhtml:link rel="alternate" hreflang="en-IN" href="https://hoteljangid.in/"/>
+    <xhtml:link rel="alternate" hreflang="hi-IN" href="https://hoteljangid.in/"/>
+
+    <!-- High-res images for Google Image Search -->
     <image:image>
       <image:loc>https://hoteljangid.in/images/hotel-building-hero.jpg</image:loc>
       <image:title>Hotel Jangid Gogamedi Building Exterior</image:title>
