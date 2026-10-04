@@ -20,6 +20,12 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   },
 });
 
+// Pre-connected Realtime broadcast channel for instant (<50ms) PMS reception alert
+export const realtimeAlertChannel = supabase.channel('jangir-hotel-pms-realtime');
+realtimeAlertChannel.subscribe((status) => {
+  console.log('[Realtime] Website alert channel status:', status);
+});
+
 /**
  * Fetch live room categories and prices from PMS
  */
@@ -297,6 +303,34 @@ export async function createWebsiteBooking({
         });
     } catch (folioErr) {
       console.warn('[folios] optional note:', folioErr);
+    }
+
+    // 6. Send instant Realtime Broadcast to Reception PMS (<50ms delivery)
+    try {
+      const fullGuestName = (guestName || (fName + (lName ? ' ' + lName : ''))).trim();
+      realtimeAlertChannel.send({
+        type: 'broadcast',
+        event: 'new_online_booking',
+        payload: {
+          id: res.id,
+          confirmationNumber: confNumber,
+          guestName: fullGuestName,
+          guestPhone: String(guestPhone || '').trim(),
+          roomCategory: resolvedCategory,
+          checkInDate: checkInDate,
+          checkInTime: checkInTime || '12:00 PM',
+          checkOutDate: checkOutDate,
+          checkOutTime: checkOutTime || '11:00 AM',
+          nights: Number(nightsNum) || 1,
+          totalAmount: Number(totalAmount) || 0,
+          paymentMethod: resolvedMethod,
+          createdAt: res.created_at || new Date().toISOString(),
+        }
+      }).catch((sendErr) => {
+        console.warn('[Realtime Alert] send error:', sendErr);
+      });
+    } catch (alertErr) {
+      console.warn('[Realtime Alert] optional note:', alertErr);
     }
 
     return {
