@@ -43,7 +43,7 @@ export function Accordion({
 
   return (
     <AccordionContext.Provider value={{ openItem: activeItem, setOpenItem, collapsible }}>
-      <div className={cn("space-y-0 divide-y divide-[#E6E1DA]", className)} {...props}>
+      <div className={cn("w-full", className)} {...props}>
         {children}
       </div>
     </AccordionContext.Provider>
