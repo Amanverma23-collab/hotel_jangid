@@ -21,6 +21,144 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
+ * PMS Software se live room categories aur unke prices fetch karna
+ */
+export async function getLiveRoomRates() {
+  try {
+    const { data, error } = await supabase
+      .from('room_types')
+      .select('id, name, code, base_price, amenities, max_occupancy')
+      .order('base_price', { ascending: true });
+
+    if (error || !data || data.length === 0) {
+      console.warn('Fallback to default room rates:', error);
+      return [
+        { id: 'c0000000-0000-0000-0000-000000000001', name: 'Deluxe AC Room', code: 'AC-DLX', base_price: 1200 },
+        { id: 'c0000000-0000-0000-0000-000000000002', name: 'Cooler Room', code: 'CLR-STD', base_price: 1000 },
+      ];
+    }
+
+    return data;
+  } catch (err) {
+    console.error('Failed to load room rates:', err);
+    return [
+      { id: 'c0000000-0000-0000-0000-000000000001', name: 'Deluxe AC Room', code: 'AC-DLX', base_price: 1200 },
+      { id: 'c0000000-0000-0000-0000-000000000002', name: 'Cooler Room', code: 'CLR-STD', base_price: 1000 },
+    ];
+  }
+}
+
+/**
+ * Live prices for AC and Cooler rooms: { ac: number, cooler: number }
+ */
+export async function getCategoryPrices() {
+  try {
+    const rates = await getLiveRoomRates();
+    let acPrice = 1200;
+    let coolerPrice = 1000;
+
+    rates.forEach(r => {
+      const name = (r.name || '').toLowerCase();
+      const code = (r.code || '').toLowerCase();
+      if (name.includes('cooler') || name.includes('non-ac') || code.includes('clr') || code.includes('exe')) {
+        coolerPrice = Number(r.base_price) || 1000;
+      } else if (name.includes('ac') || name.includes('king') || name.includes('deluxe') || code.includes('dlx')) {
+        acPrice = Number(r.base_price) || 1200;
+      }
+    });
+
+    return { ac: acPrice, cooler: coolerPrice };
+  } catch {
+    return { ac: 1200, cooler: 1000 };
+  }
+}
+
+/**
+ * Website se seedhe room ka live price update karna
+ */
+export async function updateLiveRoomRate({ id, base_price }) {
+  try {
+    const priceNum = Number(base_price);
+    if (isNaN(priceNum) || priceNum <= 0) {
+      return { success: false, error: 'Please enter a valid price amount' };
+    }
+
+    const { data, error } = await supabase
+      .from('room_types')
+      .update({ base_price: priceNum, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select();
+
+    if (error) throw error;
+
+    return {
+      success: true,
+      message: `Price successfully updated to ₹${priceNum.toLocaleString('en-IN')}`,
+      data
+    };
+  } catch (err) {
+    console.error('Failed to update room rate:', err);
+    return { success: false, error: err?.message || 'Update failed' };
+  }
+}
+
+/**
+ * Category wise (AC ya Cooler) price direct website se update karna
+ */
+export async function updateCategoryPrice({ category, newPrice }) {
+  try {
+    const priceNum = Number(newPrice);
+    if (isNaN(priceNum) || priceNum <= 0) {
+      return { success: false, error: 'Please enter a valid positive price' };
+    }
+
+    const isCooler = category === 'cooler' || category === 'non_ac';
+    const targetRoomTypeId = isCooler
+      ? 'c0000000-0000-0000-0000-000000000002'
+      : 'c0000000-0000-0000-0000-000000000001';
+
+    // 1. Update room_types
+    await supabase
+      .from('room_types')
+      .update({ base_price: priceNum, updated_at: new Date().toISOString() })
+      .eq('id', targetRoomTypeId);
+
+    // 2. Update custom_price in rooms
+    const coolingType = isCooler ? 'COOLER' : 'AC';
+    const { data: allRooms } = await supabase.from('rooms').select('id, notes');
+    if (allRooms && allRooms.length > 0) {
+      const matchIds = allRooms
+        .filter(r => {
+          try {
+            const p = JSON.parse(r.notes || '{}');
+            return p.cooling === coolingType;
+          } catch {
+            return r.notes?.includes(coolingType);
+          }
+        })
+        .map(r => r.id);
+
+      if (matchIds.length > 0) {
+        await supabase
+          .from('rooms')
+          .update({ custom_price: priceNum, updated_at: new Date().toISOString() })
+          .in('id', matchIds);
+      }
+    }
+
+    return {
+      success: true,
+      category: isCooler ? 'Cooler Room' : 'Deluxe AC Room',
+      newPrice: priceNum,
+      message: `${isCooler ? 'Cooler Room' : 'Deluxe AC Room'} price updated to ₹${priceNum}`
+    };
+  } catch (err) {
+    console.error('Failed to update category price:', err);
+    return { success: false, error: err?.message || 'Update failed' };
+  }
+}
+
+/**
  * Website se seedhe PMS me online booking push karne ka function
  */
 export async function createWebsiteBooking({
@@ -46,7 +184,6 @@ export async function createWebsiteBooking({
   homeAddress = '',
 }) {
   try {
-    // Resolve flexible parameters
     const guestsNum = Number(totalGuests || guestsCount || 1);
     const roomsNum = Number(roomsCount || 1);
     const resolvedCategory = roomCategory || (roomType === 'cooler' ? 'Cooler Room' : 'Deluxe AC Room');

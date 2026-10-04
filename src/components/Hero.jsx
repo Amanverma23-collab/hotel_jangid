@@ -9,6 +9,7 @@ import {
   X
 } from 'lucide-react';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
+import { getCategoryPrices, supabase } from '../supabase';
 
 /**
  * Pixel-Accurate HERO SECTION matching user specification & reference screenshot.
@@ -89,6 +90,30 @@ export default function Hero({ onBookClick }) {
     }
     return isoStr;
   };
+
+  // Live Room Rates from Supabase PMS Database
+  const [roomRates, setRoomRates] = useState({ ac: 1200, cooler: 1000 });
+
+  useEffect(() => {
+    getCategoryPrices().then(prices => {
+      if (prices && (prices.ac || prices.cooler)) {
+        setRoomRates(prices);
+      }
+    });
+
+    const channel = supabase
+      .channel('hero-price-sync')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'room_types' }, () => {
+        getCategoryPrices().then(prices => {
+          if (prices) setRoomRates(prices);
+        });
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   // Auto-advance Top-Right card slides every 4s with smooth crossfade
   useEffect(() => {
@@ -1036,7 +1061,7 @@ export default function Hero({ onBookClick }) {
                     textShadow: '0 1px 4px rgba(0,0,0,0.5)',
                   }}
                 >
-                  AC Room - Rs 1200
+                  AC Room - Rs {roomRates.ac}
                 </span>
               </div>
 
@@ -1111,7 +1136,7 @@ export default function Hero({ onBookClick }) {
                     textShadow: '0 1px 4px rgba(0,0,0,0.5)',
                   }}
                 >
-                  Non-AC Room - Rs 1000
+                  Non-AC Room - Rs {roomRates.cooler}
                 </span>
               </div>
             </div>
