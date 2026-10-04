@@ -47,7 +47,7 @@ export default function App() {
       </main>
 
       {/* 6. Luxury Sticky Footer with Curtain Reveal Effect */}
-      <Footer />
+      <Footer onBookClick={() => handleOpenBooking('ac')} />
 
       {/* Direct WhatsApp & Phone Quick Booking Modal */}
       <BookingModal

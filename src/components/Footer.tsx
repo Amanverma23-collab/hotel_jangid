@@ -24,13 +24,32 @@ import { HOTEL_INFO } from '../data/hotelData';
  * - Sticky curtain reveal effect: footer is stationary beneath preceding page content.
  */
 
-export default function Footer() {
+interface FooterProps {
+  onBookClick?: (type?: string) => void;
+}
+
+export default function Footer({ onBookClick }: FooterProps = {}) {
   const [modalContent, setModalContent] = useState<string | null>(null);
   const [palette, setPalette] = useState<'jangid' | 'blue'>('jangid');
   const [isInView, setIsInView] = useState(false);
   const [footerHeight, setFooterHeight] = useState<number>(720);
   const revealRef = useRef<HTMLDivElement>(null);
   const ftrRef = useRef<HTMLElement>(null);
+
+  const handleBookNow = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (onBookClick) {
+      onBookClick('ac');
+    } else {
+      const el = document.getElementById('rooms') || document.getElementById('hero');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
 
   // Palette color definitions
   const colors = palette === 'jangid'
@@ -724,10 +743,15 @@ export default function Footer() {
                     <span className="arrow-icon">→</span>
                     <span>Non-AC Room</span>
                   </a>
-                  <a href="#booking" className="footer-link-item">
+                  <button
+                    type="button"
+                    onClick={handleBookNow}
+                    className="footer-link-item"
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}
+                  >
                     <span className="arrow-icon">→</span>
                     <span>Book Now</span>
-                  </a>
+                  </button>
                 </div>
               </div>
 
@@ -824,19 +848,14 @@ export default function Footer() {
                   <MapPin size={21} strokeWidth={1.9} />
                 </a>
               </div>
-              <a
-                href="#booking"
+              <button
+                type="button"
                 className="ftr-cta"
-                onClick={(e) => {
-                  const el = document.getElementById('booking');
-                  if (el) {
-                    e.preventDefault();
-                    el.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }}
+                onClick={handleBookNow}
+                style={{ border: 'none', outline: 'none' }}
               >
                 Book Your Stay
-              </a>
+              </button>
             </div>
           </div>
         </div>
@@ -880,10 +899,15 @@ export default function Footer() {
                   <span className="arrow-icon">→</span>
                   <span>Non-AC Room</span>
                 </a>
-                <a href="#booking" className="footer-link-item">
+                <button
+                  type="button"
+                  onClick={handleBookNow}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}
+                >
                   <span className="arrow-icon">→</span>
                   <span>Book Now</span>
-                </a>
+                </button>
               </div>
             </div>
 
@@ -941,21 +965,15 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* MOBILE "BOOK YOUR STAY" BUTTON (hidden on desktop, placed after 2x2 links on mobile) */}
           <div className="ftr-mobile-cta-wrap">
-            <a
-              href="#booking"
+            <button
+              type="button"
               className="ftr-mobile-cta"
-              onClick={(e) => {
-                const el = document.getElementById('booking');
-                if (el) {
-                  e.preventDefault();
-                  el.scrollIntoView({ behavior: 'smooth' });
-                }
-              }}
+              onClick={handleBookNow}
+              style={{ border: 'none', outline: 'none' }}
             >
               Book Your Stay
-            </a>
+            </button>
           </div>
 
           {/* DIVIDER LINE (margin-top: 48px from top panel on desktop, 32px on mobile) */}
