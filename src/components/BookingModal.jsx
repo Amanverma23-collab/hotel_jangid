@@ -641,14 +641,12 @@ export default function BookingModal({
                   </div>
                 </div>
 
-                {/* Action Buttons Section */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '4px' }}>
-                  {/* 1. PRIMARY PEARL BUTTON: Book Room Now */}
+                {/* Action Button Section */}
+                <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '6px' }}>
                   <PearlButton
                     type="submit"
                     disabled={isSubmitting}
                     size="compact"
-                    className="w-full"
                     icon={
                       isSubmitting ? (
                         <Loader2 size={16} className="animate-spin" />
@@ -657,9 +655,7 @@ export default function BookingModal({
                       )
                     }
                   >
-                    <span>
-                      {isSubmitting ? 'Saving to Hotel System...' : `Book Room Now • ₹${totalAmount.toLocaleString('en-IN')}`}
-                    </span>
+                    <span>{isSubmitting ? 'Saving...' : 'Book Now'}</span>
                   </PearlButton>
                 </div>
               </form>
