@@ -333,6 +333,32 @@ export async function createWebsiteBooking({
       console.warn('[Realtime Alert] optional note:', alertErr);
     }
 
+    // 7. Trigger Background Web Push (Google FCM / VAPID) to wake up phone & laptop even when closed
+    try {
+      const fullGuestName = (guestName || (fName + (lName ? ' ' + lName : ''))).trim();
+      const isLocal = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+      const endpoints = isLocal
+        ? ['http://localhost:5173/api/send-push', 'https://jangir-hotel.vercel.app/api/send-push']
+        : ['https://jangir-hotel.vercel.app/api/send-push'];
+
+      const pushPayload = JSON.stringify({
+        title: 'New Booking',
+        body: fullGuestName + ' has booked a room',
+        bookingId: res.id,
+        url: '/?tab=online-bookings',
+      });
+
+      endpoints.forEach(ep => {
+        fetch(ep, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: pushPayload,
+        }).catch(() => {});
+      });
+    } catch (pushErr) {
+      console.warn('[WebPush] optional error:', pushErr);
+    }
+
     return {
       success: true,
       confirmationNumber: confNumber,
