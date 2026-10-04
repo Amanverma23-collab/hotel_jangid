@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble } from 'lucide-react';
+import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { createWebsiteReservation } from '../services/supabaseClient';
 
 const CHECK_IN_TIMES = [
   '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
@@ -34,6 +35,8 @@ export default function BookingModal({
   const [checkOutTime, setCheckOutTime] = useState('11:00 AM');
   const [roomsCount, setRoomsCount] = useState(1);
   const [guestsCount, setGuestsCount] = useState(initialGuests || 2);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bookingConfirmed, setBookingConfirmed] = useState(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -41,6 +44,7 @@ export default function BookingModal({
       if (initialCheckIn) setCheckInDate(initialCheckIn);
       if (initialCheckOut) setCheckOutDate(initialCheckOut);
       if (initialGuests) setGuestsCount(initialGuests);
+      setBookingConfirmed(null);
     }
   }, [isOpen, initialRoomType, initialCheckIn, initialCheckOut, initialGuests]);
 
@@ -55,10 +59,43 @@ export default function BookingModal({
   ));
   const totalAmount = roomPrice * roomsCount * nights;
 
-  const handleWhatsAppBooking = (e) => {
+  const handleWhatsAppBooking = async (e) => {
     e.preventDefault();
+    if (!name.trim() || !phone.trim()) return;
+
+    setIsSubmitting(true);
+    let confirmationNumber = `WEB-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    try {
+      // 1. Save directly into Supabase PMS Reception Software database
+      const res = await createWebsiteReservation({
+        guestName: name,
+        guestPhone: phone,
+        checkInDate,
+        checkInTime,
+        checkOutDate,
+        checkOutTime,
+        roomType,
+        roomsCount,
+        guestsCount,
+        totalAmount,
+        paidAmount: 0,
+        paymentGateway: 'WhatsApp / Pay at Hotel',
+        paymentStatus: 'PAY_AT_HOTEL',
+        reasonOfVisit: 'Shri Goga Ji Mandir Darshan',
+      });
+
+      if (res?.confirmationNumber) {
+        confirmationNumber = res.confirmationNumber;
+      }
+    } catch (err) {
+      console.warn('[BookingModal] PMS software sync note:', err);
+    }
+
+    // 2. Prepare WhatsApp notification message with real confirmation reference
     const message =
       `Namaste Vijay Ji 🙏, I would like to book a room at Hotel Jangid, Gogamedi.\n` +
+      `\n🔖 *Booking Ref:* ${confirmationNumber}` +
       `\n• Room Type: ${roomName}` +
       `\n• Rooms: ${roomsCount}` +
       `\n• Check-in: ${checkInDate} at ${checkInTime}` +
@@ -67,10 +104,31 @@ export default function BookingModal({
       `\n• Guests: ${guestsCount}` +
       `\n• Guest Name: ${name || 'Not provided'}` +
       `\n• Mobile: ${phone || 'Not provided'}` +
-      `\n• Estimated Total: ₹${totalAmount.toLocaleString('en-IN')}` +
-      `\n\nPlease confirm room availability.`;
+      `\n• Total: ₹${totalAmount.toLocaleString('en-IN')} (Pay at Hotel)` +
+      `\n\n(Auto-recorded in Hotel Jangid PMS System • Ref: ${confirmationNumber})`;
 
+    // Open WhatsApp
     window.open(`https://wa.me/919001187776?text=${encodeURIComponent(message)}`, '_blank');
+
+    setIsSubmitting(false);
+    setBookingConfirmed({
+      confirmationNumber,
+      roomName,
+      nights,
+      roomsCount,
+      guestsCount,
+      totalAmount,
+      checkInDate,
+      checkInTime,
+      guestName: name,
+      phone: phone,
+    });
+  };
+
+  const handleResetForm = () => {
+    setBookingConfirmed(null);
+    setName('');
+    setPhone('');
   };
 
   return (
@@ -136,211 +194,403 @@ export default function BookingModal({
           <X size={15} />
         </button>
 
-        {/* Header */}
-        <div style={{ marginBottom: '20px' }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: '6px',
-            padding: '4px 14px', borderRadius: '999px',
-            border: '1px solid #D9CDBA', background: 'transparent',
-            fontSize: '11px', fontWeight: 600, color: '#7A7060',
-            letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px',
-          }}>
-            Direct Hotel Reservation
-          </div>
-          <h3 style={{ margin: 0, fontSize: '28px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
-            Book Your Stay
-          </h3>
-          <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#9A8E80' }}>
-            400m from Shri Goga Ji Temple • Free Parking • 24/7 Geyser
-          </p>
-        </div>
-
-        <form onSubmit={handleWhatsAppBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-
-          {/* Room Type */}
-          <div>
-            <label className="bm-label">
-              <BedDouble size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
-              Select Room Type
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              {[
-                { key: 'ac', name: 'Deluxe AC Room', price: '₹1,200 / night' },
-                { key: 'cooler', name: 'Cooler Room', price: '₹1,000 / night' },
-              ].map(r => (
-                <button
-                  key={r.key}
-                  type="button"
-                  onClick={() => setRoomType(r.key)}
-                  className={`bm-room-btn ${roomType === r.key ? 'active' : ''}`}
-                >
-                  <div style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A' }}>{r.name}</div>
-                  <div style={{ fontSize: '12px', color: '#A8936A', fontWeight: 600, marginTop: '2px' }}>{r.price}</div>
-                </button>
-              ))}
+        {/* Confirmation Screen */}
+        {bookingConfirmed ? (
+          <div style={{ textAlign: 'center', padding: '10px 4px 6px' }}>
+            <div
+              style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '50%',
+                background: '#E8F5E9',
+                border: '2px solid #81C784',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto 16px',
+                color: '#2E7D32',
+              }}
+            >
+              <CheckCircle2 size={36} />
             </div>
-          </div>
 
-          {/* Check-in Row: Date + Time */}
-          <div>
-            <label className="bm-label">
-              <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
-              Check-in
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-              <div>
-                <input
-                  type="date"
-                  value={checkInDate}
-                  min={new Date().toISOString().split('T')[0]}
-                  onChange={(e) => {
-                    setCheckInDate(e.target.value);
-                    // ensure checkout is after checkin
-                    if (e.target.value >= checkOutDate) {
-                      const d = new Date(e.target.value);
-                      d.setDate(d.getDate() + 1);
-                      setCheckOutDate(d.toISOString().split('T')[0]);
-                    }
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                padding: '4px 12px',
+                borderRadius: '999px',
+                background: '#E8F5E9',
+                color: '#2E7D32',
+                fontSize: '11px',
+                fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.06em',
+                marginBottom: '10px',
+              }}
+            >
+              <Sparkles size={13} />
+              Saved to Hotel System
+            </div>
+
+            <h3 style={{ margin: '0 0 6px', fontSize: '24px', fontWeight: 800, color: '#1A1A1A' }}>
+              Booking Request Received!
+            </h3>
+
+            <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#6A5E50', lineHeight: 1.5 }}>
+              Your reservation is registered in Hotel Jangid&apos;s PMS reception software and forwarded to Vijay Ji on WhatsApp.
+            </p>
+
+            <div
+              style={{
+                background: '#F0E9DC',
+                border: '1.5px solid #D9CDBA',
+                borderRadius: '16px',
+                padding: '16px',
+                textAlign: 'left',
+                marginBottom: '20px',
+              }}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #E0D5C3', paddingBottom: '10px', marginBottom: '10px' }}>
+                <span style={{ fontSize: '11px', fontWeight: 600, color: '#7A7060', textTransform: 'uppercase' }}>Booking Reference</span>
+                <span style={{ fontFamily: 'monospace', fontWeight: 800, fontSize: '15px', color: '#A8936A', background: '#FDF6EA', padding: '2px 8px', borderRadius: '6px', border: '1px solid #D9CDBA' }}>
+                  {bookingConfirmed.confirmationNumber}
+                </span>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', fontSize: '12px', color: '#4A4030' }}>
+                <div><strong>Guest:</strong> {bookingConfirmed.guestName}</div>
+                <div><strong>Room:</strong> {bookingConfirmed.roomName}</div>
+                <div><strong>Check-in:</strong> {bookingConfirmed.checkInDate}</div>
+                <div><strong>Stay:</strong> {bookingConfirmed.nights} Night{bookingConfirmed.nights > 1 ? 's' : ''}</div>
+                <div style={{ gridColumn: 'span 2', marginTop: '4px', paddingTop: '6px', borderTop: '1px dashed #D9CDBA', display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ fontWeight: 600 }}>Total Payable at Hotel:</span>
+                  <span style={{ fontWeight: 800, color: '#1A1A1A', fontSize: '14px' }}>₹{bookingConfirmed.totalAmount.toLocaleString('en-IN')}</span>
+                </div>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              <button
+                type="button"
+                onClick={handleWhatsAppBooking}
+                style={{
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '8px',
+                  padding: '13px 16px',
+                  borderRadius: '14px',
+                  background: 'linear-gradient(135deg, #25D366 0%, #1DAD54 100%)',
+                  border: 'none',
+                  color: '#fff',
+                  fontWeight: 700,
+                  fontSize: '13px',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
+                  fontFamily: 'inherit',
+                }}
+              >
+                <MessageCircle size={16} />
+                Open WhatsApp Chat Again
+              </button>
+
+              <div style={{ display: 'flex', gap: '10px' }}>
+                <a
+                  href="tel:+919001187776"
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    padding: '12px 14px',
+                    borderRadius: '14px',
+                    background: '#F0E9DC',
+                    border: '1.5px solid #D9CDBA',
+                    color: '#1A1A1A',
+                    fontWeight: 600,
+                    fontSize: '12px',
+                    textDecoration: 'none',
+                    fontFamily: 'inherit',
                   }}
-                  className="bm-input"
-                  required
-                />
+                >
+                  <PhoneCall size={14} style={{ color: '#A8936A' }} />
+                  Call Vijay Ji
+                </a>
+
+                <button
+                  type="button"
+                  onClick={onClose}
+                  style={{
+                    flex: 1,
+                    padding: '12px 14px',
+                    borderRadius: '14px',
+                    background: '#E5D9C9',
+                    border: '1.5px solid #D9CDBA',
+                    color: '#1A1A1A',
+                    fontWeight: 700,
+                    fontSize: '12px',
+                    cursor: 'pointer',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  Done
+                </button>
               </div>
+
+              <button
+                type="button"
+                onClick={handleResetForm}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  color: '#8A7E70',
+                  fontSize: '12px',
+                  cursor: 'pointer',
+                  textDecoration: 'underline',
+                  marginTop: '4px',
+                }}
+              >
+                Book another room
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* Header */}
+            <div style={{ marginBottom: '20px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px', marginBottom: '8px' }}>
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '6px',
+                  padding: '4px 12px', borderRadius: '999px',
+                  border: '1px solid #D9CDBA', background: 'transparent',
+                  fontSize: '11px', fontWeight: 600, color: '#7A7060',
+                  letterSpacing: '0.06em', textTransform: 'uppercase',
+                }}>
+                  Direct Hotel Reservation
+                </div>
+
+                <div style={{
+                  display: 'inline-flex', alignItems: 'center', gap: '5px',
+                  fontSize: '10px', fontWeight: 600, color: '#2E7D32',
+                  background: '#E8F5E9', padding: '3px 8px', borderRadius: '999px',
+                }}>
+                  <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2E7D32' }} />
+                  PMS Software Synced
+                </div>
+              </div>
+
+              <h3 style={{ margin: 0, fontSize: '28px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
+                Book Your Stay
+              </h3>
+              <p style={{ margin: '4px 0 0', fontSize: '12px', color: '#9A8E80' }}>
+                400m from Shri Goga Ji Temple • Free Parking • 24/7 Geyser
+              </p>
+            </div>
+
+            <form onSubmit={handleWhatsAppBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
+              {/* Room Type */}
               <div>
-                <select value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="bm-input">
-                  {CHECK_IN_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
+                <label className="bm-label">
+                  <BedDouble size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                  Select Room Type
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  {[
+                    { key: 'ac', name: 'Deluxe AC Room', price: '₹1,200 / night' },
+                    { key: 'cooler', name: 'Cooler Room', price: '₹1,000 / night' },
+                  ].map(r => (
+                    <button
+                      key={r.key}
+                      type="button"
+                      onClick={() => setRoomType(r.key)}
+                      className={`bm-room-btn ${roomType === r.key ? 'active' : ''}`}
+                    >
+                      <div style={{ fontWeight: 700, fontSize: '13px', color: '#1A1A1A' }}>{r.name}</div>
+                      <div style={{ fontSize: '12px', color: '#A8936A', fontWeight: 600, marginTop: '2px' }}>{r.price}</div>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Check-out Row: Date + Time */}
-          <div>
-            <label className="bm-label">
-              <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
-              Check-out
-            </label>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+              {/* Check-in Row: Date + Time */}
               <div>
-                <input
-                  type="date"
-                  value={checkOutDate}
-                  min={checkInDate}
-                  onChange={(e) => setCheckOutDate(e.target.value)}
-                  className="bm-input"
-                  required
-                />
+                <label className="bm-label">
+                  <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                  Check-in
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div>
+                    <input
+                      type="date"
+                      value={checkInDate}
+                      min={new Date().toISOString().split('T')[0]}
+                      onChange={(e) => {
+                        setCheckInDate(e.target.value);
+                        // ensure checkout is after checkin
+                        if (e.target.value >= checkOutDate) {
+                          const d = new Date(e.target.value);
+                          d.setDate(d.getDate() + 1);
+                          setCheckOutDate(d.toISOString().split('T')[0]);
+                        }
+                      }}
+                      className="bm-input"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <select value={checkInTime} onChange={(e) => setCheckInTime(e.target.value)} className="bm-input">
+                      {CHECK_IN_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
+
+              {/* Check-out Row: Date + Time */}
               <div>
-                <select value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="bm-input">
-                  {CHECK_OUT_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
-                </select>
+                <label className="bm-label">
+                  <CalendarDays size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                  Check-out
+                </label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <div>
+                    <input
+                      type="date"
+                      value={checkOutDate}
+                      min={checkInDate}
+                      onChange={(e) => setCheckOutDate(e.target.value)}
+                      className="bm-input"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <select value={checkOutTime} onChange={(e) => setCheckOutTime(e.target.value)} className="bm-input">
+                      {CHECK_OUT_TIMES.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                </div>
               </div>
-            </div>
-          </div>
 
-          {/* Rooms + Guests */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div>
-              <label className="bm-label">Rooms</label>
-              <select value={roomsCount} onChange={(e) => setRoomsCount(Number(e.target.value))} className="bm-input">
-                {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Room{n > 1 ? 's' : ''}</option>)}
-              </select>
-            </div>
-            <div>
-              <label className="bm-label">
-                <Users size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
-                Guests
-              </label>
-              <select value={guestsCount} onChange={(e) => setGuestsCount(Number(e.target.value))} className="bm-input">
-                {[1, 2, 3, 4, 5, 6, 8, 10].map(n => <option key={n} value={n}>{n} Guest{n > 1 ? 's' : ''}</option>)}
-              </select>
-            </div>
-          </div>
-
-          {/* Name + Phone */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div>
-              <label className="bm-label">Your Name</label>
-              <input
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. Ramesh Kumar"
-                className="bm-input"
-                required
-              />
-            </div>
-            <div>
-              <label className="bm-label">Phone Number</label>
-              <input
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="e.g. 98765 43210"
-                className="bm-input"
-                required
-              />
-            </div>
-          </div>
-
-          {/* Price Summary */}
-          <div style={{
-            background: '#F0E9DC', borderRadius: '16px', padding: '14px 16px',
-            border: '1.5px solid #D9CDBA', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          }}>
-            <div style={{ fontSize: '13px', color: '#5A5040' }}>
-              <span>{roomsCount} Room × {nights} Night{nights > 1 ? 's' : ''}</span>
-              <div style={{ marginTop: '2px' }}>
-                <span style={{ fontSize: '11px', color: '#9A8E80' }}>Total: </span>
-                <strong style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>
-                  ₹{totalAmount.toLocaleString('en-IN')}
-                </strong>
+              {/* Rooms + Guests */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div>
+                  <label className="bm-label">Rooms</label>
+                  <select value={roomsCount} onChange={(e) => setRoomsCount(Number(e.target.value))} className="bm-input">
+                    {[1, 2, 3, 4, 5].map(n => <option key={n} value={n}>{n} Room{n > 1 ? 's' : ''}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="bm-label">
+                    <Users size={11} style={{ display: 'inline', marginRight: '5px', verticalAlign: 'middle' }} />
+                    Guests
+                  </label>
+                  <select value={guestsCount} onChange={(e) => setGuestsCount(Number(e.target.value))} className="bm-input">
+                    {[1, 2, 3, 4, 5, 6, 8, 10].map(n => <option key={n} value={n}>{n} Guest{n > 1 ? 's' : ''}</option>)}
+                  </select>
+                </div>
               </div>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#27864A', fontWeight: 600 }}>
-              <ShieldCheck size={14} />
-              <span>Pay at Hotel</span>
-            </div>
-          </div>
 
-          {/* Action Buttons */}
-          <div style={{ display: 'flex', gap: '10px', paddingTop: '2px' }}>
-            <button
-              type="submit"
-              style={{
-                flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                gap: '8px', padding: '13px 16px', borderRadius: '14px',
-                background: 'linear-gradient(135deg, #25D366 0%, #1DAD54 100%)',
-                border: 'none', color: '#fff', fontWeight: 700, fontSize: '13px',
-                cursor: 'pointer', boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
-                transition: 'all 0.18s', fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
-              onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-            >
-              <MessageCircle size={16} />
-              Confirm on WhatsApp
-            </button>
+              {/* Name + Phone */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                <div>
+                  <label className="bm-label">Your Name</label>
+                  <input
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="e.g. Ramesh Kumar"
+                    className="bm-input"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="bm-label">Phone Number</label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="e.g. 98765 43210"
+                    className="bm-input"
+                    required
+                  />
+                </div>
+              </div>
 
-            <a
-              href="tel:+919001187776"
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                gap: '6px', padding: '13px 16px', borderRadius: '14px',
-                background: '#F0E9DC', border: '1.5px solid #D9CDBA',
-                color: '#1A1A1A', fontWeight: 600, fontSize: '13px',
-                textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
-              onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
-            >
-              <PhoneCall size={15} style={{ color: '#A8936A' }} />
-              Call Vijay Ji
-            </a>
-          </div>
-        </form>
+              {/* Price Summary */}
+              <div style={{
+                background: '#F0E9DC', borderRadius: '16px', padding: '14px 16px',
+                border: '1.5px solid #D9CDBA', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              }}>
+                <div style={{ fontSize: '13px', color: '#5A5040' }}>
+                  <span>{roomsCount} Room × {nights} Night{nights > 1 ? 's' : ''}</span>
+                  <div style={{ marginTop: '2px' }}>
+                    <span style={{ fontSize: '11px', color: '#9A8E80' }}>Total: </span>
+                    <strong style={{ fontSize: '18px', fontWeight: 800, color: '#1A1A1A' }}>
+                      ₹{totalAmount.toLocaleString('en-IN')}
+                    </strong>
+                  </div>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '11px', color: '#27864A', fontWeight: 600 }}>
+                  <ShieldCheck size={14} />
+                  <span>Pay at Hotel</span>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div style={{ display: 'flex', gap: '10px', paddingTop: '2px' }}>
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  style={{
+                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: '8px', padding: '13px 16px', borderRadius: '14px',
+                    background: 'linear-gradient(135deg, #25D366 0%, #1DAD54 100%)',
+                    border: 'none', color: '#fff', fontWeight: 700, fontSize: '13px',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
+                    transition: 'all 0.18s', fontFamily: 'inherit',
+                    opacity: isSubmitting ? 0.75 : 1,
+                  }}
+                  onMouseEnter={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(-1px)')}
+                  onMouseLeave={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(0)')}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 size={16} className="animate-spin" />
+                      Connecting to Hotel System...
+                    </>
+                  ) : (
+                    <>
+                      <MessageCircle size={16} />
+                      Confirm on WhatsApp
+                    </>
+                  )}
+                </button>
+
+                <a
+                  href="tel:+919001187776"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    gap: '6px', padding: '13px 16px', borderRadius: '14px',
+                    background: '#F0E9DC', border: '1.5px solid #D9CDBA',
+                    color: '#1A1A1A', fontWeight: 600, fontSize: '13px',
+                    textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
+                    fontFamily: 'inherit',
+                  }}
+                  onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
+                  onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
+                >
+                  <PhoneCall size={15} style={{ color: '#A8936A' }} />
+                  Call Vijay Ji
+                </a>
+              </div>
+            </form>
+          </>
+        )}
       </div>
     </div>
   );

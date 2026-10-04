@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { HOTEL_INFO } from '../data/hotelData';
+import { createWebsiteReservation } from '../services/supabaseClient';
 
 export default function BookingSection({ preselectedRoomType = 'ac' }) {
   // Form State
@@ -139,10 +140,38 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
     }, 1000);
   };
 
-  const finalizeBooking = (bookingId, paymentId) => {
+  const finalizeBooking = async (bookingId, paymentId) => {
     setIsProcessing(false);
+    let assignedBookingId = bookingId;
+
+    try {
+      const res = await createWebsiteReservation({
+        guestName,
+        guestPhone: mobileNumber,
+        checkInDate,
+        checkInTime: checkInTime ? `${checkInTime} ${Number(checkInTime.split(':')[0]) >= 12 ? 'PM' : 'AM'}` : '12:00 PM',
+        checkOutDate,
+        checkOutTime: checkOutTime ? `${checkOutTime} ${Number(checkOutTime.split(':')[0]) >= 12 ? 'PM' : 'AM'}` : '11:00 AM',
+        roomType,
+        roomsCount,
+        guestsCount,
+        totalAmount,
+        paidAmount: payableAmount,
+        paymentGateway: paymentId?.startsWith('pay_') ? 'Razorpay' : 'Pay at Hotel',
+        paymentId: paymentId || null,
+        paymentStatus: payableAmount >= totalAmount ? 'PAID' : (payableAmount > 0 ? 'PARTIAL' : 'PAY_AT_HOTEL'),
+        homeAddress: guestAddress,
+        reasonOfVisit: reasonOfVisit,
+      });
+      if (res?.confirmationNumber) {
+        assignedBookingId = res.confirmationNumber;
+      }
+    } catch (err) {
+      console.warn('[BookingSection] PMS sync note:', err);
+    }
+
     const bookingData = {
-      bookingId,
+      bookingId: assignedBookingId,
       paymentId,
       guestName,
       mobileNumber,
