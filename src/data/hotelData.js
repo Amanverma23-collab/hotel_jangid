@@ -51,7 +51,7 @@ export const HOTEL_INFO = {
     },
     {
       id: "non-ac",
-      name: "Cooler Room (Non-AC)",
+      name: "Non-AC Room",
       price: 1000,
       capacity: "2–3 Guests",
       beds: "1 Double Bed + 1 Cot",

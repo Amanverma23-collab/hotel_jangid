@@ -80,7 +80,7 @@ export default function BookingModal({
 
   // Use live dynamic room prices
   const roomPrice = roomType === 'ac' ? roomRates.ac : roomRates.cooler;
-  const roomName = roomType === 'ac' ? 'Deluxe AC Room' : 'Cooler Room';
+  const roomName = roomType === 'ac' ? 'Deluxe AC Room' : 'Non-AC Room';
 
   // Calculate nights
   const nights = Math.max(1, Math.round(
@@ -519,7 +519,7 @@ export default function BookingModal({
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                     {[
                       { key: 'ac', name: 'Deluxe AC Room', price: `₹${roomRates.ac.toLocaleString('en-IN')} / night` },
-                      { key: 'cooler', name: 'Cooler Room', price: `₹${roomRates.cooler.toLocaleString('en-IN')} / night` },
+                      { key: 'cooler', name: 'Non-AC Room', price: `₹${roomRates.cooler.toLocaleString('en-IN')} / night` },
                     ].map(r => (
                       <button
                         key={r.key}

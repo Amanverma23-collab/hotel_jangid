@@ -192,10 +192,10 @@ export default function PriceManagerModal({ isOpen, onClose, onPriceUpdated }) {
               </div>
             </div>
 
-            {/* Cooler Room Rate */}
+            {/* Non-AC Room Rate */}
             <div style={{ background: '#F7F2E9', border: '1.5px solid #D9CDBA', borderRadius: '16px', padding: '14px' }}>
               <label style={{ display: 'block', fontSize: '12px', fontWeight: 700, color: '#1A1A1A', marginBottom: '6px' }}>
-                Cooler Room Price (₹ / night)
+                Non-AC Room Price (₹ / night)
               </label>
               <div style={{ position: 'relative' }}>
                 <span style={{ position: 'absolute', left: '12px', top: '10px', fontSize: '15px', fontWeight: 700, color: '#7A7060' }}>

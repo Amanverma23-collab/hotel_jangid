@@ -28,13 +28,13 @@ export async function getLiveRoomRates() {
     const { data, error } = await supabase
       .from('room_types')
       .select('id, name, code, base_price, amenities, max_occupancy')
-      .order('base_price', { ascending: true });
+      .order('base_price', { ascending: false });
 
     if (error || !data || data.length === 0) {
       console.warn('Fallback to default room rates:', error);
       return [
         { id: 'c0000000-0000-0000-0000-000000000001', name: 'Deluxe AC Room', code: 'AC-DLX', base_price: 1200 },
-        { id: 'c0000000-0000-0000-0000-000000000002', name: 'Cooler Room', code: 'CLR-STD', base_price: 1000 },
+        { id: 'c0000000-0000-0000-0000-000000000002', name: 'Non-AC Room', code: 'NON-AC', base_price: 1000 },
       ];
     }
 
@@ -43,7 +43,7 @@ export async function getLiveRoomRates() {
     console.error('Failed to load room rates:', err);
     return [
       { id: 'c0000000-0000-0000-0000-000000000001', name: 'Deluxe AC Room', code: 'AC-DLX', base_price: 1200 },
-      { id: 'c0000000-0000-0000-0000-000000000002', name: 'Cooler Room', code: 'CLR-STD', base_price: 1000 },
+      { id: 'c0000000-0000-0000-0000-000000000002', name: 'Non-AC Room', code: 'NON-AC', base_price: 1000 },
     ];
   }
 }
@@ -148,9 +148,9 @@ export async function updateCategoryPrice({ category, newPrice }) {
 
     return {
       success: true,
-      category: isCooler ? 'Cooler Room' : 'Deluxe AC Room',
+      category: isCooler ? 'Non-AC Room' : 'Deluxe AC Room',
       newPrice: priceNum,
-      message: `${isCooler ? 'Cooler Room' : 'Deluxe AC Room'} price updated to ₹${priceNum}`
+      message: `${isCooler ? 'Non-AC Room' : 'Deluxe AC Room'} price updated to ₹${priceNum}`
     };
   } catch (err) {
     console.error('Failed to update category price:', err);
@@ -174,7 +174,7 @@ export async function createWebsiteBooking({
   roomCategory,
   roomType,
   roomsCount = 1,
-  totalAmount = 1500,
+  totalAmount = 1200,
   paidAmount = 0,
   paymentMethod = 'Pay at Hotel', // 'Razorpay', 'UPI', 'Pay at Hotel', 'WhatsApp'
   paymentGateway,
@@ -186,7 +186,7 @@ export async function createWebsiteBooking({
   try {
     const guestsNum = Number(totalGuests || guestsCount || 1);
     const roomsNum = Number(roomsCount || 1);
-    const resolvedCategory = roomCategory || (roomType === 'cooler' ? 'Cooler Room' : 'Deluxe AC Room');
+    const resolvedCategory = roomCategory || (roomType === 'cooler' || roomType === 'non_ac' ? 'Non-AC Room' : 'Deluxe AC Room');
     const resolvedMethod = paymentMethod || paymentGateway || 'Pay at Hotel';
     const resolvedPaymentId = razorpayPaymentId || paymentId || (paidAmount > 0 ? `pay_web_${Date.now()}` : '');
 
