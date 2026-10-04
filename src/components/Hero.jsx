@@ -650,6 +650,18 @@ export default function Hero({ onBookClick }) {
                 </em>
                 <span> Temple</span>
               </h1>
+              <p
+                style={{
+                  margin: '6px 0 0',
+                  color: 'rgba(255, 255, 255, 0.92)',
+                  fontSize: 'clamp(12px, 1.2vw, 14px)',
+                  fontWeight: 500,
+                  letterSpacing: '0.01em',
+                  textShadow: '0 1px 4px rgba(0,0,0,0.6)',
+                }}
+              >
+                Best Hotel in Gogamedi (Gugamedi) • 400m from Shri Goga Ji Mandir
+              </p>
             </div>
           </div>
 

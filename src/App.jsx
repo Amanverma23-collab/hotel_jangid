@@ -4,6 +4,7 @@ import Hero from './components/Hero';
 import OwnersSection from './components/OwnersSection';
 import AmenitiesSection from './components/AmenitiesSection';
 import GalleryTestimonialsSection from './components/GalleryTestimonialsSection';
+import FAQSection from './components/FAQSection';
 import Footer from './components/Footer';
 import BookingModal from './components/BookingModal';
 
@@ -40,6 +41,9 @@ export default function App() {
 
         {/* 5. Curved Wave Photo Gallery & Real Google Reviews */}
         <GalleryTestimonialsSection />
+
+        {/* 6. Frequently Asked Questions (SEO & AEO Engine) */}
+        <FAQSection />
       </main>
 
       {/* 6. Luxury Sticky Footer with Curtain Reveal Effect */}

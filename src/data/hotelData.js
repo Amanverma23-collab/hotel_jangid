@@ -73,28 +73,28 @@ export const HOTEL_INFO = {
   ],
   faqs: [
     {
+      q: "Which is the best hotel in Gogamedi near Goga Ji Temple?",
+      a: "Hotel Jangid is considered the best hotel in Gogamedi (also spelled Gugamedi), located just 400 meters (a 5-minute walk) from Shri Goga Ji Temple. It features 23 clean rooms (AC and Non-AC), 24/7 hot water geysers, secure private parking, high-speed Wi-Fi, and 100% power backup."
+    },
+    {
+      q: "What is the room price at Hotel Jangid Gogamedi?",
+      a: "Hotel Jangid offers the most transparent and affordable room rates in Gogamedi: Deluxe AC Rooms are ₹1,200 per night and Non-AC Rooms are ₹1,000 per night. You can book directly online with zero advance payment (Pay at Hotel)."
+    },
+    {
+      q: "How far is Hotel Jangid from Shri Goga Ji Temple and Gogamedi Railway Station?",
+      a: "Hotel Jangid is 400 meters from Shri Goga Ji Mandir (approx. 5 minutes on foot via direct paved road) and only 900 meters from Gogamedi Railway Station (3 minutes by e-rickshaw or taxi)."
+    },
+    {
+      q: "Is secure vehicle parking and 24-hour hot water available?",
+      a: "Yes, Hotel Jangid has a large, private gated courtyard in front of the hotel with free, secure parking for cars, SUVs, and buses. Every room also features an attached private bathroom with 24x7 geyser hot water facility."
+    },
+    {
+      q: "How do I book a room in Gogamedi at Hotel Jangid?",
+      a: "You can book directly on our website by clicking 'Book Now' with instant confirmation, or call manager Vijay Jangid directly at +91 90011 87776."
+    },
+    {
       q: "What are the check-in and check-out timings?",
-      a: "Standard check-in is at 12:00 PM and check-out is at 11:00 AM. Early check-in is accommodated subject to room availability on arrival."
-    },
-    {
-      q: "Is government ID proof required at check-in?",
-      a: "Yes. In accordance with government hotel regulations, all adult guests must present a valid government photo ID (Aadhaar Card, Voter ID, or Driving License)."
-    },
-    {
-      q: "How far is the hotel from Goga Ji Temple and Railway Station?",
-      a: "The hotel is 400 meters from Shri Goga Ji Temple (an easy 5-minute walk along a direct paved road). Gogamedi Railway Station is 900 meters away (approx. 3 minutes by e-rickshaw or 10 minutes on foot)."
-    },
-    {
-      q: "Is safe vehicle parking available?",
-      a: "Yes. Jangid Hotel has a large, open private courtyard directly in front of the building with secure parking space for personal cars, SUVs, and taxis."
-    },
-    {
-      q: "Do you serve food or tea on premises?",
-      a: "Jangid Hotel is strictly a rooms-only property. There is no restaurant on the premises. However, several pure vegetarian Rajasthani dhabas and eateries are located within 50 to 100 meters on Temple Road."
-    },
-    {
-      q: "What is your booking cancellation policy?",
-      a: "You can modify or cancel your booking by notifying us at least 24 hours prior to your scheduled check-in. For any immediate assistance, you can contact Vijay Jangid directly via phone or WhatsApp."
+      a: "Standard check-in is at 12:00 PM and check-out is at 11:00 AM. Early check-in and late check-out are accommodated based on room availability upon request."
     }
   ]
 };

@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Direct Google and Bing to the sitemap
+Sitemap: https://hoteljangid.in/sitemap.xml
