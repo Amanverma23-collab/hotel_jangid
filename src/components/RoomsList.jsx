@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getLiveRoomRates } from '../services/bookingService';
+import { supabase } from '../supabase';
 import { BedDouble, Users, Sparkles, Check, ArrowRight } from 'lucide-react';
 
 export function RoomsList({ onSelectRoom }) {
@@ -12,6 +13,18 @@ export function RoomsList({ onSelectRoom }) {
       setRooms(data || []);
       setLoading(false);
     });
+
+    // Supabase realtime listener
+    const channel = supabase
+      .channel('room-types-live-price')
+      .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'room_types' }, (payload) => {
+        setRooms(prev => prev.map(r => r.id === payload.new.id ? { ...r, base_price: payload.new.base_price } : r));
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   if (loading) {
