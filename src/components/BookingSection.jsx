@@ -22,6 +22,11 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
   
   // Default to today and tomorrow
   const today = new Date().toISOString().split('T')[0];
+  const maxAdvanceDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split('T')[0];
+  })();
   const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
   
   const [checkInDate, setCheckInDate] = useState(today);
@@ -86,6 +91,11 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
 
     if (new Date(checkOutDate) <= new Date(checkInDate)) {
       setErrorMessage('Check-out date must be after check-in date');
+      return;
+    }
+
+    if (checkInDate > maxAdvanceDate) {
+      setErrorMessage(`Advance booking is allowed only up to 7 days in advance. Maximum Check-In date is ${maxAdvanceDate}.`);
       return;
     }
 
@@ -423,8 +433,18 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
                       <input
                         type="date"
                         min={today}
+                        max={maxAdvanceDate}
                         value={checkInDate}
-                        onChange={(e) => setCheckInDate(e.target.value)}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          if (val > maxAdvanceDate) {
+                            setErrorMessage(`Advance booking is allowed only up to 7 days in advance. Maximum Check-In date is ${maxAdvanceDate}.`);
+                            setCheckInDate(maxAdvanceDate);
+                            return;
+                          }
+                          setErrorMessage('');
+                          setCheckInDate(val);
+                        }}
                         required
                         className="w-full px-3 py-2 rounded-xl border border-sand-300 bg-sand-50 text-ink-900 text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-terracotta-500"
                       />

@@ -72,6 +72,11 @@ export default function Hero({ onBookClick }) {
 
   // Real upcoming date format DD - MM - YYYY with dynamic native picker support
   const getTodayIso = () => new Date().toISOString().split('T')[0];
+  const getMaxCheckInIso = () => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split('T')[0];
+  };
   const getTomorrowIso = () => {
     const d = new Date();
     d.setDate(d.getDate() + 1);
@@ -840,9 +845,15 @@ export default function Hero({ onBookClick }) {
                   type="date"
                   value={checkInDate}
                   min={getTodayIso()}
+                  max={getMaxCheckInIso()}
                   onChange={(e) => {
                     const val = e.target.value;
                     if (!val) return;
+                    if (val > getMaxCheckInIso()) {
+                      alert(`Advance booking is allowed only up to 7 days in advance. Maximum Check-In date is ${formatDisplayDate(getMaxCheckInIso())}.`);
+                      setCheckInDate(getMaxCheckInIso());
+                      return;
+                    }
                     setCheckInDate(val);
                     if (val >= checkOutDate) {
                       const next = new Date(val);

@@ -184,6 +184,17 @@ export async function createWebsiteBooking({
   homeAddress = '',
 }) {
   try {
+    // Enforce maximum 7 days advance booking limit for check-in
+    const now = new Date();
+    const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(now);
+    const max7DaysDate = new Date(now);
+    max7DaysDate.setDate(max7DaysDate.getDate() + 7);
+    const maxCheckInStr = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata' }).format(max7DaysDate);
+
+    if (checkInDate && checkInDate > maxCheckInStr) {
+      throw new Error('Advance booking is allowed only up to 7 days in advance. Maximum Check-In date is ' + maxCheckInStr + '.');
+    }
+
     const guestsNum = Number(totalGuests || guestsCount || 1);
     const roomsNum = Number(roomsCount || 1);
     const resolvedCategory = roomCategory || (roomType === 'cooler' || roomType === 'non_ac' ? 'Non-AC Room' : 'Deluxe AC Room');

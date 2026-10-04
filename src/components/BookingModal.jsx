@@ -26,7 +26,13 @@ export default function BookingModal({
   const [roomType, setRoomType] = useState(initialRoomType);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [checkInDate, setCheckInDate] = useState(() => initialCheckIn || new Date().toISOString().split('T')[0]);
+  const todayIso = new Date().toISOString().split('T')[0];
+  const maxCheckInDate = (() => {
+    const d = new Date();
+    d.setDate(d.getDate() + 7);
+    return d.toISOString().split('T')[0];
+  })();
+  const [checkInDate, setCheckInDate] = useState(() => initialCheckIn || todayIso);
   const [checkOutDate, setCheckOutDate] = useState(() => {
     if (initialCheckOut) return initialCheckOut;
     const d = new Date();
@@ -98,6 +104,16 @@ export default function BookingModal({
     if (e && e.preventDefault) e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       alert('Please fill in your name and phone number to complete booking.');
+      return;
+    }
+
+    if (checkInDate > maxCheckInDate) {
+      alert(`Advance booking is allowed only up to 7 days in advance (Check-in on or before ${maxCheckInDate}).`);
+      return;
+    }
+
+    if (checkInDate > maxCheckInDate) {
+      alert(`Advance booking is allowed only up to 7 days in advance (Check-in on or before ${maxCheckInDate}).`);
       return;
     }
 
@@ -530,11 +546,18 @@ export default function BookingModal({
                       <input
                         type="date"
                         value={checkInDate}
-                        min={new Date().toISOString().split('T')[0]}
+                        min={todayIso}
+                        max={maxCheckInDate}
                         onChange={(e) => {
-                          setCheckInDate(e.target.value);
-                          if (e.target.value >= checkOutDate) {
-                            const d = new Date(e.target.value);
+                          const val = e.target.value;
+                          if (val > maxCheckInDate) {
+                            alert(`Advance booking is allowed only up to 7 days in advance. Maximum Check-In date is ${maxCheckInDate}.`);
+                            setCheckInDate(maxCheckInDate);
+                            return;
+                          }
+                          setCheckInDate(val);
+                          if (val >= checkOutDate) {
+                            const d = new Date(val);
                             d.setDate(d.getDate() + 1);
                             setCheckOutDate(d.toISOString().split('T')[0]);
                           }
