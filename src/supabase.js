@@ -180,7 +180,7 @@ export async function createWebsiteBooking({
   paymentGateway,
   razorpayPaymentId = '',
   paymentId,
-  reasonOfVisit = 'Shri Goga Ji Mandir Darshan',
+  reasonOfVisit = null,
   homeAddress = '',
 }) {
   try {

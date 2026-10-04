@@ -135,8 +135,7 @@ export default function BookingModal({
         totalAmount,
         paidAmount: 0,
         paymentMethod: 'Pay at Hotel',
-        reasonOfVisit: 'Shri Goga Ji Mandir Darshan',
-      });
+              });
 
       if (res?.confirmationNumber) {
         confirmationNumber = res.confirmationNumber;
@@ -234,8 +233,7 @@ export default function BookingModal({
         totalAmount,
         paidAmount: 0,
         paymentMethod: 'WhatsApp',
-        reasonOfVisit: 'Shri Goga Ji Mandir Darshan',
-      });
+              });
 
       if (res?.confirmationNumber) {
         confirmationNumber = res.confirmationNumber;
