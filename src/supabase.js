@@ -21,7 +21,7 @@ export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
 });
 
 /**
- * PMS Software se live room categories aur unke prices fetch karna
+ * Fetch live room categories and prices from PMS
  */
 export async function getLiveRoomRates() {
   try {
@@ -201,7 +201,7 @@ export async function createWebsiteBooking({
     const resolvedMethod = paymentMethod || paymentGateway || 'Pay at Hotel';
     const resolvedPaymentId = razorpayPaymentId || paymentId || (paidAmount > 0 ? `pay_web_${Date.now()}` : '');
 
-    // 1. Guest profile create karein
+    // 1. Create guest profile
     const nameParts = (guestName || 'Website Guest').trim().split(/\s+/);
     const fName = nameParts[0] || 'Guest';
     const lName = nameParts.slice(1).join(' ') || '';
@@ -240,7 +240,7 @@ export async function createWebsiteBooking({
       guests_count: guestsNum
     });
 
-    // 3. Reservations table me entry karein (status: 'CONFIRMED' pre-booking ke roop me)
+    // 3. Create entry in reservations table (status: 'CONFIRMED')
     const { data: res, error: resErr } = await supabase
       .from('reservations')
       .insert({
@@ -264,7 +264,7 @@ export async function createWebsiteBooking({
 
     if (resErr) throw resErr;
 
-    // 4. Reservation item add karein
+    // 4. Add reservation item
     try {
       await supabase
         .from('reservation_items')
@@ -280,7 +280,7 @@ export async function createWebsiteBooking({
       console.warn('[reservation_items] optional note:', itemErr);
     }
 
-    // 5. Folio add karein (PMS software billing / folio ke liye)
+    // 5. Create folio record for PMS billing
     try {
       await supabase
         .from('folios')

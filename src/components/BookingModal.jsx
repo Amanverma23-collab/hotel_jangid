@@ -401,7 +401,7 @@ export default function BookingModal({
               </h3>
 
               <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#6A5E50', lineHeight: 1.5 }}>
-                Aapki booking Hotel Jangid ke Reception Software me darj ho chuki hai. Receptionist room allot karenge.
+                Your booking has been recorded in the Hotel Jangid system. Front desk will allot your room upon arrival.
               </p>
 
               <div

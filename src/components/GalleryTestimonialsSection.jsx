@@ -172,7 +172,7 @@ const PHOTOS = [
   },
 ];
 
-// 100% Real Google Reviews extracted from: https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6 (जांगिड़ रेस्ट हाउस)
+// 100% Real Google Reviews extracted from: https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6 (Hotel Jangid)
 const REVIEWS = [
   {
     id: 1,
@@ -186,7 +186,7 @@ const REVIEWS = [
     id: 2,
     quote:
       '"Good Location & best service. Very close to Goga Ji Maharaj temple—just a 5-minute walk. Excellent family hospitality."',
-    name: 'सेवक योगेश पाँड़व',
+    name: 'Yogesh Pandav',
     role: 'Pilgrim Guest • Google Review',
     avatar: '/images/avatars/avatar-yogesh-pandav.png',
   },
@@ -576,7 +576,7 @@ export default function GalleryTestimonialsSection() {
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }} />
-              <span>Verified 5.0 Google Rating • जांगिड़ रेस्ट हाउस (Hotel Jangid), Gogamedi</span>
+              <span>Verified 5.0 Google Rating • Hotel Jangid, Gogamedi</span>
             </div>
             <a
               href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6"

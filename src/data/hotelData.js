@@ -1,6 +1,6 @@
 export const HOTEL_INFO = {
   name: "Jangid Hotel",
-  hindiName: "होटल जांगिड़",
+  
   town: "Gogamedi, Rajasthan",
   tagline: "400 m from Goga Ji Temple · 900 m from Railway Station",
   promise: "A quiet, honest family-run stay in Gogamedi.",
@@ -97,7 +97,7 @@ export const HOTEL_INFO = {
       a: "Yes, Hotel Jangid is a 100% family-friendly property. We provide safe, peaceful accommodation for families, female devotees, and pilgrimage groups with options for extra bedding, clean western and Indian bathrooms, and 24/7 on-site staff assistance."
     },
     {
-      q: "Is Hotel Jangid open 24 hours during the annual Gogamedi Mela (गोगामेड़ी मेला)?",
+      q: "Is Hotel Jangid open 24 hours during the annual Gogamedi Mela (Annual Fair)?",
       a: "Yes, Hotel Jangid operates 24x7 throughout the year, with special round-the-clock management, electricity backup, and direct temple access during the annual Bhadrapada Gogamedi Mela."
     },
     {

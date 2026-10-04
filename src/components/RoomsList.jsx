@@ -8,7 +8,7 @@ export function RoomsList({ onSelectRoom }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Software se live price fetch karein
+    // Fetch live room prices from PMS
     getLiveRoomRates().then((data) => {
       setRooms(data || []);
       setLoading(false);
