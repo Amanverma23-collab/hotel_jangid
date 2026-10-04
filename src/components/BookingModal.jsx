@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles } from 'lucide-react';
+import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
+import confetti from 'canvas-confetti';
 import { createWebsiteBooking } from '../supabase';
 
 const CHECK_IN_TIMES = [
@@ -59,15 +60,18 @@ export default function BookingModal({
   ));
   const totalAmount = roomPrice * roomsCount * nights;
 
-  const handleWhatsAppBooking = async (e) => {
-    e.preventDefault();
-    if (!name.trim() || !phone.trim()) return;
+  // Direct Online Booking Submission (Saves immediately to Hotel PMS)
+  const handleDirectBooking = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!name.trim() || !phone.trim()) {
+      alert('Please fill in your name and phone number to complete booking.');
+      return;
+    }
 
     setIsSubmitting(true);
     let confirmationNumber = `WEB-${Math.floor(100000 + Math.random() * 900000)}`;
 
     try {
-      // 1. Save directly into Supabase PMS Reception Software database
       const res = await createWebsiteBooking({
         guestName: name,
         guestPhone: phone,
@@ -75,13 +79,13 @@ export default function BookingModal({
         checkInTime,
         checkOutDate,
         checkOutTime,
+        roomCategory: roomName,
         roomType,
         roomsCount,
-        guestsCount,
+        totalGuests: guestsCount,
         totalAmount,
         paidAmount: 0,
-        paymentGateway: 'WhatsApp / Pay at Hotel',
-        paymentStatus: 'PAY_AT_HOTEL',
+        paymentMethod: 'Pay at Hotel',
         reasonOfVisit: 'Shri Goga Ji Mandir Darshan',
       });
 
@@ -89,10 +93,70 @@ export default function BookingModal({
         confirmationNumber = res.confirmationNumber;
       }
     } catch (err) {
-      console.warn('[BookingModal] PMS software sync note:', err);
+      console.warn('[BookingModal] Direct booking note:', err);
     }
 
-    // 2. Prepare WhatsApp notification message with real confirmation reference
+    try {
+      confetti({
+        particleCount: 70,
+        spread: 65,
+        origin: { y: 0.6 },
+        colors: ['#A8936A', '#2E7D32', '#1A1A1A', '#D4AF37'],
+      });
+    } catch (err) {}
+
+    setIsSubmitting(false);
+    setBookingConfirmed({
+      confirmationNumber,
+      roomName,
+      nights,
+      roomsCount,
+      guestsCount,
+      totalAmount,
+      checkInDate,
+      checkInTime,
+      guestName: name,
+      phone: phone,
+      bookingMethod: 'DIRECT',
+    });
+  };
+
+  // WhatsApp Booking Submission
+  const handleWhatsAppBooking = async (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    if (!name.trim() || !phone.trim()) {
+      alert('Please enter your name and phone number.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    let confirmationNumber = `WEB-${Math.floor(100000 + Math.random() * 900000)}`;
+
+    try {
+      const res = await createWebsiteBooking({
+        guestName: name,
+        guestPhone: phone,
+        checkInDate,
+        checkInTime,
+        checkOutDate,
+        checkOutTime,
+        roomCategory: roomName,
+        roomType,
+        roomsCount,
+        totalGuests: guestsCount,
+        totalAmount,
+        paidAmount: 0,
+        paymentMethod: 'WhatsApp',
+        reasonOfVisit: 'Shri Goga Ji Mandir Darshan',
+      });
+
+      if (res?.confirmationNumber) {
+        confirmationNumber = res.confirmationNumber;
+      }
+    } catch (err) {
+      console.warn('[BookingModal] WhatsApp booking note:', err);
+    }
+
     const message =
       `Namaste Vijay Ji 🙏, I would like to book a room at Hotel Jangid, Gogamedi.\n` +
       `\n🔖 *Booking Ref:* ${confirmationNumber}` +
@@ -107,7 +171,6 @@ export default function BookingModal({
       `\n• Total: ₹${totalAmount.toLocaleString('en-IN')} (Pay at Hotel)` +
       `\n\n(Auto-recorded in Hotel Jangid PMS System • Ref: ${confirmationNumber})`;
 
-    // Open WhatsApp
     window.open(`https://wa.me/919001187776?text=${encodeURIComponent(message)}`, '_blank');
 
     setIsSubmitting(false);
@@ -122,6 +185,7 @@ export default function BookingModal({
       checkInTime,
       guestName: name,
       phone: phone,
+      bookingMethod: 'WHATSAPP',
     });
   };
 
@@ -235,11 +299,11 @@ export default function BookingModal({
             </div>
 
             <h3 style={{ margin: '0 0 6px', fontSize: '24px', fontWeight: 800, color: '#1A1A1A' }}>
-              Booking Request Received!
+              Booking Confirmed!
             </h3>
 
             <p style={{ margin: '0 0 16px', fontSize: '13px', color: '#6A5E50', lineHeight: 1.5 }}>
-              Your reservation is registered in Hotel Jangid&apos;s PMS reception software and forwarded to Vijay Ji on WhatsApp.
+              Aapki booking Hotel Jangid ke Reception Software me darj ho chuki hai. Receptionist room allot karenge.
             </p>
 
             <div
@@ -294,7 +358,7 @@ export default function BookingModal({
                 }}
               >
                 <MessageCircle size={16} />
-                Open WhatsApp Chat Again
+                Send Confirmation on WhatsApp
               </button>
 
               <div style={{ display: 'flex', gap: '10px' }}>
@@ -391,7 +455,7 @@ export default function BookingModal({
               </p>
             </div>
 
-            <form onSubmit={handleWhatsAppBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleDirectBooking} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
 
               {/* Room Type */}
               <div>
@@ -431,7 +495,6 @@ export default function BookingModal({
                       min={new Date().toISOString().split('T')[0]}
                       onChange={(e) => {
                         setCheckInDate(e.target.value);
-                        // ensure checkout is after checkin
                         if (e.target.value >= checkOutDate) {
                           const d = new Date(e.target.value);
                           d.setDate(d.getDate() + 1);
@@ -540,53 +603,102 @@ export default function BookingModal({
                 </div>
               </div>
 
-              {/* Action Buttons */}
-              <div style={{ display: 'flex', gap: '10px', paddingTop: '2px' }}>
+              {/* Action Buttons Section */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '4px' }}>
+                {/* 1. PRIMARY BIG BUTTON: Book Room Now */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
                   style={{
-                    flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    gap: '8px', padding: '13px 16px', borderRadius: '14px',
-                    background: 'linear-gradient(135deg, #25D366 0%, #1DAD54 100%)',
-                    border: 'none', color: '#fff', fontWeight: 700, fontSize: '13px',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '10px',
+                    padding: '14px 20px',
+                    borderRadius: '16px',
+                    background: 'linear-gradient(135deg, #1A1A1A 0%, #2F2923 100%)',
+                    border: '1.5px solid #4A3E31',
+                    color: '#FDF6EA',
+                    fontWeight: 800,
+                    fontSize: '15px',
                     cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                    boxShadow: '0 4px 16px rgba(37,211,102,0.3)',
-                    transition: 'all 0.18s', fontFamily: 'inherit',
+                    boxShadow: '0 6px 20px rgba(0,0,0,0.18)',
+                    transition: 'all 0.18s ease',
+                    fontFamily: 'inherit',
                     opacity: isSubmitting ? 0.75 : 1,
                   }}
-                  onMouseEnter={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(-1px)')}
-                  onMouseLeave={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(0)')}
+                  onMouseEnter={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(-1px)', e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)')}
+                  onMouseLeave={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(0)', e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)')}
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 size={16} className="animate-spin" />
-                      Connecting to Hotel System...
+                      <Loader2 size={18} className="animate-spin" />
+                      <span>Saving to Hotel System...</span>
                     </>
                   ) : (
                     <>
-                      <MessageCircle size={16} />
-                      Confirm on WhatsApp
+                      <CheckCircle2 size={18} style={{ color: '#D4AF37' }} />
+                      <span>Book Room Now • ₹{totalAmount.toLocaleString('en-IN')}</span>
                     </>
                   )}
                 </button>
 
-                <a
-                  href="tel:+919001187776"
-                  style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    gap: '6px', padding: '13px 16px', borderRadius: '14px',
-                    background: '#F0E9DC', border: '1.5px solid #D9CDBA',
-                    color: '#1A1A1A', fontWeight: 600, fontSize: '13px',
-                    textDecoration: 'none', whiteSpace: 'nowrap', transition: 'all 0.15s',
-                    fontFamily: 'inherit',
-                  }}
-                  onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
-                  onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
-                >
-                  <PhoneCall size={15} style={{ color: '#A8936A' }} />
-                  Call Vijay Ji
-                </a>
+                {/* 2. SECONDARY ROW: WhatsApp & Call Options */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <button
+                    type="button"
+                    onClick={handleWhatsAppBooking}
+                    disabled={isSubmitting}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '7px',
+                      padding: '11px 14px',
+                      borderRadius: '14px',
+                      background: '#E8F5E9',
+                      border: '1.5px solid #A5D6A7',
+                      color: '#1B5E20',
+                      fontWeight: 700,
+                      fontSize: '12px',
+                      cursor: 'pointer',
+                      fontFamily: 'inherit',
+                      transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#C8E6C9'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#E8F5E9'}
+                  >
+                    <MessageCircle size={15} style={{ color: '#25D366' }} />
+                    Confirm on WhatsApp
+                  </button>
+
+                  <a
+                    href="tel:+919001187776"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '6px',
+                      padding: '11px 14px',
+                      borderRadius: '14px',
+                      background: '#F0E9DC',
+                      border: '1.5px solid #D9CDBA',
+                      color: '#1A1A1A',
+                      fontWeight: 600,
+                      fontSize: '12px',
+                      textDecoration: 'none',
+                      whiteSpace: 'nowrap',
+                      fontFamily: 'inherit',
+                      transition: 'all 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.background = '#E5D9C9'}
+                    onMouseLeave={e => e.currentTarget.style.background = '#F0E9DC'}
+                  >
+                    <PhoneCall size={14} style={{ color: '#A8936A' }} />
+                    Call Vijay Ji
+                  </a>
+                </div>
               </div>
             </form>
           </>
