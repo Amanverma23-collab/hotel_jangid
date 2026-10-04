@@ -74,7 +74,7 @@ export function RoomsList({ onSelectRoom }) {
                   }}
                 >
                   <Sparkles size={11} />
-                  Live PMS Price
+                  Live Rate
                 </span>
 
                 <span style={{ fontSize: '12px', color: '#7A7060', display: 'flex', alignItems: 'center', gap: '4px' }}>

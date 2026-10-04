@@ -465,15 +465,6 @@ export default function BookingModal({
                   }}>
                     Direct Hotel Reservation
                   </div>
-
-                  <div style={{
-                    display: 'inline-flex', alignItems: 'center', gap: '5px',
-                    fontSize: '10px', fontWeight: 600, color: '#2E7D32',
-                    background: '#E8F5E9', padding: '3px 8px', borderRadius: '999px',
-                  }}>
-                    <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#2E7D32' }} />
-                    PMS Software Synced
-                  </div>
                 </div>
 
                 <h3 style={{ margin: 0, fontSize: '28px', fontWeight: 700, color: '#1A1A1A', lineHeight: 1.15 }}>
