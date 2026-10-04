@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { X, MessageCircle, PhoneCall, ShieldCheck, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { createWebsiteBooking, getCategoryPrices, supabase } from '../supabase';
+import { PearlButton } from './ui/pearl-button';
 
 const CHECK_IN_TIMES = [
   '06:00 AM', '07:00 AM', '08:00 AM', '09:00 AM', '10:00 AM', '11:00 AM',
@@ -642,44 +643,24 @@ export default function BookingModal({
 
                 {/* Action Buttons Section */}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '4px' }}>
-                  {/* 1. PRIMARY BIG BUTTON: Book Room Now */}
-                  <button
+                  {/* 1. PRIMARY PEARL BUTTON: Book Room Now */}
+                  <PearlButton
                     type="submit"
                     disabled={isSubmitting}
-                    style={{
-                      width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      gap: '10px',
-                      padding: '14px 20px',
-                      borderRadius: '16px',
-                      background: 'linear-gradient(135deg, #1A1A1A 0%, #2F2923 100%)',
-                      border: '1.5px solid #4A3E31',
-                      color: '#FDF6EA',
-                      fontWeight: 800,
-                      fontSize: '15px',
-                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                      boxShadow: '0 6px 20px rgba(0,0,0,0.18)',
-                      transition: 'all 0.18s ease',
-                      fontFamily: 'inherit',
-                      opacity: isSubmitting ? 0.75 : 1,
-                    }}
-                    onMouseEnter={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(-1px)', e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)')}
-                    onMouseLeave={e => !isSubmitting && (e.currentTarget.style.transform = 'translateY(0)', e.currentTarget.style.boxShadow = '0 6px 20px rgba(0,0,0,0.18)')}
+                    size="compact"
+                    className="w-full"
+                    icon={
+                      isSubmitting ? (
+                        <Loader2 size={16} className="animate-spin" />
+                      ) : (
+                        <CheckCircle2 size={18} style={{ color: '#E2B774' }} />
+                      )
+                    }
                   >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 size={18} className="animate-spin" />
-                        <span>Saving to Hotel System...</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 size={18} style={{ color: '#D4AF37' }} />
-                        <span>Book Room Now • ₹{totalAmount.toLocaleString('en-IN')}</span>
-                      </>
-                    )}
-                  </button>
+                    <span>
+                      {isSubmitting ? 'Saving to Hotel System...' : `Book Room Now • ₹${totalAmount.toLocaleString('en-IN')}`}
+                    </span>
+                  </PearlButton>
                 </div>
               </form>
             </>
