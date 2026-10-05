@@ -481,7 +481,7 @@
   <body class="bg-[#FAF8F5] text-[#111111] selection:bg-[#c99f5b]/30 selection:text-[#111111] antialiased" style="background-color: #FAF8F5 !important; margin: 0 !important;">
     <div id="root" style="background-color: #FAF8F5;">
       <!-- Server-rendered Semantic SEO Fallback (Visually hidden for seamless paint; indexed by crawlers; replaced on React mount) -->
-      <div id="ssr-seo-wrapper" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: normal; border: 0; opacity: 0; pointer-events: none;">
+      <div id="ssr-seo-wrapper" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: normal; border: 0;">
         <!-- Header & Primary Navigation (Internal & External Links) -->
         <header style="margin-bottom: 32px; border-bottom: 1px solid #EAE5DE; padding-bottom: 20px;">
           <nav aria-label="Main Navigation" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 14px;">
@@ -561,15 +561,99 @@
             </p>
           </section>
 
-          <!-- Section 5: FAQs -->
-          <section id="faq" style="margin-bottom: 32px;">
-            <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 24px; color: #111111; margin-bottom: 8px;">
+          <!-- Section 5: FAQs (Aligned with JSON-LD FAQPage Schema) -->
+          <section id="faq" itemscope itemtype="https://schema.org/FAQPage" style="margin-bottom: 32px;">
+            <h2 style="font-family: 'Playfair Display', Georgia, serif; font-size: 24px; color: #111111; margin-bottom: 12px;">
               Frequently Asked Questions (FAQ) — Hotel Booking in Gogamedi
             </h2>
             <div style="font-size: 15px; color: #444444; line-height: 1.6;">
-              <p><strong>Q: What is the distance from Hotel Jangid to Goga Ji Temple?</strong><br />A: Hotel Jangid is only 400 meters away, approximately a 4-5 minute easy walk.</p>
-              <p><strong>Q: What are the room tariffs at Hotel Jangid?</strong><br />A: Non-AC rooms are ₹1,000/night and Deluxe AC rooms are ₹1,200/night.</p>
-              <p><strong>Q: Is vehicle parking available at the hotel?</strong><br />A: Yes, free private secure parking is available on-site for both cars and buses.</p>
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  Which is the best hotel in Gogamedi near Goga Ji Temple?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Hotel Jangid is considered the best hotel in Gogamedi (also spelled Gugamedi), located just 400 meters (a 5-minute walk) from Shri Goga Ji Temple. It features 23 clean rooms (AC and Non-AC), 24/7 hot water geysers, secure private parking, high-speed Wi-Fi, and 100% power backup.
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  What is the room price at Hotel Jangid Gogamedi?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Hotel Jangid offers the most transparent and affordable room rates in Gogamedi: Deluxe AC Rooms are ₹1,200 per night and Non-AC Rooms are ₹1,000 per night. You can book directly online with zero advance payment (Pay at Hotel).
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  How far is Hotel Jangid from Shri Goga Ji Temple and Gogamedi Railway Station?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Hotel Jangid is 400 meters from Shri Goga Ji Mandir (approx. 5 minutes on foot via direct paved road) and only 900 meters from Gogamedi Railway Station (3 minutes by e-rickshaw or taxi).
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  Is secure vehicle parking and 24-hour hot water available?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Yes, Hotel Jangid has a large, private gated courtyard in front of the hotel with free, secure parking for cars, SUVs, and buses. Every room also features an attached private bathroom with 24x7 geyser hot water facility.
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  How do I book a room in Gogamedi at Hotel Jangid?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    You can book directly on our website by clicking 'Book Now' with instant confirmation, or call manager Vijay Jangid directly at +91 90011 87776.
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  Can families, ladies, and group pilgrims stay comfortably at Hotel Jangid?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Yes, Hotel Jangid is a 100% family-friendly property. We provide safe, peaceful accommodation for families, female devotees, and pilgrimage groups with options for extra bedding, clean western and Indian bathrooms, and 24/7 on-site staff assistance.
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  Is Hotel Jangid open 24 hours during the annual Gogamedi Mela (गोगामेड़ी मेला)?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Yes, Hotel Jangid operates 24x7 throughout the year, with special round-the-clock management, electricity backup, and direct temple access during the annual Bhadrapada Gogamedi Mela.
+                  </p>
+                </div>
+              </article>
+
+              <article itemscope itemprop="mainEntity" itemtype="https://schema.org/Question" style="margin-bottom: 16px;">
+                <h3 itemprop="name" style="font-size: 16px; font-weight: 600; color: #111111; margin-bottom: 4px;">
+                  What are the check-in and check-out timings?
+                </h3>
+                <div itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                  <p itemprop="text" style="margin: 0; color: #555555;">
+                    Standard check-in is at 12:00 PM and check-out is at 11:00 AM. Early check-in and late check-out are accommodated based on room availability upon request.
+                  </p>
+                </div>
+              </article>
             </div>
           </section>
 
