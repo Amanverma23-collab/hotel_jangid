@@ -19,7 +19,11 @@ export default defineConfig({
         const domain = process.env.CUSTOM_DOMAIN || process.env.VERCEL_PROJECT_PRODUCTION_URL || 'hoteljangid.vercel.app';
         const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/+$/, '');
         const canonicalUrl = `https://${cleanDomain}/`;
-        return html.replace(/__CANONICAL_URL__/g, canonicalUrl);
+        let transformed = html.replace(/__CANONICAL_URL__/g, canonicalUrl);
+        if (!domain.includes('hoteljangid.in')) {
+          transformed = transformed.replace(/https:\/\/hoteljangid\.in\//g, canonicalUrl);
+        }
+        return transformed;
       },
     },
   ],
