@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { ExternalLink, X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react';
+import { Mascot } from 'page-mascot';
 
 /**
  * Pixel-Accurate "Testimonials" Section
@@ -573,17 +574,40 @@ export default function GalleryTestimonialsSection() {
               color: '#6B7280',
               flexWrap: 'wrap',
               gap: '12px',
+              position: 'relative',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', zIndex: 2 }}>
               <span style={{ display: 'inline-block', width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#10B981' }} />
               <span>Verified 5.0 Google Rating • Hotel Jangid, Gogamedi</span>
             </div>
+
+            {/* Absolutely positioned Mascot: Takes 0px in document flow, section height unchanged */}
+            <div
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: '16px',
+                transform: 'translateX(-50%)',
+                pointerEvents: 'none',
+                zIndex: 5,
+              }}
+            >
+              <div style={{ pointerEvents: 'auto' }}>
+                <Mascot
+                  directions="/mascots/kamran-directions.webp"
+                  reactions="/mascots/kamran-reactions.webp"
+                  size={140}
+                  label="Hotel Jangid mascot"
+                />
+              </div>
+            </div>
+
             <a
               href="https://www.google.com/travel/hotels/s/37kmAYoQB2s1j5xs6"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#111827', fontWeight: 600, textDecoration: 'none' }}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', color: '#111827', fontWeight: 600, textDecoration: 'none', zIndex: 2 }}
             >
               <span>View Official Google Reviews</span>
               <ExternalLink size={14} />
