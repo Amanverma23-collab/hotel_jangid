@@ -12,10 +12,13 @@ export default defineConfig({
     {
       name: 'html-canonical-plugin',
       transformIndexHtml(html) {
-        const isPreview = process.env.VERCEL_ENV === 'preview' || (process.env.VERCEL_URL && !process.env.VERCEL_URL.includes('hoteljangid.in'));
-        const canonicalUrl = isPreview && process.env.VERCEL_URL
-          ? `https://${process.env.VERCEL_URL}/`
-          : 'https://hoteljangid.in/';
+        // Priority for Canonical Domain:
+        // 1. Explicit CUSTOM_DOMAIN environment variable (e.g. hoteljangid.in)
+        // 2. VERCEL_PROJECT_PRODUCTION_URL (set by Vercel to 'hoteljangid.vercel.app' or custom production domain)
+        // 3. Default to 'hoteljangid.vercel.app'
+        const domain = process.env.CUSTOM_DOMAIN || process.env.VERCEL_PROJECT_PRODUCTION_URL || 'hoteljangid.vercel.app';
+        const cleanDomain = domain.replace(/^https?:\/\//, '').replace(/\/+$/, '');
+        const canonicalUrl = `https://${cleanDomain}/`;
         return html.replace(/__CANONICAL_URL__/g, canonicalUrl);
       },
     },
