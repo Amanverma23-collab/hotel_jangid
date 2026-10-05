@@ -4,7 +4,7 @@
 User-agent: *
 Allow: /
 
-# Explicit permission for major search engines
+# Search Engine Crawlers
 User-agent: Googlebot
 Allow: /
 
@@ -14,22 +14,58 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 
-# AEO: Explicit permission for AI search answer engines
-User-agent: GPTBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: Google-Extended
-Allow: /
-
 User-agent: Applebot
 Allow: /
 
-# XML Sitemap locations (Custom domain & Vercel deployment)
+# GEO / AI Bot Permissions (Explicitly Allowed for Full AI Citability)
+# OpenAI / ChatGPT Crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic / Claude Crawlers
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+# Perplexity AI Crawler
+User-agent: PerplexityBot
+Allow: /
+
+# Google Gemini / AI Crawler
+User-agent: Google-Extended
+Allow: /
+
+# Meta / Facebook AI
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Other AI Search Engines
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+# XML Sitemap locations
 Sitemap: https://hoteljangid.in/sitemap.xml
 Sitemap: https://hoteljangid.vercel.app/sitemap.xml
