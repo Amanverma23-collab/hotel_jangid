@@ -71,10 +71,10 @@ export default function FAQs() {
     <section id="faq" className="py-16 md:py-24 bg-[#FAF8F5] text-[#111111] border-t border-[#EAE5DE]/80">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
-        {/* Section Top Header: Just "FAQs" */}
+        {/* Section Top Header: Question Format for GEO Citability */}
         <div className="text-center mb-10 md:mb-16">
           <h2 className="text-[#111111] text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight font-serif">
-            FAQs
+            Why Devotees Choose Us: Frequently Asked Questions
           </h2>
         </div>
 
@@ -98,9 +98,11 @@ export default function FAQs() {
                 itemProp="mainEntity"
                 itemType="https://schema.org/Question"
               >
-                <AccordionTrigger className="cursor-pointer text-base sm:text-lg font-medium hover:no-underline py-4 sm:py-5">
-                  <span itemProp="name">{item.question}</span>
-                </AccordionTrigger>
+                <h3 className="m-0 p-0 text-inherit font-inherit font-normal">
+                  <AccordionTrigger className="cursor-pointer text-base sm:text-lg font-medium hover:no-underline py-4 sm:py-5">
+                    <span itemProp="name">{item.question}</span>
+                  </AccordionTrigger>
+                </h3>
                 <AccordionContent
                   itemScope
                   itemProp="acceptedAnswer"
@@ -125,9 +127,11 @@ export default function FAQs() {
                 itemProp="mainEntity"
                 itemType="https://schema.org/Question"
               >
-                <AccordionTrigger className="cursor-pointer text-base sm:text-lg font-medium hover:no-underline py-4 sm:py-5">
-                  <span itemProp="name">{item.question}</span>
-                </AccordionTrigger>
+                <h3 className="m-0 p-0 text-inherit font-inherit font-normal">
+                  <AccordionTrigger className="cursor-pointer text-base sm:text-lg font-medium hover:no-underline py-4 sm:py-5">
+                    <span itemProp="name">{item.question}</span>
+                  </AccordionTrigger>
+                </h3>
                 <AccordionContent
                   itemScope
                   itemProp="acceptedAnswer"

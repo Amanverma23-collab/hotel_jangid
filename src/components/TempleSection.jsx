@@ -23,7 +23,7 @@ export default function TempleSection() {
             </div>
 
             <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink-950 tracking-tight leading-tight">
-              The Holy Samadhi of Shri Goga Ji Maharaj
+              Why Devotees Visit: The Holy Samadhi of Shri Goga Ji Maharaj
             </h2>
 
             <p className="text-sm sm:text-base text-ink-700 leading-relaxed">

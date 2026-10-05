@@ -14,7 +14,7 @@ export default function LocationSection() {
             Location Advantage
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink-950 tracking-tight leading-tight">
-            Close to the Temple, Direct from the Station
+            How Far is Hotel Jangid? 400m to Temple, 900m to Station
           </h2>
           <p className="mt-3 text-sm sm:text-base text-ink-600 leading-relaxed">
             The hotel's location is its greatest advantage. An easy 5-minute walk along a direct road gets you to the temple gates, making it effortless for elderly relatives and young children.
