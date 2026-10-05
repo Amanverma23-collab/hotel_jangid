@@ -100,6 +100,18 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
     };
   }, []);
 
+  // Listen for external requests to open policy modals (e.g. from Cookie Consent banner)
+  useEffect(() => {
+    const handlePolicyEvent = (e: Event) => {
+      const customEvent = e as CustomEvent<string>;
+      if (customEvent.detail && ['privacy', 'terms', 'refund'].includes(customEvent.detail)) {
+        setModalContent(customEvent.detail);
+      }
+    };
+    window.addEventListener('open-hotel-policy', handlePolicyEvent);
+    return () => window.removeEventListener('open-hotel-policy', handlePolicyEvent);
+  }, []);
+
   // IntersectionObserver for entrance animation
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -805,6 +817,15 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                     <span className="arrow-icon">→</span>
                     <span>Refund Policy</span>
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-preferences'))}
+                    className="footer-link-item"
+                    style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Cookie Preferences</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -961,6 +982,15 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                   <span className="arrow-icon">→</span>
                   <span>Refund Policy</span>
                 </button>
+                <button
+                  type="button"
+                  onClick={() => window.dispatchEvent(new CustomEvent('open-cookie-preferences'))}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+                >
+                  <span className="arrow-icon">→</span>
+                  <span>Cookie Preferences</span>
+                </button>
               </div>
             </div>
           </div>
@@ -1072,7 +1102,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
           onClick={() => setModalContent(null)}
         >
           <div
@@ -1120,14 +1150,10 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             )}
 
             {modalContent === 'refund' && (
-              <div className="space-y-5">
-                <div className="flex items-center gap-2 text-amber-800 text-xs font-bold uppercase tracking-wider">
-                  <ShieldCheck className="size-4 text-amber-700" />
-                  <span>100% Transparent Policy</span>
-                </div>
+              <div className="space-y-4">
                 <h3 className="font-serif font-bold text-2xl text-slate-950">Cancellation & Refund Policy</h3>
                 <p className="text-xs sm:text-sm text-slate-700 leading-relaxed">
-                  Hum samajhte hain ki yatra ki planning badal sakti hai. Isliye humari refund policy bilkul simple aur transparent hai:
+                  We understand that travel plans and pilgrimage schedules can change. Our cancellation and refund policy is simple, fair, and completely transparent:
                 </p>
 
                 {/* Visual refund timeline */}
@@ -1139,7 +1165,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                     </div>
                     <p className="text-xl font-bold text-emerald-800">100% Refund</p>
                     <p className="text-xs text-emerald-700 leading-snug">
-                      Check-in se <strong>48 ghante pehle</strong> cancel karne par poora paisa wapas
+                      Full refund when cancelled at least <strong>48 hours before</strong> check-in
                     </p>
                   </div>
                   {/* No refund card */}
@@ -1149,13 +1175,13 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                     </div>
                     <p className="text-xl font-bold text-red-700">No Refund</p>
                     <p className="text-xs text-red-600 leading-snug">
-                      Check-in se <strong>48 ghante se kam</strong> samay mein cancel karne par refund nahi milega
+                      Non-refundable when cancelled <strong>within 48 hours</strong> of check-in
                     </p>
                   </div>
                 </div>
 
                 <div className="rounded-xl bg-amber-50 border border-amber-200/60 p-3.5 text-xs sm:text-sm text-amber-900 leading-relaxed">
-                  <strong>Refund Process:</strong> Approved refunds original payment method mein 5–7 business days mein reflect ho jayenge. Kisi bhi sahayta ke liye Vijay Jangid ko call karein: <a href="tel:+919001187776" className="underline font-semibold">+91 90011 87776</a>
+                  <strong>Refund Process:</strong> Approved refunds will be credited back to your original payment method within 5–7 business days. For any reservation inquiries or refund assistance, contact host Vijay Jangid directly: <a href="tel:+919001187776" className="underline font-semibold">+91 90011 87776</a>
                 </div>
               </div>
             )}

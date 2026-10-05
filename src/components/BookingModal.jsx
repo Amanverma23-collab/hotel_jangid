@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { X, MessageCircle, PhoneCall, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { X, MessageCircle, PhoneCall, CalendarDays, Clock, Users, BedDouble, CheckCircle2, ArrowRight, Loader2, Sparkles, Check, ShieldCheck } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { createWebsiteBooking, getCategoryPrices, supabase } from '../supabase';
 import { PearlButton } from './ui/pearl-button';
@@ -45,6 +46,8 @@ export default function BookingModal({
   const [guestsCount, setGuestsCount] = useState(initialGuests || 2);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingConfirmed, setBookingConfirmed] = useState(null);
+  const [acceptRefundPolicy, setAcceptRefundPolicy] = useState(false);
+  const [showRefundModal, setShowRefundModal] = useState(false);
 
   // Live Room Rates from PMS Database
   const [roomRates, setRoomRates] = useState({ ac: 1200, cooler: 1000 });
@@ -78,6 +81,8 @@ export default function BookingModal({
       if (initialCheckOut) setCheckOutDate(initialCheckOut);
       if (initialGuests) setGuestsCount(initialGuests);
       setBookingConfirmed(null);
+      setShowRefundModal(false);
+      setAcceptRefundPolicy(false);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -104,6 +109,11 @@ export default function BookingModal({
     if (e && e.preventDefault) e.preventDefault();
     if (!name.trim() || !phone.trim()) {
       alert('Please fill in your name and phone number to complete booking.');
+      return;
+    }
+
+    if (!acceptRefundPolicy) {
+      alert('Please accept the Cancellation & Refund Policy to proceed.');
       return;
     }
 
@@ -278,6 +288,8 @@ export default function BookingModal({
     setBookingConfirmed(null);
     setName('');
     setPhone('');
+    setAcceptRefundPolicy(false);
+    setShowRefundModal(false);
   };
 
   return (
@@ -349,12 +361,14 @@ export default function BookingModal({
               border: '1.5px solid #D9CDBA', background: '#F0E9DC',
               cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
               color: '#7A7060', transition: 'all 0.15s',
+              zIndex: 70,
             }}
             onMouseEnter={e => { e.currentTarget.style.background = '#E5D9C9'; e.currentTarget.style.color = '#1A1A1A'; }}
             onMouseLeave={e => { e.currentTarget.style.background = '#F0E9DC'; e.currentTarget.style.color = '#7A7060'; }}
           >
             <X size={15} />
           </button>
+
 
           {/* Confirmation Screen */}
           {bookingConfirmed ? (
@@ -696,11 +710,64 @@ export default function BookingModal({
                   </div>
                 </div>
 
+                {/* Minimal Refund Policy Acceptance Checkbox */}
+                <label
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    padding: '2px 4px',
+                    marginTop: '-2px',
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={acceptRefundPolicy}
+                    onChange={(e) => setAcceptRefundPolicy(e.target.checked)}
+                    required
+                    style={{
+                      width: '15px',
+                      height: '15px',
+                      accentColor: '#1A1A1A',
+                      cursor: 'pointer',
+                      margin: 0,
+                      borderRadius: '4px',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <span style={{ fontSize: '12px', color: '#5A5040', lineHeight: 1.35 }}>
+                    I accept the{' '}
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        setShowRefundModal(true);
+                      }}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        padding: 0,
+                        color: '#1A1A1A',
+                        textDecoration: 'underline',
+                        textUnderlineOffset: '2px',
+                        fontWeight: 600,
+                        cursor: 'pointer',
+                        fontSize: 'inherit',
+                      }}
+                    >
+                      Cancellation & Refund Policy
+                    </button>
+                  </span>
+                </label>
+
                 {/* Action Button Section */}
-                <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '6px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', paddingTop: '4px' }}>
                   <PearlButton
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !acceptRefundPolicy}
                     size="compact"
                     icon={
                       isSubmitting ? (
@@ -718,6 +785,146 @@ export default function BookingModal({
           )}
         </div>
       </div>
+
+      {/* Dedicated Centered Refund Policy Modal (Portal to body) */}
+      {showRefundModal && typeof document !== 'undefined' && createPortal(
+        <div
+          role="dialog"
+          aria-modal="true"
+          onClick={() => setShowRefundModal(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            zIndex: 200000,
+            background: 'rgba(0, 0, 0, 0.72)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '16px',
+            animation: 'modalFadeIn 0.2s ease-out',
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'relative',
+              width: '100%',
+              maxWidth: '460px',
+              background: '#FDF6EA',
+              borderRadius: '24px',
+              border: '1.5px solid #D9CDBA',
+              boxShadow: '0 25px 60px rgba(0,0,0,0.3)',
+              padding: '24px 22px 20px',
+              maxHeight: '90vh',
+              overflowY: 'auto',
+              fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+            }}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setShowRefundModal(false)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '1px solid #D9CDBA',
+                background: '#F0E9DC',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#7A7060',
+                transition: 'all 0.15s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#E5D9C9'; e.currentTarget.style.color = '#1A1A1A'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#F0E9DC'; e.currentTarget.style.color = '#7A7060'; }}
+              aria-label="Close refund policy"
+            >
+              <X size={15} />
+            </button>
+
+            <h3 style={{ margin: '0 0 8px', fontSize: '20px', fontWeight: 800, color: '#1A1A1A', lineHeight: 1.2, paddingRight: '36px' }}>
+              Cancellation & Refund Policy
+            </h3>
+            <p style={{ margin: '0 0 16px', fontSize: '12.5px', color: '#6A6050', lineHeight: 1.5 }}>
+              We understand that travel plans and pilgrimage schedules can change. Our cancellation and refund policy is simple, fair, and completely transparent:
+            </p>
+
+            {/* Visual refund timeline */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
+              {/* 100% refund card */}
+              <div style={{
+                borderRadius: '16px', border: '1.5px solid #A5D6A7', background: '#F1F8E9',
+                padding: '12px 10px', textAlign: 'center',
+              }}>
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '50%', background: '#C8E6C9',
+                  color: '#2E7D32', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 6px',
+                }}>
+                  <CheckCircle2 size={17} />
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#1B5E20' }}>100% Refund</div>
+                <div style={{ fontSize: '11px', color: '#2E7D32', marginTop: '3px', lineHeight: 1.3 }}>
+                  Full refund when cancelled at least <strong>48 hours before</strong> check-in
+                </div>
+              </div>
+
+              {/* No refund card */}
+              <div style={{
+                borderRadius: '16px', border: '1.5px solid #FFCDD2', background: '#FFEBEE',
+                padding: '12px 10px', textAlign: 'center',
+              }}>
+                <div style={{
+                  width: '32px', height: '32px', borderRadius: '50%', background: '#FFCDD2',
+                  color: '#C62828', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  margin: '0 auto 6px',
+                }}>
+                  <X size={17} />
+                </div>
+                <div style={{ fontSize: '14px', fontWeight: 800, color: '#B71C1C' }}>No Refund</div>
+                <div style={{ fontSize: '11px', color: '#C62828', marginTop: '3px', lineHeight: 1.3 }}>
+                  Non-refundable when cancelled <strong>within 48 hours</strong> of check-in
+                </div>
+              </div>
+            </div>
+
+            {/* Refund Process card */}
+            <div style={{
+              background: '#FFF8E1', border: '1px solid #FFE082', borderRadius: '14px',
+              padding: '12px 14px', fontSize: '11.5px', color: '#795548', lineHeight: 1.5,
+            }}>
+              <strong>Refund Process:</strong> Approved refunds will be credited back to your original payment method within 5–7 business days. For any reservation inquiries or refund assistance, contact host Vijay Jangid directly: <a href="tel:+919001187776" style={{ color: '#1A1A1A', fontWeight: 700, textDecoration: 'underline' }}>+91 90011 87776</a>
+            </div>
+
+            <div style={{ marginTop: '18px', display: 'flex', gap: '8px' }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setAcceptRefundPolicy(true);
+                  setShowRefundModal(false);
+                }}
+                style={{
+                  flex: 1, padding: '11px 16px', borderRadius: '14px',
+                  background: '#1A1A1A', color: '#FFFFFF', border: 'none',
+                  fontWeight: 700, fontSize: '13px', cursor: 'pointer',
+                  transition: 'background 0.15s',
+                }}
+                onMouseEnter={e => (e.currentTarget.style.background = '#333333')}
+                onMouseLeave={e => (e.currentTarget.style.background = '#1A1A1A')}
+              >
+                I Understand & Accept
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </>
   );
 }
