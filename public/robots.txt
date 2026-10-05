@@ -30,5 +30,6 @@ Allow: /
 User-agent: Applebot
 Allow: /
 
-# XML Sitemap location
+# XML Sitemap locations (Custom domain & Vercel deployment)
 Sitemap: https://hoteljangid.in/sitemap.xml
+Sitemap: https://hoteljangid.vercel.app/sitemap.xml

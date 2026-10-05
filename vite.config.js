@@ -13,6 +13,23 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  esbuild: {
+    legalComments: 'none',
+    drop: ['console', 'debugger'],
+  },
+  build: {
+    minify: 'esbuild',
+    target: 'es2020',
+    cssMinify: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'vendor-react': ['react', 'react-dom'],
+          'vendor-animation': ['gsap', 'framer-motion'],
+        },
+      },
+    },
+  },
   server: {
     port: 5173,
     host: true
