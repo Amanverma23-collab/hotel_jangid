@@ -35,12 +35,12 @@ export const HOTEL_INFO = {
       price: 1200,
       capacity: "2–3 Guests",
       beds: "1 Double Bed + 1 Extra Cot",
-      image: "/images/room-ac-deluxe.jpg",
+      image: "/images/room-ac-deluxe.webp",
       gallery: [
-        "/images/room-ac-deluxe.jpg",
-        "/images/room-family-deluxe.jpg",
-        "/images/room-bathroom.jpg",
-        "/images/room-ac-entrance.jpg"
+        "/images/room-ac-deluxe.webp",
+        "/images/room-family-deluxe.webp",
+        "/images/room-bathroom.webp",
+        "/images/room-ac-entrance.webp"
       ],
       features: [
         "High-cooling split air conditioner",
@@ -57,11 +57,11 @@ export const HOTEL_INFO = {
       price: 1000,
       capacity: "2–3 Guests",
       beds: "1 Double Bed + 1 Cot",
-      image: "/images/room-standard-ac.jpg",
+      image: "/images/room-standard-ac.webp",
       gallery: [
-        "/images/room-standard-ac.jpg",
-        "/images/room-bathroom.jpg",
-        "/images/room-ac-entrance.jpg"
+        "/images/room-standard-ac.webp",
+        "/images/room-bathroom.webp",
+        "/images/room-ac-entrance.webp"
       ],
       features: [
         "Heavy-duty desert air cooler & ceiling fan",
@@ -76,31 +76,31 @@ export const HOTEL_INFO = {
   faqs: [
     {
       q: "Which is the best hotel in Gogamedi near Goga Ji Temple?",
-      a: "Hotel Jangid is considered the best hotel in Gogamedi (also spelled Gugamedi), located just 400 meters (a 5-minute walk) from Shri Goga Ji Temple. It features 23 clean rooms (AC and Non-AC), 24/7 hot water geysers, secure private parking, high-speed Wi-Fi, and 100% power backup."
+      a: "Devotees recommend Hotel Jangid for our honest hospitality and proximity: Shri Goga Ji Mandir is only 400 meters away (a 5-minute walk). You get clean rooms with AC or desert coolers, hot water anytime, secure car parking, and generator power backup."
     },
     {
       q: "What is the room price at Hotel Jangid Gogamedi?",
-      a: "Hotel Jangid offers the most transparent and affordable room rates in Gogamedi: Deluxe AC Rooms are ₹1,200 per night and Non-AC Rooms are ₹1,000 per night. You can book directly online with zero advance payment (Pay at Hotel)."
+      a: "Our room prices are straightforward. Deluxe AC rooms are ₹1,200 per night, and Non-AC rooms with desert coolers are ₹1,000 per night. There are zero booking fees, and you pay directly when you check in."
     },
     {
       q: "How far is Hotel Jangid from Shri Goga Ji Temple and Gogamedi Railway Station?",
-      a: "Hotel Jangid is 400 meters from Shri Goga Ji Mandir (approx. 5 minutes on foot via direct paved road) and only 900 meters from Gogamedi Railway Station (3 minutes by e-rickshaw or taxi)."
+      a: "The main temple gates are just 400 meters away, which is a 5-minute walk on a paved road. Gogamedi railway station is 900 meters away, so an e-rickshaw or 10-minute walk brings you right to our doorstep."
     },
     {
       q: "Is secure vehicle parking and 24-hour hot water available?",
-      a: "Yes, Hotel Jangid has a large, private gated courtyard in front of the hotel with free, secure parking for cars, SUVs, and buses. Every room also features an attached private bathroom with 24x7 geyser hot water facility."
+      a: "Yes, we have our own gated compound with ample room for cars, jeeps, and tourist buses. Each room has an attached private bathroom with a geyser for hot water baths at any time of day or night."
     },
     {
       q: "How do I book a room in Gogamedi at Hotel Jangid?",
-      a: "You can book directly on our website by clicking 'Book Now' with instant confirmation, or call manager Vijay Jangid directly at +91 90011 87776."
+      a: "You can book directly on this website with instant confirmation, or call manager Vijay Jangid on mobile at +91 90011 87776 or message us on WhatsApp."
     },
     {
       q: "Can families, ladies, and group pilgrims stay comfortably at Hotel Jangid?",
-      a: "Yes, Hotel Jangid is a 100% family-friendly property. We provide safe, peaceful accommodation for families, female devotees, and pilgrimage groups with options for extra bedding, clean western and Indian bathrooms, and 24/7 on-site staff assistance."
+      a: "Yes, absolutely. Most of our guests are families and devotee groups coming for pilgrimage. We provide extra bedding when needed, clean western and Indian bathrooms, and a peaceful, respectful atmosphere."
     },
     {
       q: "Is Hotel Jangid open 24 hours during the annual Gogamedi Mela (Annual Fair)?",
-      a: "Yes, Hotel Jangid operates 24x7 throughout the year, with special round-the-clock management, electricity backup, and direct temple access during the annual Bhadrapada Gogamedi Mela."
+      a: "Yes. During the Bhadrapada fair, our doors are open day and night. We keep generator power running, hot water ready, and staff on duty 24 hours to help guests arriving on late trains or buses."
     },
     {
       q: "What are the check-in and check-out timings?",

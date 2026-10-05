@@ -55,12 +55,12 @@ import { getCategoryPrices, supabase } from '../supabase';
 
 const TOP_RIGHT_SLIDES = [
   {
-    image: '/images/route-map-400m.jpg',
+    image: '/images/route-map-400m.webp',
     alt: '400 Meter Walking Route from Hotel Jangid to Shri Goga Mandir',
     subtitle: '400m to Goga Ji Mandir',
   },
   {
-    image: '/images/gogamedi-temple.jpg',
+    image: '/images/gogamedi-temple.webp',
     alt: 'Shri Goga Ji Maharaj Mandir, Gogamedi',
     subtitle: 'Gogamedi, Rajasthan',
   },
@@ -576,10 +576,10 @@ export default function Hero({ onBookClick }) {
             <picture style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
               <source
                 media="(max-width: 767px)"
-                srcSet="/images/hotel-building-hero-mobile.jpg"
+                srcSet="/images/hotel-building-hero-mobile.webp"
               />
               <img
-                src="/images/hotel-building-hero.jpg"
+                src="/images/hotel-building-hero.webp"
                 alt="Hotel Jangid Gogamedi - Main Hotel Building Near Shri Goga Ji Temple"
                 width={1024}
                 height={771}
@@ -1037,7 +1037,7 @@ export default function Hero({ onBookClick }) {
                 className="group"
               >
                 <img
-                  src="/images/room-ac-deluxe.jpg"
+                  src="/images/room-ac-deluxe.webp"
                   alt="Deluxe AC Room with Split AC, Geyser and Double Bed at Hotel Jangid Gogamedi"
                   width={280}
                   height={210}
@@ -1115,7 +1115,7 @@ export default function Hero({ onBookClick }) {
                 className="group"
               >
                 <img
-                  src="/images/room-standard-ac.jpg"
+                  src="/images/room-standard-ac.webp"
                   alt="Non-AC Standard Room with Air Cooler and Geyser at Hotel Jangid Gogamedi"
                   width={280}
                   height={210}

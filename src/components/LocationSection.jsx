@@ -102,7 +102,7 @@ export default function LocationSection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white rounded-3xl p-6 sm:p-8 border border-sand-300 shadow-warm-sm">
           <div className="lg:col-span-7 overflow-hidden rounded-2xl border border-sand-200 group relative">
             <img
-              src="/images/route-map-400m.jpg"
+              src="/images/route-map-400m.webp"
               alt="Hotel Jangid to Shri Goga Ji Temple 400m Route Map"
               loading="lazy"
               decoding="async"

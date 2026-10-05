@@ -131,7 +131,7 @@ export default function OwnersSection() {
             >
               {/* Owners Photo */}
               <motion.img
-                src="/images/owners-surjeet-vijay-jangid.jpg"
+                src="/images/owners-surjeet-vijay-jangid.webp"
                 alt="Mr. Surjeet Jangid and Mr. Vijay Jangid, owners of Hotel Jangid, Gogamedi"
                 loading="lazy"
                 width={818}
@@ -412,7 +412,7 @@ export default function OwnersSection() {
             >
               {/* Full-Cover Temple Photo - Repositioned to show full mandir structure */}
               <motion.img
-                src="/images/gogaji-temple-main.jpg"
+                src="/images/gogaji-temple-main.webp"
                 alt="Shri Goga Ji Maharaj Temple, Gogamedi, 400 m from Hotel Jangid"
                 loading="lazy"
                 width={818}
@@ -457,7 +457,7 @@ export default function OwnersSection() {
             onClick={(e) => e.stopPropagation()}
           >
             <img
-              src="/images/gogaji-temple-main.jpg"
+              src="/images/gogaji-temple-main.webp"
               alt="Shri Goga Ji Maharaj Temple, Gogamedi, 400 m from Hotel Jangid"
               className="max-w-full max-h-[75vh] object-contain rounded-2xl shadow-2xl border border-white/20"
             />

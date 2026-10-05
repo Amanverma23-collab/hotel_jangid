@@ -111,7 +111,7 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
         currency: 'INR',
         name: 'Jangid Hotel, Gogamedi',
         description: `${roomType === 'ac' ? 'Deluxe AC Room' : 'Cooler Room'} (${roomsCount} Room, ${nights} Night)`,
-        image: '/images/hotel-exterior-day.jpg',
+        image: '/images/hotel-exterior-day.webp',
         prefill: {
           name: guestName,
           contact: mobileClean,

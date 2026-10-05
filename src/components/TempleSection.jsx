@@ -65,7 +65,7 @@ export default function TempleSection() {
           >
             <div className="relative rounded-3xl overflow-hidden shadow-warm-lg border border-sand-300 group">
               <img
-                src="/images/gogamedi-temple.jpg"
+                src="/images/gogamedi-temple.webp"
                 alt="Shri Gogaji Maharaj Mandir, Gogamedi Temple"
                 loading="lazy"
                 decoding="async"

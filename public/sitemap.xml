@@ -15,22 +15,22 @@
 
     <!-- High-res images for Google Image Search -->
     <image:image>
-      <image:loc>https://hoteljangid.in/images/hotel-building-hero.jpg</image:loc>
+      <image:loc>https://hoteljangid.in/images/hotel-building-hero.webp</image:loc>
       <image:title>Hotel Jangid Gogamedi Building Exterior</image:title>
       <image:caption>Best Hotel in Gogamedi near Shri Goga Ji Temple - Hotel Jangid</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://hoteljangid.in/images/room-ac-deluxe.jpg</image:loc>
+      <image:loc>https://hoteljangid.in/images/room-ac-deluxe.webp</image:loc>
       <image:title>Deluxe AC Room at Hotel Jangid Gogamedi</image:title>
       <image:caption>Deluxe AC Room in Gogamedi with 24/7 Geyser and Wi-Fi</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://hoteljangid.in/images/room-standard-ac.jpg</image:loc>
+      <image:loc>https://hoteljangid.in/images/room-standard-ac.webp</image:loc>
       <image:title>Non-AC Room at Hotel Jangid Gogamedi</image:title>
       <image:caption>Budget Non-AC Room with Desert Cooler in Gogamedi</image:caption>
     </image:image>
     <image:image>
-      <image:loc>https://hoteljangid.in/images/gogaji-temple-main.jpg</image:loc>
+      <image:loc>https://hoteljangid.in/images/gogaji-temple-main.webp</image:loc>
       <image:title>Shri Goga Ji Maharaj Temple Gogamedi</image:title>
       <image:caption>Shri Goga Ji Temple located only 400m from Hotel Jangid</image:caption>
     </image:image>
