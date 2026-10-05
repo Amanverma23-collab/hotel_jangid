@@ -144,7 +144,12 @@ export default function Hero({ onBookClick }) {
 
   const handleNavScroll = (selector) => {
     setMobileMenuOpen(false);
-    const target = document.querySelector(selector);
+    const hash = selector.includes('#') ? selector.substring(selector.indexOf('#')) : selector;
+    if (hash === '' || hash === '#' || hash === '#hero' || selector === '/') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const target = document.querySelector(hash);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
@@ -197,7 +202,7 @@ export default function Hero({ onBookClick }) {
           {/* LEFT: Logo = small building/cottage icon + text "JANGID HOTEL" */}
           {/* LEFT: Logo = small building/cottage icon + text "JANGID HOTEL" */}
           <a
-            href="#hero"
+            href="/"
             onClick={(e) => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -248,10 +253,10 @@ export default function Hero({ onBookClick }) {
             }}
           >
             {[
-              { name: 'About', href: '#about' },
-              { name: 'Rooms', href: '#rooms' },
-              { name: 'Amenities', href: '#amenities' },
-              { name: 'Gallery & Reviews', href: '#testimonials' },
+              { name: 'About', href: '/#about' },
+              { name: 'Rooms', href: '/#rooms' },
+              { name: 'Amenities', href: '/#amenities' },
+              { name: 'Gallery & Reviews', href: '/#testimonials' },
             ].map((link) => (
               <a
                 key={link.name}
@@ -438,10 +443,10 @@ export default function Hero({ onBookClick }) {
             }}
           >
             {[
-              { name: 'About Hotel', href: '#about' },
-              { name: 'Rooms & Pricing', href: '#rooms' },
-              { name: 'Amenities', href: '#amenities' },
-              { name: 'Gallery & Reviews', href: '#testimonials' },
+              { name: 'About Hotel', href: '/#about' },
+              { name: 'Rooms & Pricing', href: '/#rooms' },
+              { name: 'Amenities', href: '/#amenities' },
+              { name: 'Gallery & Reviews', href: '/#testimonials' },
             ].map((link) => (
               <a
                 key={link.name}

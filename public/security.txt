@@ -1,0 +1,9 @@
+# Security Policy for Hotel Jangid Gogamedi
+# RFC 9116: A File Format to Aid in Security Vulnerability Disclosure
+Contact: mailto:hoteljangidgogamedi@gmail.com
+Contact: tel:+919001187776
+Expires: 2027-12-31T23:59:59.000Z
+Canonical: https://hoteljangid.in/.well-known/security.txt
+Preferred-Languages: en, hi
+Policy: https://hoteljangid.in/
+Acknowledgments: https://hoteljangid.in/

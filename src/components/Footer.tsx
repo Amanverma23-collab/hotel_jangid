@@ -724,19 +724,19 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
               <div className="ftr-col">
                 <div className="ftr-col-heading">Explore</div>
                 <div className="ftr-col-list">
-                  <a href="#hero" className="footer-link-item">
+                  <a href="/" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Home</span>
                   </a>
-                  <a href="#rooms" className="footer-link-item">
+                  <a href="/#rooms" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Rooms</span>
                   </a>
-                  <a href="#about" className="footer-link-item">
+                  <a href="/#about" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>About Us</span>
                   </a>
-                  <a href="#contact" className="footer-link-item">
+                  <a href="/#contact" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Contact</span>
                   </a>
@@ -765,11 +765,11 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
               <div className="ftr-col">
                 <div className="ftr-col-heading">Rooms</div>
                 <div className="ftr-col-list">
-                  <a href="#rooms" className="footer-link-item">
+                  <a href="/#rooms" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>AC Room</span>
                   </a>
-                  <a href="#rooms" className="footer-link-item">
+                  <a href="/#rooms" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Non-AC Room</span>
                   </a>
@@ -789,15 +789,15 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
               <div className="ftr-col">
                 <div className="ftr-col-heading">Nearby</div>
                 <div className="ftr-col-list">
-                  <a href="#amenities" className="footer-link-item">
+                  <a href="/#amenities" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Goga Ji Temple</span>
                   </a>
-                  <a href="#amenities" className="footer-link-item">
+                  <a href="/#amenities" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>Railway Station</span>
                   </a>
-                  <a href="#location" className="footer-link-item">
+                  <a href="/#location" className="footer-link-item">
                     <span className="arrow-icon">→</span>
                     <span>How to Reach</span>
                   </a>
@@ -844,6 +844,14 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                     <span className="arrow-icon">→</span>
                     <span>Cookie Preferences</span>
                   </button>
+                  <a href="/sitemap.xml" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>XML Sitemap</span>
+                  </a>
+                  <a href="/.well-known/security.txt" className="footer-link-item">
+                    <span className="arrow-icon">→</span>
+                    <span>Security Policy</span>
+                  </a>
                 </div>
               </div>
             </div>
@@ -951,19 +959,19 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             <div>
               <div className="ftr-col-heading">Explore</div>
               <div className="ftr-col-list">
-                <a href="#hero" className="footer-link-item">
+                <a href="/" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Home</span>
                 </a>
-                <a href="#rooms" className="footer-link-item">
+                <a href="/#rooms" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Rooms</span>
                 </a>
-                <a href="#about" className="footer-link-item">
+                <a href="/#about" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>About Us</span>
                 </a>
-                <a href="#contact" className="footer-link-item">
+                <a href="/#contact" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Contact</span>
                 </a>
@@ -992,11 +1000,11 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             <div>
               <div className="ftr-col-heading">Rooms</div>
               <div className="ftr-col-list">
-                <a href="#rooms" className="footer-link-item">
+                <a href="/#rooms" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>AC Room</span>
                 </a>
-                <a href="#rooms" className="footer-link-item">
+                <a href="/#rooms" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Non-AC Room</span>
                 </a>
@@ -1016,15 +1024,15 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             <div>
               <div className="ftr-col-heading">Nearby</div>
               <div className="ftr-col-list">
-                <a href="#amenities" className="footer-link-item">
+                <a href="/#amenities" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Goga Ji Temple</span>
                 </a>
-                <a href="#amenities" className="footer-link-item">
+                <a href="/#amenities" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Railway Station</span>
                 </a>
-                <a href="#location" className="footer-link-item">
+                <a href="/#location" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>How to Reach</span>
                 </a>
@@ -1071,6 +1079,14 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                   <span className="arrow-icon">→</span>
                   <span>Cookie Preferences</span>
                 </button>
+                <a href="/sitemap.xml" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>XML Sitemap</span>
+                </a>
+                <a href="/.well-known/security.txt" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Security Policy</span>
+                </a>
               </div>
             </div>
           </div>

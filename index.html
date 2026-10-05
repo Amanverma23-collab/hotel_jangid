@@ -585,22 +585,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   </head>
   <body class="bg-[#FAF8F5] text-[#111111] selection:bg-[#c99f5b]/30 selection:text-[#111111] antialiased" style="background-color: #FAF8F5 !important; margin: 0 !important;">
-    <div id="root" style="background-color: #FAF8F5;">
-      <!-- Server-rendered Semantic SEO Fallback (Visually hidden for seamless paint; indexed by crawlers; replaced on React mount) -->
-      <div id="ssr-seo-wrapper" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: normal; border: 0;">
-        <!-- Header & Primary Navigation (Internal & External Links) -->
-        <header style="margin-bottom: 32px; border-bottom: 1px solid #EAE5DE; padding-bottom: 20px;">
-          <nav aria-label="Main Navigation" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 14px;">
-            <a href="#rooms" style="color: #8C6D3B; text-decoration: underline;">Rooms &amp; Pricing</a>
-            <a href="#amenities" style="color: #8C6D3B; text-decoration: underline;">Amenities</a>
-            <a href="#temple-distance" style="color: #8C6D3B; text-decoration: underline;">Temple Distance</a>
-            <a href="#gallery" style="color: #8C6D3B; text-decoration: underline;">Photo Gallery</a>
-            <a href="#faq" style="color: #8C6D3B; text-decoration: underline;">FAQs</a>
-            <a href="#contact" style="color: #8C6D3B; text-decoration: underline;">Contact &amp; Location</a>
-            <a href="https://maps.google.com/?q=29.0205,75.2016" target="_blank" rel="noopener noreferrer" style="color: #111111;">Google Maps</a>
-            <a href="https://www.instagram.com/hotel_jangid/?hl=en" target="_blank" rel="noopener noreferrer" style="color: #111111;">Instagram</a>
-            <a href="https://www.facebook.com/vijay.janger.35" target="_blank" rel="noopener noreferrer" style="color: #111111;">Facebook</a>
-          </nav>
+    <!-- ==================== 1. STATIC NOSCRIPT FALLBACK (FOR JS-HEAVY AUDIT & NO-JS VISITORS) ==================== -->
+    <noscript>
+      <div style="background-color: #FAF8F5; color: #111111; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+        <nav aria-label="Static Fallback Navigation">
+          <ul style="list-style: none; display: flex; flex-wrap: wrap; gap: 16px; padding: 0; margin: 0 0 16px 0; font-size: 14px;">
+            <li><a href="/" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Home</a></li>
+            <li><a href="/#rooms" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Rooms &amp; Tariffs</a></li>
+            <li><a href="/#amenities" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Hotel Amenities</a></li>
+            <li><a href="/#temple-distance" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Temple Distance</a></li>
+            <li><a href="/#gallery" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Photo Gallery</a></li>
+            <li><a href="/#testimonials" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Guest Reviews</a></li>
+            <li><a href="/#faq" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Frequently Asked Questions</a></li>
+            <li><a href="/#contact" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Contact &amp; Booking</a></li>
+            <li><a href="/sitemap.xml" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">XML Sitemap</a></li>
+            <li><a href="/.well-known/security.txt" style="color: #8C6D3B; font-weight: 600; text-decoration: underline;">Security Policy</a></li>
+          </ul>
+        </nav>
+        <hr style="border: 0; border-top: 1px solid #EAE5DE; margin-bottom: 20px;" />
+        <h2 style="font-size: 20px; font-weight: 700; margin-bottom: 8px;">Hotel Jangid Gogamedi — Best Hotel Near Shri Goga Ji Temple</h2>
+        <p style="font-size: 14px; line-height: 1.6; margin-bottom: 12px;">
+          Family-run budget luxury hotel situated only 400m from Shri Goga Ji Maharaj Mandir. Offering Deluxe AC (₹1,200) and Non-AC (₹1,000) rooms with 24/7 hot water geyser, free private parking, and inverter power backup. Call manager Vijay Jangid at <a href="tel:+919001187776" style="color: #8C6D3B; font-weight: 600;">+91 90011 87776</a>.
+        </p>
+      </div>
+    </noscript>
+
+    <!-- React Application Mount Point -->
+    <div id="root" style="background-color: #FAF8F5;"></div>
+
+    <!-- Permanent Semantic SEO & Static Crawl Content (Preserved outside root; accessible to all crawlers & screen readers) -->
+    <div id="ssr-seo-wrapper" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: normal; border: 0;">
+      <!-- Header & Primary Navigation (Internal & External Links) -->
+      <header style="margin-bottom: 32px; border-bottom: 1px solid #EAE5DE; padding-bottom: 20px;">
+        <nav aria-label="Main Navigation" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 14px;">
+          <a href="/" style="color: #8C6D3B; text-decoration: underline;">Home</a>
+          <a href="/#rooms" style="color: #8C6D3B; text-decoration: underline;">Rooms &amp; Pricing</a>
+          <a href="/#amenities" style="color: #8C6D3B; text-decoration: underline;">Amenities</a>
+          <a href="/#temple-distance" style="color: #8C6D3B; text-decoration: underline;">Temple Distance</a>
+          <a href="/#gallery" style="color: #8C6D3B; text-decoration: underline;">Photo Gallery</a>
+          <a href="/#testimonials" style="color: #8C6D3B; text-decoration: underline;">Guest Reviews</a>
+          <a href="/#faq" style="color: #8C6D3B; text-decoration: underline;">FAQs</a>
+          <a href="/#contact" style="color: #8C6D3B; text-decoration: underline;">Contact &amp; Location</a>
+          <a href="/sitemap.xml" style="color: #8C6D3B; text-decoration: underline;">XML Sitemap</a>
+          <a href="/.well-known/security.txt" style="color: #8C6D3B; text-decoration: underline;">Security Policy</a>
+          <a href="https://maps.google.com/?q=29.0205,75.2016" target="_blank" rel="noopener noreferrer" style="color: #111111;">Google Maps</a>
+          <a href="https://www.instagram.com/hotel_jangid/?hl=en" target="_blank" rel="noopener noreferrer" style="color: #111111;">Instagram</a>
+          <a href="https://www.facebook.com/vijay.janger.35" target="_blank" rel="noopener noreferrer" style="color: #111111;">Facebook</a>
+        </nav>
           <h1 style="font-family: 'Playfair Display', Georgia, serif; font-size: 32px; color: #111111; margin: 0 0 12px; font-weight: 700; line-height: 1.25;">
             Hotel Jangid Gogamedi — Best Hotel in Gogamedi Near Goga Ji Temple
           </h1>
@@ -781,10 +812,9 @@
 
         <!-- Footer with Internal Links -->
         <footer style="border-top: 1px solid #EAE5DE; padding-top: 16px; font-size: 13px; color: #777777;">
-          <p>© 2026 Hotel Jangid Gogamedi. All rights reserved. <a href="https://hoteljangid.in/" style="color: #8C6D3B;">Home</a> | <a href="#rooms" style="color: #8C6D3B;">Rooms</a> | <a href="#amenities" style="color: #8C6D3B;">Amenities</a> | <a href="#contact" style="color: #8C6D3B;">Contact</a></p>
+          <p>© 2026 Hotel Jangid Gogamedi. All rights reserved. <a href="/" style="color: #8C6D3B;">Home</a> | <a href="/#rooms" style="color: #8C6D3B;">Rooms</a> | <a href="/#amenities" style="color: #8C6D3B;">Amenities</a> | <a href="/#contact" style="color: #8C6D3B;">Contact</a> | <a href="/sitemap.xml" style="color: #8C6D3B;">Sitemap</a> | <a href="/.well-known/security.txt" style="color: #8C6D3B;">Security Policy</a></p>
         </footer>
       </div>
-    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

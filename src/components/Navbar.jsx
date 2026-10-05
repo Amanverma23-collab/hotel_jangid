@@ -19,19 +19,20 @@ export default function Navbar({ onBookClick }) {
   }, []);
 
   const navLinks = [
-    { name: 'About', href: '#about' },
-    { name: 'Amenities', href: '#amenities' },
-    { name: 'Rooms', href: '#rooms' },
-    { name: 'Gallery & Reviews', href: '#testimonials' },
+    { name: 'About', href: '/#about' },
+    { name: 'Amenities', href: '/#amenities' },
+    { name: 'Rooms', href: '/#rooms' },
+    { name: 'Gallery & Reviews', href: '/#testimonials' },
   ];
 
   const handleNavClick = (href) => {
     setMobileMenuOpen(false);
-    if (href === '#' || href === '#hero') {
+    const hash = href.includes('#') ? href.substring(href.indexOf('#')) : href;
+    if (hash === '' || hash === '#' || hash === '#hero' || href === '/') {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       return;
     }
-    const target = document.querySelector(href);
+    const target = document.querySelector(hash);
     if (target) {
       target.scrollIntoView({ behavior: 'smooth' });
     }
@@ -91,7 +92,7 @@ export default function Navbar({ onBookClick }) {
       >
         {/* LEFT: Logo = building icon + text "JANGID HOTEL" */}
         <a
-          href="#hero"
+          href="/"
           onClick={(e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -327,10 +328,10 @@ export default function Navbar({ onBookClick }) {
             }}
           >
             {[
-              { name: 'About Hotel', href: '#about' },
-              { name: 'Amenities', href: '#amenities' },
-              { name: 'Rooms & Pricing', href: '#rooms' },
-              { name: 'Gallery & Reviews', href: '#testimonials' },
+              { name: 'About Hotel', href: '/#about' },
+              { name: 'Amenities', href: '/#amenities' },
+              { name: 'Rooms & Pricing', href: '/#rooms' },
+              { name: 'Gallery & Reviews', href: '/#testimonials' },
             ].map((link) => (
               <a
                 key={link.name}
