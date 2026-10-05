@@ -68,6 +68,7 @@ export default function TempleSection() {
                 src="/images/gogamedi-temple.jpg"
                 alt="Shri Gogaji Maharaj Mandir, Gogamedi Temple"
                 loading="lazy"
+                decoding="async"
                 className="w-full h-[380px] sm:h-[450px] object-cover object-center group-hover:scale-104 transition-transform duration-700 ease-out"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent pointer-events-none" />

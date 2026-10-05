@@ -16,6 +16,13 @@
     <meta name="publisher" content="Hotel Jangid" />
     <link rel="canonical" href="https://hoteljangid.in/" />
 
+    <!-- Force HTTPS & Content Security Policy (Prevents mixed content, forces HTTPS) -->
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests" />
+
+    <!-- Search Engine Verification (Google Search Console & Bing Webmaster Tools) -->
+    <meta name="google-site-verification" content="ENTER_YOUR_GOOGLE_SEARCH_CONSOLE_CODE" />
+    <meta name="msvalidate.01" content="ENTER_YOUR_BING_WEBMASTER_CODE" />
+
     <!-- Multilingual / Hreflang Alternates -->
     <link rel="alternate" hreflang="x-default" href="https://hoteljangid.in/" />
     <link rel="alternate" hreflang="en-IN" href="https://hoteljangid.in/" />
@@ -47,8 +54,10 @@
     <meta property="og:type" content="business.business" />
     <meta property="og:title" content="Hotel Jangid Gogamedi | Best Hotel in Gogamedi Near Goga Ji Temple" />
     <meta property="og:description" content="Stay at the best hotel in Gogamedi just 400m from Shri Goga Ji Temple. Deluxe AC (₹1200) & Non-AC (₹1000) rooms with 24/7 hot water, free parking & Wi-Fi. Call +91 90011 87776 to book online!" />
-    <meta property="og:image" content="https://hoteljangid.in/images/hotel-building-hero.jpg" />
-    <meta property="og:image:alt" content="Hotel Jangid Building Near Shri Goga Ji Temple Gogamedi" />
+    <meta property="og:image" content="https://hoteljangid.in/images/og-preview-card.jpg" />
+    <meta property="og:image:secure_url" content="https://hoteljangid.in/images/og-preview-card.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:alt" content="Hotel Jangid Gogamedi - Best Hotel Near Goga Ji Temple" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:url" content="https://hoteljangid.in/" />
@@ -67,7 +76,7 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Hotel Jangid Gogamedi | Best Hotel in Gogamedi Near Goga Ji Temple" />
     <meta name="twitter:description" content="Best hotel in Gogamedi just 400m from Shri Goga Ji Temple. Deluxe AC (₹1200) & Non-AC (₹1000) rooms with free parking & 24/7 hot water." />
-    <meta name="twitter:image" content="https://hoteljangid.in/images/hotel-building-hero.jpg" />
+    <meta name="twitter:image" content="https://hoteljangid.in/images/og-preview-card.jpg" />
 
     <!-- ==================== 5. SCHEMA.ORG JSON-LD (SEO, GEO, AEO & VOICE SEARCH) ==================== -->
     <script type="application/ld+json">
@@ -89,8 +98,20 @@
           ],
           "description": "Hotel Jangid is the premier budget luxury hotel in Gogamedi (Gugamedi), situated only 400 meters from Shri Goga Ji Maharaj Temple and 900 meters from Gogamedi Railway Station. Offering 23 clean rooms with high-cooling AC, desert coolers, 24/7 geyser hot water, free private car parking, power backup, and high-speed Wi-Fi.",
           "url": "https://hoteljangid.in/",
+          "sameAs": [
+            "https://www.instagram.com/hotel_jangid/?hl=en",
+            "https://www.facebook.com/vijay.janger.35"
+          ],
+          "logo": "https://hoteljangid.in/images/hotel-building-hero.jpg",
           "telephone": "+919001187776",
           "email": "hoteljangidgogamedi@gmail.com",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+919001187776",
+            "contactType": "reservations",
+            "areaServed": "IN",
+            "availableLanguage": ["Hindi", "English", "Rajasthani", "Haryanvi", "Punjabi"]
+          },
           "priceRange": "₹1,000 - ₹1,200",
           "currenciesAccepted": "INR",
           "paymentAccepted": "Cash, UPI, PhonePe, Google Pay, Paytm, Net Banking",
@@ -386,6 +407,21 @@
               "item": "https://hoteljangid.in/#hotel"
             }
           ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://hoteljangid.in/#website",
+          "url": "https://hoteljangid.in/",
+          "name": "Hotel Jangid Gogamedi",
+          "description": "Best hotel in Gogamedi near Shri Goga Ji Maharaj Temple with clean AC and Non-AC rooms, 24/7 geyser hot water, and free private parking.",
+          "publisher": {
+            "@id": "https://hoteljangid.in/#hotel"
+          },
+          "sameAs": [
+            "https://www.instagram.com/hotel_jangid/?hl=en",
+            "https://www.facebook.com/vijay.janger.35"
+          ],
+          "inLanguage": ["en-IN", "hi-IN"]
         }
       ]
     }
@@ -431,6 +467,8 @@
     <link rel="preload" as="image" href="/images/hotel-building-hero-mobile.jpg" media="(max-width: 767px)" fetchpriority="high" />
 
     <!-- Google Fonts: Luxury Editorial Serif & Clean Geometric Sans with font-display: swap -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">

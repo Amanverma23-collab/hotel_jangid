@@ -105,6 +105,7 @@ export default function LocationSection() {
               src="/images/route-map-400m.jpg"
               alt="Hotel Jangid to Shri Goga Ji Temple 400m Route Map"
               loading="lazy"
+              decoding="async"
               className="w-full h-auto object-cover group-hover:scale-102 transition-transform duration-500"
             />
             <div className="absolute bottom-3 left-3 bg-ink-950/80 backdrop-blur-sm text-white px-3 py-1 rounded-md text-xs font-medium">

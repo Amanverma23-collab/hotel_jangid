@@ -33,3 +33,6 @@ pnpm-debug.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Image Backups
+public/images_backup/

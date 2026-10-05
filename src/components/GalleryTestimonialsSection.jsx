@@ -275,7 +275,7 @@ export default function GalleryTestimonialsSection() {
         fontFamily: '"Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont, sans-serif',
       }}
     >
-      <div ref={containerRef} style={{ width: '100%', position: 'relative' }}>
+      <div ref={containerRef} id="gallery" style={{ width: '100%', position: 'relative' }}>
         
         {/* PHOTO GALLERY BOX: 976px wide x 372px tall, centered horizontally */}
         <div
@@ -442,6 +442,7 @@ export default function GalleryTestimonialsSection() {
 
         {/* TESTIMONIAL CARDS: 3 columns, equal width (~300px each), 30px gap, no card border/background */}
         <div
+          id="reviews"
           style={{
             maxWidth: '1080px',
             margin: '0 auto',
@@ -523,7 +524,7 @@ export default function GalleryTestimonialsSection() {
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <img
                         src={rev.avatar}
-                        alt={rev.name}
+                        alt={`${rev.name} - Verified Guest at Hotel Jangid Gogamedi`}
                         loading="lazy"
                         width={38}
                         height={38}

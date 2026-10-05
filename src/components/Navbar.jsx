@@ -91,7 +91,7 @@ export default function Navbar({ onBookClick }) {
       >
         {/* LEFT: Logo = building icon + text "JANGID HOTEL" */}
         <a
-          href="#"
+          href="#hero"
           onClick={(e) => {
             e.preventDefault();
             window.scrollTo({ top: 0, behavior: 'smooth' });

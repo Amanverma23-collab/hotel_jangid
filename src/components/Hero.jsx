@@ -152,6 +152,7 @@ export default function Hero({ onBookClick }) {
 
   return (
     <div
+      id="hero"
       style={{
         backgroundColor: '#CFC6BF', // Page background: warm taupe/grey
         minHeight: '100vh',
@@ -196,7 +197,7 @@ export default function Hero({ onBookClick }) {
           {/* LEFT: Logo = small building/cottage icon + text "JANGID HOTEL" */}
           {/* LEFT: Logo = small building/cottage icon + text "JANGID HOTEL" */}
           <a
-            href="#"
+            href="#hero"
             onClick={(e) => {
               e.preventDefault();
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -247,7 +248,7 @@ export default function Hero({ onBookClick }) {
             }}
           >
             {[
-              { name: 'About', href: '#hero' },
+              { name: 'About', href: '#about' },
               { name: 'Rooms', href: '#rooms' },
               { name: 'Amenities', href: '#amenities' },
               { name: 'Gallery & Reviews', href: '#testimonials' },
@@ -368,6 +369,7 @@ export default function Hero({ onBookClick }) {
 
             {/* d) Black pill button: Phone + "Call Now" (Desktop only) */}
             <a
+              id="contact"
               href="tel:+919001187776"
               className="hidden md:inline-flex"
               style={{
@@ -436,7 +438,7 @@ export default function Hero({ onBookClick }) {
             }}
           >
             {[
-              { name: 'About Hotel', href: '#hero' },
+              { name: 'About Hotel', href: '#about' },
               { name: 'Rooms & Pricing', href: '#rooms' },
               { name: 'Amenities', href: '#amenities' },
               { name: 'Gallery & Reviews', href: '#testimonials' },
@@ -578,7 +580,10 @@ export default function Hero({ onBookClick }) {
               />
               <img
                 src="/images/hotel-building-hero.jpg"
-                alt="Hotel Jangid Main Luxury Building in Gogamedi"
+                alt="Hotel Jangid Gogamedi - Main Hotel Building Near Shri Goga Ji Temple"
+                width={1024}
+                height={771}
+                decoding="async"
                 loading="eager"
                 fetchPriority="high"
                 style={{
@@ -676,6 +681,7 @@ export default function Hero({ onBookClick }) {
           >
             {/* ---------- 3B. TOP-RIGHT IMAGE CARD (Slideshow: 400m Route Map & Temple, ~200px) ---------- */}
             <div
+              id="location"
               style={{
                 height: '200px',
                 position: 'relative',
@@ -691,6 +697,9 @@ export default function Hero({ onBookClick }) {
                   key={idx}
                   src={slide.image}
                   alt={slide.alt}
+                  width={600}
+                  height={450}
+                  decoding="async"
                   loading="eager"
                   style={{
                     position: 'absolute',
@@ -821,6 +830,7 @@ export default function Hero({ onBookClick }) {
 
             {/* ---------- 3C. BOOKING CARD (~144px) ---------- */}
             <div
+              id="rooms"
               style={{
                 backgroundColor: '#F1F0EE',
                 borderRadius: '28px',
@@ -1027,7 +1037,10 @@ export default function Hero({ onBookClick }) {
               >
                 <img
                   src="/images/room-ac-deluxe.jpg"
-                  alt="Deluxe AC Room - Rs 1200 - Hotel Jangid"
+                  alt="Deluxe AC Room with Split AC, Geyser and Double Bed at Hotel Jangid Gogamedi"
+                  width={280}
+                  height={210}
+                  decoding="async"
                   loading="lazy"
                   style={{
                     position: 'absolute',
@@ -1102,7 +1115,10 @@ export default function Hero({ onBookClick }) {
               >
                 <img
                   src="/images/room-standard-ac.jpg"
-                  alt="Non-AC Room - Rs 1000 - Hotel Jangid"
+                  alt="Non-AC Standard Room with Air Cooler and Geyser at Hotel Jangid Gogamedi"
+                  width={280}
+                  height={210}
+                  decoding="async"
                   loading="lazy"
                   style={{
                     position: 'absolute',

@@ -6,6 +6,8 @@ export const HOTEL_INFO = {
   promise: "A quiet, honest family-run stay in Gogamedi.",
   phone: "+91 90011 87776",
   whatsapp: "+91 90011 87776",
+  instagram: "https://www.instagram.com/hotel_jangid/?hl=en",
+  facebook: "https://www.facebook.com/vijay.janger.35",
   address: "Jamal - Gogamedi Road, near Goga Mandir Turn Point, Gogamedi, Hanumangarh, Rajasthan — 335504",
   mapUrl: "https://maps.google.com/?q=Hotel+Jangid+Gogamedi",
   totalRooms: 23,

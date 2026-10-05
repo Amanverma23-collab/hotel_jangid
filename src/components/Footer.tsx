@@ -740,6 +740,24 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                     <span className="arrow-icon">→</span>
                     <span>Contact</span>
                   </a>
+                  <a
+                    href="https://www.instagram.com/hotel_jangid/?hl=en"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link-item"
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Instagram</span>
+                  </a>
+                  <a
+                    href="https://www.facebook.com/vijay.janger.35"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="footer-link-item"
+                  >
+                    <span className="arrow-icon">→</span>
+                    <span>Facebook</span>
+                  </a>
                 </div>
               </div>
 
@@ -834,6 +852,50 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             <div className="ftr-right">
               <div className="ftr-social ftr-socials">
                 <a
+                  href="https://www.instagram.com/hotel_jangid/?hl=en"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Follow Hotel Jangid on Instagram"
+                  aria-label="Follow Hotel Jangid on Instagram"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <rect width="20" height="20" x="2" y="2" rx="5" ry="5" />
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                    <line x1="17.5" x2="17.51" y1="6.5" y2="6.5" />
+                  </svg>
+                </a>
+                <a
+                  href="https://www.facebook.com/vijay.janger.35"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="social-icon-btn"
+                  title="Connect with Hotel Jangid on Facebook"
+                  aria-label="Connect with Hotel Jangid on Facebook"
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.9"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
+                  </svg>
+                </a>
+                <a
                   href="https://wa.me/919001187776?text=Hello%20Vijay%20ji,%20I%20want%20to%20inquire%20about%20room%20availability%20at%20Hotel%20Jangid"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -904,6 +966,24 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                 <a href="#contact" className="footer-link-item">
                   <span className="arrow-icon">→</span>
                   <span>Contact</span>
+                </a>
+                <a
+                  href="https://www.instagram.com/hotel_jangid/?hl=en"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-link-item"
+                >
+                  <span className="arrow-icon">→</span>
+                  <span>Instagram</span>
+                </a>
+                <a
+                  href="https://www.facebook.com/vijay.janger.35"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="footer-link-item"
+                >
+                  <span className="arrow-icon">→</span>
+                  <span>Facebook</span>
                 </a>
               </div>
             </div>
@@ -1065,7 +1145,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             </div>
 
             {/* RIGHT: 3 lines, UPPERCASE address */}
-            <div className="ftr-bottom-address">
+            <div id="contact" className="ftr-bottom-address">
               <div>+91 90011 87776</div>
               <div>HOTEL JANGID, NEAR GOGA JI TEMPLE</div>
               <div>GOGAMEDI, HANUMANGARH, RAJASTHAN - 335504</div>

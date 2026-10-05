@@ -201,7 +201,7 @@ const CookiePanel = (props: CookiePanelProps) => {
             <IconEl className="size-5" aria-hidden="true" />
           </span>
 
-          <h2 className="text-sm font-semibold leading-5 text-foreground">{title}</h2>
+          <h3 className="text-sm font-semibold leading-5 text-foreground">{title}</h3>
 
           <button
             type="button"
