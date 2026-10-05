@@ -122,14 +122,14 @@ export default function RoomsSection({ onSelectRoom }) {
               OUR ROOMS
             </span>
 
-            {/* Main Heading: Exact Luxury Serif Typography */}
+            {/* Main Heading: Question Format for GEO & SEO */}
             <h2 className="font-luxury-serif text-3xl sm:text-4xl md:text-5xl font-normal text-gray-900 tracking-tight leading-[1.15]">
-              Exquisite Rooms &amp; Suites
+              What Rooms &amp; Rates Are Available at Hotel Jangid?
             </h2>
 
             {/* Sub-paragraph */}
             <p className="mt-3.5 text-sm sm:text-base text-gray-600 font-sans leading-relaxed max-w-xl">
-              Thoughtfully designed for your comfort, each room and suite offers a perfect blend of elegance, space, and modern amenities.
+              Choose between Deluxe AC and budget-friendly cooler rooms, all featuring attached private bathrooms with geyser hot water and quiet courtyard surroundings.
             </p>
 
             {/* View All Rooms Link */}

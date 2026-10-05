@@ -230,7 +230,7 @@ export default function BookingSection({ preselectedRoomType = 'ac' }) {
             Fast Booking • Under 2 Minutes
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl font-bold text-ink-950 tracking-tight leading-tight">
-            Reserve Your Room Online
+            How to Reserve Your Room at Hotel Jangid Online?
           </h2>
           <p className="mt-3 text-sm sm:text-base text-ink-600 leading-relaxed">
             During temple festival dates and weekends, rooms fill up quickly. Secure your stay in advance with instant Razorpay confirmation.

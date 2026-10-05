@@ -427,10 +427,10 @@ export default function GalleryTestimonialsSection() {
                 }}
               >
                 <span style={{ display: 'block', color: '#0B0B0F' }}>
-                  Heard it from our guests,
+                  What Do Pilgrims Say About Hotel Jangid?
                 </span>
-                <span style={{ display: 'block', color: '#8E9AAF', marginTop: '2px' }}>
-                  not from us
+                <span style={{ display: 'block', color: '#8E9AAF', marginTop: '4px', fontSize: '18px', fontWeight: 500 }}>
+                  Heard directly from our verified guests
                 </span>
               </h2>
             </div>

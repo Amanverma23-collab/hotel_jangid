@@ -103,15 +103,15 @@ export default function AmenitiesSection({ onExploreClick }) {
             </span>
             
             <h2 className="font-luxury-serif text-3xl sm:text-4xl md:text-[2.75rem] font-normal text-white tracking-tight leading-[1.15]">
-              World-Class Amenities
+              What Facilities &amp; Amenities Does Hotel Jangid Provide?
             </h2>
 
             <p className="mt-4 text-sm sm:text-[15px] text-white/70 font-sans leading-relaxed">
-              From rejuvenating hot geyser baths to 400-meter temple proximity, we offer everything you need for a truly comfortable and peaceful stay.
+              From continuous hot geyser water to 400-meter temple proximity, we provide everything needed for a restful pilgrimage stay.
             </p>
 
             <a
-              href="#rooms"
+              href="/#rooms"
               onClick={handleExplore}
               className="inline-flex items-center gap-2 mt-6 text-xs sm:text-sm font-semibold text-[#dfc59e] hover:text-white transition-colors group"
             >
