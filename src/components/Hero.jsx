@@ -639,6 +639,7 @@ export default function Hero({ onBookClick }) {
                 }}
                 className="hero-headline-text"
               >
+                <span className="sr-only">Hotel Jangid Gogamedi — </span>
                 <span>Stay Close to</span>
                 <br />
                 <em
