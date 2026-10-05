@@ -476,8 +476,8 @@
   </head>
   <body class="bg-[#FAF8F5] text-[#111111] selection:bg-[#c99f5b]/30 selection:text-[#111111] antialiased" style="background-color: #FAF8F5 !important; margin: 0 !important;">
     <div id="root" style="background-color: #FAF8F5;">
-      <!-- Server-rendered Semantic SEO Fallback (Hydrated & Replaced on React Mount) -->
-      <div id="ssr-seo-wrapper" style="max-width: 1200px; margin: 0 auto; padding: 24px 16px; font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; color: #111111;">
+      <!-- Server-rendered Semantic SEO Fallback (Visually hidden for seamless paint; indexed by crawlers; replaced on React mount) -->
+      <div id="ssr-seo-wrapper" class="sr-only" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: normal; border: 0; opacity: 0; pointer-events: none;">
         <!-- Header & Primary Navigation (Internal & External Links) -->
         <header style="margin-bottom: 32px; border-bottom: 1px solid #EAE5DE; padding-bottom: 20px;">
           <nav aria-label="Main Navigation" style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px; font-size: 14px;">
