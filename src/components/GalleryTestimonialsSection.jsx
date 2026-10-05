@@ -484,6 +484,11 @@ export default function GalleryTestimonialsSection() {
                 flex-shrink: 0;
               }
             }
+            @media (max-width: 900px) {
+              .mascot-desktop-only {
+                display: none !important;
+              }
+            }
           `}</style>
 
           {/* Slider wrapper */}
@@ -582,8 +587,9 @@ export default function GalleryTestimonialsSection() {
               <span>Verified 5.0 Google Rating • Hotel Jangid, Gogamedi</span>
             </div>
 
-            {/* Absolutely positioned Mascot: Takes 0px in document flow, section height unchanged */}
+            {/* Absolutely positioned Mascot: Takes 0px in document flow, hidden on mobile */}
             <div
+              className="mascot-desktop-only"
               style={{
                 position: 'absolute',
                 left: '50%',
