@@ -7,6 +7,7 @@ import {
   CheckCircle2,
 } from 'lucide-react';
 import { HOTEL_INFO } from '../data/hotelData';
+import { RetroButton } from '@/components/ui/retro-button';
 
 /**
  * Pixel-Accurate Notched Folder-Tab FOOTER
@@ -939,14 +940,15 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                   <MapPin size={21} strokeWidth={1.9} />
                 </a>
               </div>
-              <button
-                type="button"
-                className="ftr-cta"
+              <RetroButton
+                variant="default"
+                size="lg"
                 onClick={handleBookNow}
-                style={{ border: 'none', outline: 'none' }}
+                className="mt-10 sm:mt-12 text-sm sm:text-base font-semibold"
+                innerClassName="py-3 px-6 text-sm sm:text-base tracking-widest font-bold"
               >
                 Book Your Stay
-              </button>
+              </RetroButton>
             </div>
           </div>
         </div>
@@ -1091,15 +1093,16 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             </div>
           </div>
 
-          <div className="ftr-mobile-cta-wrap">
-            <button
-              type="button"
-              className="ftr-mobile-cta"
+          <div className="ftr-mobile-cta-wrap mt-6">
+            <RetroButton
+              variant="default"
+              size="full"
               onClick={handleBookNow}
-              style={{ border: 'none', outline: 'none' }}
+              className="w-full text-base font-semibold"
+              innerClassName="py-3.5 px-6 text-base tracking-widest font-bold"
             >
               Book Your Stay
-            </button>
+            </RetroButton>
           </div>
 
           {/* DIVIDER LINE (margin-top: 48px from top panel on desktop, 32px on mobile) */}
