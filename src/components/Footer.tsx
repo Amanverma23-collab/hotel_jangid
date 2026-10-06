@@ -482,6 +482,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
             justify-content: center;
             align-items: flex-end;
           }
+          .ftr-right button,
           .ftr-top .ftr-cta {
             display: none !important;
           }
@@ -944,7 +945,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                 variant="default"
                 size="lg"
                 onClick={handleBookNow}
-                className="mt-10 sm:mt-12 text-sm sm:text-base font-semibold"
+                className="hidden md:inline-flex mt-10 sm:mt-12 text-sm sm:text-base font-semibold"
                 innerClassName="py-3 px-6 text-sm sm:text-base tracking-widest font-bold"
               >
                 Book Your Stay
