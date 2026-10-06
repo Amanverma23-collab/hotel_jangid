@@ -999,50 +999,7 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
               </div>
             </div>
 
-            {/* Column 2: Rooms */}
-            <div>
-              <div className="ftr-col-heading">Rooms</div>
-              <div className="ftr-col-list">
-                <a href="/#rooms" className="footer-link-item">
-                  <span className="arrow-icon">→</span>
-                  <span>AC Room</span>
-                </a>
-                <a href="/#rooms" className="footer-link-item">
-                  <span className="arrow-icon">→</span>
-                  <span>Non-AC Room</span>
-                </a>
-                <button
-                  type="button"
-                  onClick={handleBookNow}
-                  className="footer-link-item"
-                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}
-                >
-                  <span className="arrow-icon">→</span>
-                  <span>Book Now</span>
-                </button>
-              </div>
-            </div>
-
-            {/* Column 3: Nearby */}
-            <div>
-              <div className="ftr-col-heading">Nearby</div>
-              <div className="ftr-col-list">
-                <a href="/#amenities" className="footer-link-item">
-                  <span className="arrow-icon">→</span>
-                  <span>Goga Ji Temple</span>
-                </a>
-                <a href="/#amenities" className="footer-link-item">
-                  <span className="arrow-icon">→</span>
-                  <span>Railway Station</span>
-                </a>
-                <a href="/#location" className="footer-link-item">
-                  <span className="arrow-icon">→</span>
-                  <span>How to Reach</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Column 4: Legal */}
+            {/* Column 2: Legal (Swapped with Rooms for clean 2x2 mobile grid symmetry) */}
             <div>
               <div className="ftr-col-heading">Legal</div>
               <div className="ftr-col-list">
@@ -1090,6 +1047,49 @@ export default function Footer({ onBookClick }: FooterProps = {}) {
                   <span className="arrow-icon">→</span>
                   <span>Security Policy</span>
                 </a>
+              </div>
+            </div>
+
+            {/* Column 3: Nearby */}
+            <div>
+              <div className="ftr-col-heading">Nearby</div>
+              <div className="ftr-col-list">
+                <a href="/#amenities" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Goga Ji Temple</span>
+                </a>
+                <a href="/#amenities" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Railway Station</span>
+                </a>
+                <a href="/#location" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>How to Reach</span>
+                </a>
+              </div>
+            </div>
+
+            {/* Column 4: Rooms (Swapped with Legal) */}
+            <div>
+              <div className="ftr-col-heading">Rooms</div>
+              <div className="ftr-col-list">
+                <a href="/#rooms" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>AC Room</span>
+                </a>
+                <a href="/#rooms" className="footer-link-item">
+                  <span className="arrow-icon">→</span>
+                  <span>Non-AC Room</span>
+                </a>
+                <button
+                  type="button"
+                  onClick={handleBookNow}
+                  className="footer-link-item"
+                  style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left' }}
+                >
+                  <span className="arrow-icon">→</span>
+                  <span>Book Now</span>
+                </button>
               </div>
             </div>
           </div>
