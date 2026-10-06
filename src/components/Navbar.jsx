@@ -283,24 +283,15 @@ export default function Navbar({ onBookClick }) {
             <span>Call Now</span>
           </a>
 
-          {/* Mobile menu toggle (Clean icon without circle background) */}
+          {/* Mobile menu toggle (Clean icon without circle background, hidden on laptop/desktop) */}
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="flex md:hidden p-1.5 focus:outline-none focus:ring-0 active:outline-none"
+            className="flex md:!hidden items-center justify-center p-1.5 focus:outline-none focus:ring-0 active:outline-none text-[#111111] cursor-pointer bg-transparent border-0"
             style={{
-              background: 'transparent',
-              backgroundColor: 'transparent',
-              border: 'none',
+              WebkitTapHighlightColor: 'transparent',
               outline: 'none',
               boxShadow: 'none',
-              WebkitTapHighlightColor: 'transparent',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#111111',
-              cursor: 'pointer',
-              padding: '6px',
             }}
             aria-label="Toggle navigation menu"
           >
@@ -308,10 +299,10 @@ export default function Navbar({ onBookClick }) {
           </button>
         </div>
 
-        {/* Mobile Dropdown Menu */}
+        {/* Mobile Dropdown Menu (Hidden on laptop/desktop) */}
         {mobileMenuOpen && (
           <div
-            className="md:hidden"
+            className="flex md:!hidden flex-col gap-2"
             style={{
               position: 'absolute',
               top: '64px',
@@ -321,9 +312,6 @@ export default function Navbar({ onBookClick }) {
               borderRadius: '24px',
               padding: '16px',
               boxShadow: '0 16px 40px rgba(0,0,0,0.14)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px',
               border: '1px solid rgba(0,0,0,0.06)',
             }}
           >

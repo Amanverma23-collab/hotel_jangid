@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { X } from 'lucide-react';
+import TextAnimation from '@/components/ui/stagger-text';
 
 /**
  * About / Owners Bento Section
@@ -82,15 +83,13 @@ export default function OwnersSection() {
               marginBottom: '20px',
             }}
           >
-            About Us
+            <TextAnimation divideBy="letter" delay={0.05}>
+              About Us
+            </TextAnimation>
           </motion.div>
 
-          {/* 2-Line H2 Heading */}
-          <motion.h2
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+          {/* 2-Line H2 Heading with Stagger Text Animation */}
+          <h2
             className="text-center font-semibold"
             style={{
               fontSize: '36px',
@@ -101,12 +100,16 @@ export default function OwnersSection() {
             }}
           >
             <span style={{ color: '#1A1A1A', display: 'block' }}>
-              A family-run hotel,
+              <TextAnimation delay={0.1} divideBy="word">
+                A family-run hotel,
+              </TextAnimation>
             </span>
             <span style={{ color: '#8E9AAF', display: 'block' }}>
-              just steps from Goga Ji Dham
+              <TextAnimation delay={0.3} divideBy="word">
+                just steps from Goga Ji Dham
+              </TextAnimation>
             </span>
-          </motion.h2>
+          </h2>
 
         </div>
 
@@ -169,7 +172,9 @@ export default function OwnersSection() {
                     marginBottom: '8px',
                   }}
                 >
-                  Two Generations, One Promise
+                  <TextAnimation delay={0.2} divideBy="word">
+                    Two Generations, One Promise
+                  </TextAnimation>
                 </h3>
                 <p
                   style={{
@@ -179,7 +184,9 @@ export default function OwnersSection() {
                     maxWidth: '420px',
                   }}
                 >
-                  Father and son, Mr. Surjeet Jangid and Mr. Vijay Jangid, personally look after every guest who stays with us.
+                  <TextAnimation delay={0.25} divideBy="word">
+                    Father and son, Mr. Surjeet Jangid and Mr. Vijay Jangid, personally look after every guest who stays with us.
+                  </TextAnimation>
                 </p>
               </div>
             </motion.div>
@@ -210,7 +217,9 @@ export default function OwnersSection() {
                     color: '#8A7B66',
                   }}
                 >
-                  THE OWNERS
+                  <TextAnimation delay={0.1} divideBy="letter">
+                    THE OWNERS
+                  </TextAnimation>
                 </span>
               </div>
 
@@ -230,7 +239,9 @@ export default function OwnersSection() {
                       marginBottom: '3px',
                     }}
                   >
-                    FOUNDER
+                    <TextAnimation delay={0.12} divideBy="letter">
+                      FOUNDER
+                    </TextAnimation>
                   </span>
                   <h3
                     style={{
@@ -241,7 +252,9 @@ export default function OwnersSection() {
                       marginBottom: '5px',
                     }}
                   >
-                    Mr. Surjeet Jangid
+                    <TextAnimation delay={0.15} divideBy="word">
+                      Mr. Surjeet Jangid
+                    </TextAnimation>
                   </h3>
                 </div>
 
@@ -268,7 +281,9 @@ export default function OwnersSection() {
                       marginBottom: '3px',
                     }}
                   >
-                    CO-OWNER
+                    <TextAnimation delay={0.2} divideBy="letter">
+                      CO-OWNER
+                    </TextAnimation>
                   </span>
                   <h3
                     style={{
@@ -279,7 +294,9 @@ export default function OwnersSection() {
                       marginBottom: '5px',
                     }}
                   >
-                    Mr. Vijay Jangid
+                    <TextAnimation delay={0.22} divideBy="word">
+                      Mr. Vijay Jangid
+                    </TextAnimation>
                   </h3>
                   <p
                     style={{
@@ -288,7 +305,9 @@ export default function OwnersSection() {
                       color: '#6B6B6B',
                     }}
                   >
-                    On-site daily to manage guest reservations, ensure meticulous room hygiene, and assist yatris with temple timings and travel guidance.
+                    <TextAnimation delay={0.26} divideBy="word">
+                      On-site daily to manage guest reservations, ensure meticulous room hygiene, and assist yatris with temple timings and travel guidance.
+                    </TextAnimation>
                   </p>
                 </div>
 
@@ -327,7 +346,9 @@ export default function OwnersSection() {
                     color: 'rgba(255, 255, 255, 0.75)',
                   }}
                 >
-                  SACRED DHAM & PROXIMITY
+                  <TextAnimation delay={0.1} divideBy="letter">
+                    SACRED DHAM & PROXIMITY
+                  </TextAnimation>
                 </span>
               </div>
 
@@ -345,7 +366,9 @@ export default function OwnersSection() {
                       marginBottom: '6px',
                     }}
                   >
-                    The Sacred Home of Goga Ji
+                    <TextAnimation delay={0.15} divideBy="word">
+                      The Sacred Home of Goga Ji
+                    </TextAnimation>
                   </h3>
                   <p
                     style={{
@@ -354,7 +377,9 @@ export default function OwnersSection() {
                       color: 'rgba(255, 255, 255, 0.9)',
                     }}
                   >
-                    Gogamedi, in Hanumangarh district of Rajasthan, is revered by devotees from Rajasthan, Punjab and Haryana. The Goga Navami fair draws the largest crowds every year.
+                    <TextAnimation delay={0.2} divideBy="word">
+                      Gogamedi, in Hanumangarh district of Rajasthan, is revered by devotees from Rajasthan, Punjab and Haryana. The Goga Navami fair draws the largest crowds every year.
+                    </TextAnimation>
                   </p>
                 </div>
 
@@ -379,7 +404,9 @@ export default function OwnersSection() {
                       marginBottom: '6px',
                     }}
                   >
-                    Just 400 m from Goga Ji Temple
+                    <TextAnimation delay={0.25} divideBy="word">
+                      Just 400 m from Goga Ji Temple
+                    </TextAnimation>
                   </h4>
                   <p
                     style={{
@@ -388,7 +415,9 @@ export default function OwnersSection() {
                       color: 'rgba(255, 255, 255, 0.9)',
                     }}
                   >
-                    Walk to Goga Ji Dham for darshan in minutes. The railway station is only 900 m away, so reaching us is easy.
+                    <TextAnimation delay={0.3} divideBy="word">
+                      Walk to Goga Ji Dham for darshan in minutes. The railway station is only 900 m away, so reaching us is easy.
+                    </TextAnimation>
                   </p>
                 </div>
 
@@ -463,10 +492,14 @@ export default function OwnersSection() {
             />
             <div className="mt-4 text-center text-white">
               <h4 className="text-lg font-semibold tracking-wide">
-                Shri Goga Ji Maharaj Temple, Gogamedi
+                <TextAnimation delay={0.1} divideBy="word">
+                  Shri Goga Ji Maharaj Temple, Gogamedi
+                </TextAnimation>
               </h4>
               <p className="text-xs text-gray-300 mt-1">
-                Located just 400 meters (5 minutes walk) from Hotel Jangid
+                <TextAnimation delay={0.2} divideBy="word">
+                  Located just 400 meters (5 minutes walk) from Hotel Jangid
+                </TextAnimation>
               </p>
             </div>
           </motion.div>

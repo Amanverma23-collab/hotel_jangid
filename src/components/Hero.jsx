@@ -399,24 +399,15 @@ export default function Hero({ onBookClick }) {
               <span>Call Now</span>
             </a>
 
-            {/* Mobile menu toggle (Clean icon without circle background) */}
+            {/* Mobile menu toggle (Clean icon without circle background, hidden on laptop/desktop) */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="flex md:hidden p-1.5 focus:outline-none focus:ring-0 active:outline-none"
+              className="flex md:!hidden items-center justify-center p-1.5 focus:outline-none focus:ring-0 active:outline-none text-[#111111] cursor-pointer bg-transparent border-0"
               style={{
-                background: 'transparent',
-                backgroundColor: 'transparent',
-                border: 'none',
+                WebkitTapHighlightColor: 'transparent',
                 outline: 'none',
                 boxShadow: 'none',
-                WebkitTapHighlightColor: 'transparent',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#111111',
-                cursor: 'pointer',
-                padding: '6px',
               }}
               aria-label="Toggle navigation menu"
             >
@@ -425,9 +416,10 @@ export default function Hero({ onBookClick }) {
           </div>
         </header>
 
-        {/* Mobile dropdown menu */}
+        {/* Mobile dropdown menu (Hidden on laptop/desktop) */}
         {mobileMenuOpen && (
           <div
+            className="flex md:!hidden flex-col gap-2.5"
             style={{
               backgroundColor: '#FFFFFF',
               borderRadius: '20px',
@@ -435,9 +427,6 @@ export default function Hero({ onBookClick }) {
               marginTop: '8px',
               marginBottom: '12px',
               boxShadow: '0 12px 32px rgba(0,0,0,0.12)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
               zIndex: 40,
               border: '1px solid rgba(0,0,0,0.06)',
             }}

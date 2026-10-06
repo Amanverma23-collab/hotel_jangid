@@ -71,12 +71,13 @@ export default function FAQs() {
     <section id="faq" className="py-16 md:py-24 bg-[#FAF8F5] text-[#111111] border-t border-[#EAE5DE]/80">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         
-        {/* Section Top Header: Question Format for GEO Citability */}
+        {/* Section Top Header */}
         <div className="text-center mb-10 md:mb-16">
           <h2 className="text-[#111111] text-3xl sm:text-4xl md:text-5xl font-semibold tracking-tight font-serif">
-            Why Devotees Choose Us: Frequently Asked Questions
+            FAQ
           </h2>
         </div>
+
 
         {/* 2 FAQs Per Row (2 Columns) */}
         <Accordion
